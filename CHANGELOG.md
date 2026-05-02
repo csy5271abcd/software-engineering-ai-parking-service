@@ -33,3 +33,15 @@ SmartPark 프로젝트의 주요 변경 사항과 버전 tag 기록을 정리한
 - `configuration_management_plan.md`에 추가 산출물 관리 기준과 폴더 구조 관리 항목 보완
 
 ---
+
+## v0.2.7
+
+- `docs/product/PERSONA.md` 추가
+- `docs/product/USER_JOURNEY.md` 추가
+- `docs/product/COMPETITOR_ANALYSIS.md` 추가
+- `docs/product/SERVICE_SCENARIO.md` 추가
+- `docs/product/BUSINESS_MODEL.md` 추가
+- SmartPark의 주요 사용자 페르소나, 사용자 여정, 경쟁 서비스 분석, 서비스 시나리오, 비즈니스 모델 정리
+- 제품 기획 문서를 기반으로 향후 요구사항 정의서, 요구사항 분석서, 화면 설계서 작성 기반 마련
+
+---

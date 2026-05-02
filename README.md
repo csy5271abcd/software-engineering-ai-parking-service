@@ -142,11 +142,15 @@ software-engineering-ai-parking-service/
 
 공식 과제 문서 외에도 SmartPark 프로젝트를 실제 서비스처럼 구체화하기 위해 다음과 같은 보조 산출물을 작성한다.
 
-| 구분      | 문서 예시                                                             | 목적                                            |
-| --------- | --------------------------------------------------------------------- | ----------------------------------------------- |
-| 제품 기획 | `PERSONA.md`, `USER_JOURNEY.md`, `COMPETITOR_ANALYSIS.md`             | 사용자와 시장을 기반으로 서비스 방향 구체화     |
-| 디자인    | `SCREEN_FLOW.md`, `UI_DESIGN_GUIDE.md`, `DESIGN_SYSTEM.md`            | 앱 화면 구조와 UI 기준 정의                     |
-| 하네스    | `PRD.md`, `FEATURE_SPEC.md`, `CLAUDE.md`, `CODEX.md`, `PROMPT_LOG.md` | AI 개발 도구가 일관성 있게 작업하도록 기준 제공 |
+| 구분      | 문서                                                                  | 목적                                                 | 상태 |
+| --------- | --------------------------------------------------------------------- | ---------------------------------------------------- | ---- |
+| 제품 기획 | `PERSONA.md`                                                          | SmartPark의 주요 사용자 유형과 페르소나 정의         | 완료 |
+| 제품 기획 | `USER_JOURNEY.md`                                                     | 사용자 유형별 서비스 이용 흐름과 문제 해결 과정 정리 | 완료 |
+| 제품 기획 | `COMPETITOR_ANALYSIS.md`                                              | 기존 주차 서비스와 SmartPark의 차별성 비교 분석      | 완료 |
+| 제품 기획 | `SERVICE_SCENARIO.md`                                                 | 실제 이용 상황 기반 서비스 시나리오 정리             | 완료 |
+| 제품 기획 | `BUSINESS_MODEL.md`                                                   | 목표 시장, 수익 모델, 확장 가능성 정리               | 완료 |
+| 디자인    | `SCREEN_FLOW.md`, `UI_DESIGN_GUIDE.md`, `DESIGN_SYSTEM.md`            | 앱 화면 구조와 UI 기준 정의                          | 예정 |
+| 하네스    | `PRD.md`, `FEATURE_SPEC.md`, `CLAUDE.md`, `CODEX.md`, `PROMPT_LOG.md` | AI 개발 도구가 일관성 있게 작업하도록 기준 제공      | 예정 |
 
 ---
 
@@ -178,7 +182,18 @@ git push origin main --tags
 
 ## 12. 현재 진행 상태
 
-현재 저장소에는 프로젝트 정의서, 프로젝트 관리 계획서, 형상관리 계획서, CHANGELOG, 폴더 구조 설명 문서가 포함되어 있다.  
+현재 저장소에는 프로젝트 정의서, 프로젝트 관리 계획서, 형상관리 계획서, CHANGELOG, 폴더 구조 설명 문서가 포함되어 있다.
+
+또한 `docs/product/` 폴더에는 SmartPark의 제품 기획을 구체화하기 위한 다음 문서가 추가되었다.
+
+- `PERSONA.md`
+- `USER_JOURNEY.md`
+- `COMPETITOR_ANALYSIS.md`
+- `SERVICE_SCENARIO.md`
+- `BUSINESS_MODEL.md`
+
+이를 통해 SmartPark의 주요 사용자, 사용자 여정, 경쟁 서비스 대비 차별성, 실제 서비스 시나리오, 비즈니스 모델을 정리하였다.
+
 이후 단계에서는 요구사항 정의서, 요구사항 분석서, 소프트웨어 설계서, 인스팩션 예제, 테스트 결과서를 순차적으로 작성한다.
 
 ---
