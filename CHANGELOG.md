@@ -78,3 +78,22 @@ SmartPark 프로젝트의 주요 변경 사항과 버전 tag 기록을 정리한
 - 제품 기획 문서를 기반으로 향후 요구사항 정의서, 요구사항 분석서, 화면 설계서 작성 기반 마련
 
 ---
+
+## v0.2.8
+
+- `README.md` 갱신
+- `CHANGELOG.md` 갱신
+- `docs/product/` 폴더의 제품 기획 문서 5종 작성 완료 현황을 README에 반영
+- 추가 프로젝트 산출물 목록에 `PERSONA.md`, `USER_JOURNEY.md`, `COMPETITOR_ANALYSIS.md`, `SERVICE_SCENARIO.md`, `BUSINESS_MODEL.md` 완료 상태 반영
+- 현재 진행 상태에 SmartPark의 사용자 분석, 사용자 여정, 경쟁 서비스 분석, 서비스 시나리오, 비즈니스 모델 정리 완료 내용 추가
+- 제품 기획 문서 작성 이력을 CHANGELOG에 반영
+
+---
+
+## v0.2.9
+
+- `CHANGELOG.md` 갱신
+- 제품 기획 문서 작성 이력을 `v0.2.3`부터 `v0.2.7`까지 문서별로 분리하여 정리
+- `v0.2.8` 항목에 `README.md`와 `CHANGELOG.md` 갱신 내용을 추가
+- 버전 tag 흐름이 실제 작업 순서와 일치하도록 변경 이력 정리
+- 향후 요구사항 정의서 작성 전 기준 변경 이력 정리 완료
