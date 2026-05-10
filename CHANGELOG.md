@@ -97,3 +97,13 @@ SmartPark 프로젝트의 주요 변경 사항과 버전 tag 기록을 정리한
 - `v0.2.8` 항목에 `README.md`와 `CHANGELOG.md` 갱신 내용을 추가
 - 버전 tag 흐름이 실제 작업 순서와 일치하도록 변경 이력 정리
 - 향후 요구사항 정의서 작성 전 기준 변경 이력 정리 완료
+
+---
+
+## v0.3.0
+
+- `docs/harness/PRD.md` 추가
+- SmartPark의 제품 요구사항, 제품 목표, MVP 범위, 핵심 기능 요구사항 정리
+- 주요 사용자, 가치 제안, 화면 요구사항, 데이터 요구사항, 비기능 요구사항 정리
+- Claude Code와 Codex가 SmartPark 프로젝트를 일관성 있게 이해하고 작업할 수 있도록 하네스 기준 문서 작성
+- 향후 `FEATURE_SPEC.md`, `SCREEN_STRUCTURE.md`, `PROJECT_RULES.md`, `CLAUDE.md`, `CODEX.md`, `PROMPT_LOG.md` 작성 기반 마련
