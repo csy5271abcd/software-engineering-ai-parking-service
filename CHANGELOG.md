@@ -141,3 +141,15 @@ SmartPark 프로젝트의 주요 변경 사항과 버전 tag 기록을 정리한
 - Git commit 메시지, tag 생성, CHANGELOG 작성 규칙 정리
 - Claude Code와 Codex 작업 시 따라야 할 AI 도구 작업 규칙 및 프롬프트 작성 기준 정리
 - 문서, 프론트엔드, 백엔드 검토 체크리스트와 금지 사항 정리
+
+---
+
+## v0.3.4
+
+- `docs/harness/CLAUDE.md` 추가
+- Claude Code가 SmartPark React Native 프론트엔드 구현 시 참고할 작업 지침 정리
+- Claude Code의 역할, 작업 범위, 금지 사항, 기본 작업 흐름 정의
+- 프론트엔드 폴더 구조, 화면 구현 규칙, 컴포넌트 구현 규칙, 네이밍 규칙 정리
+- HomeMapScreen, DestinationSearchScreen, RecommendedParkingScreen, ParkingDetailScreen, ActiveParkingSessionScreen, PaymentScreen, ProviderHomeScreen 등 주요 화면별 구현 기준 작성
+- API 연동, mock 데이터, 상태값, 네비게이션, Prompt 작성 기준 정리
+- Claude Code 작업 결과 보고 형식과 검증 기준 정리
