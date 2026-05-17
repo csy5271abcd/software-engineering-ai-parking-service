@@ -166,3 +166,14 @@ SmartPark 프로젝트의 주요 변경 사항과 버전 tag 기록을 정리한
 - 주차장 조회, 목적지 기반 검색, 공급자 등록, 관리자 승인, NFC 이용 시작/종료, 결제 및 정산, 신고 처리, 혼잡도 분석 로직 기준 정리
 - 공통 응답, 예외 처리, 외부 API 연동, 데이터베이스 설계, 보안/권한, 테스트 작성 기준 정리
 - Codex Prompt 작성 기준과 작업 결과 보고 형식 정리
+
+---
+
+## v0.3.6
+
+- `docs/harness/PROMPT_LOG.md` 추가
+- SmartPark 프로젝트에서 AI 도구에 입력한 프롬프트와 생성 결과, 수정 사항을 기록하기 위한 문서 작성
+- 프롬프트 기록 대상, 제외 가능 항목, 기록 방식, 기록 템플릿 정리
+- PRD, FEATURE_SPEC, SCREEN_STRUCTURE, PROJECT_RULES, CLAUDE, CODEX 문서 작성 과정의 주요 프롬프트 기록 정리
+- Claude Code와 Codex 작업 프롬프트 예시, 문서 수정 프롬프트 예시, 오류 수정 기록 양식 작성
+- AI 기반 작업 결과를 commit, tag, CHANGELOG와 연결하기 위한 형상관리 기준 정리
