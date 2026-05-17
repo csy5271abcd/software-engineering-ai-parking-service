@@ -118,3 +118,12 @@ SmartPark 프로젝트의 주요 변경 사항과 버전 tag 기록을 정리한
 - 개인/상가 주차 공간 등록, 이용 가능 시간 및 요금 설정, NFC 이용 시작/종료, 결제 내역 저장 기능 명세 작성
 - AI/규칙 기반 혼잡도 분석, 관리자 승인/반려, 신고 및 분쟁 관리, 결제 오류 관리, 운영 통계 기능 명세 작성
 - 기능별 입력값, 출력값, 예외 상황, API 후보, 완료 기준, 테스트 케이스 연결 방향 정리
+
+## v0.3.2
+
+- `docs/harness/SCREEN_STRUCTURE.md` 추가
+- SmartPark React Native 앱의 전체 화면 구조와 네비게이션 구성 정리
+- RootNavigator, MainTabNavigator, HomeStack, SearchStack, ParkingStack, ProviderStack, MyPageStack 구조 정의
+- 일반 이용자, 공급자, 관리자 관점의 주요 화면 흐름 정리
+- 메인 지도, 목적지 검색, 추천 주차장, 상세 화면, NFC 이용, 결제, 공급자 등록, 관리자 승인 화면 구조 작성
+- 화면별 주요 컴포넌트, 상태값, API 연결 기준, 테스트 케이스 연결 방향 정리
