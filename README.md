@@ -142,15 +142,21 @@ software-engineering-ai-parking-service/
 
 공식 과제 문서 외에도 SmartPark 프로젝트를 실제 서비스처럼 구체화하기 위해 다음과 같은 보조 산출물을 작성한다.
 
-| 구분      | 문서                                                                  | 목적                                                 | 상태 |
-| --------- | --------------------------------------------------------------------- | ---------------------------------------------------- | ---- |
-| 제품 기획 | `PERSONA.md`                                                          | SmartPark의 주요 사용자 유형과 페르소나 정의         | 완료 |
-| 제품 기획 | `USER_JOURNEY.md`                                                     | 사용자 유형별 서비스 이용 흐름과 문제 해결 과정 정리 | 완료 |
-| 제품 기획 | `COMPETITOR_ANALYSIS.md`                                              | 기존 주차 서비스와 SmartPark의 차별성 비교 분석      | 완료 |
-| 제품 기획 | `SERVICE_SCENARIO.md`                                                 | 실제 이용 상황 기반 서비스 시나리오 정리             | 완료 |
-| 제품 기획 | `BUSINESS_MODEL.md`                                                   | 목표 시장, 수익 모델, 확장 가능성 정리               | 완료 |
-| 디자인    | `SCREEN_FLOW.md`, `UI_DESIGN_GUIDE.md`, `DESIGN_SYSTEM.md`            | 앱 화면 구조와 UI 기준 정의                          | 예정 |
-| 하네스    | `PRD.md`, `FEATURE_SPEC.md`, `CLAUDE.md`, `CODEX.md`, `PROMPT_LOG.md` | AI 개발 도구가 일관성 있게 작업하도록 기준 제공      | 예정 |
+| 구분      | 문서                                                       | 목적                                                            | 상태 |
+| --------- | ---------------------------------------------------------- | --------------------------------------------------------------- | ---- |
+| 제품 기획 | `PERSONA.md`                                               | SmartPark의 주요 사용자 유형과 페르소나 정의                    | 완료 |
+| 제품 기획 | `USER_JOURNEY.md`                                          | 사용자 유형별 서비스 이용 흐름과 문제 해결 과정 정리            | 완료 |
+| 제품 기획 | `COMPETITOR_ANALYSIS.md`                                   | 기존 주차 서비스와 SmartPark의 차별성 비교 분석                 | 완료 |
+| 제품 기획 | `SERVICE_SCENARIO.md`                                      | 실제 이용 상황 기반 서비스 시나리오 정리                        | 완료 |
+| 제품 기획 | `BUSINESS_MODEL.md`                                        | 목표 시장, 수익 모델, 확장 가능성 정리                          | 완료 |
+| 하네스    | `PRD.md`                                                   | SmartPark의 제품 요구사항, 제품 목표, MVP 범위 정리             | 완료 |
+| 하네스    | `FEATURE_SPEC.md`                                          | 기능별 상세 동작, 입력값, 출력값, 예외 상황 정리                | 완료 |
+| 하네스    | `SCREEN_STRUCTURE.md`                                      | React Native 앱의 화면 구조와 네비게이션 구성 정리              | 완료 |
+| 하네스    | `PROJECT_RULES.md`                                         | 코드 작성 규칙, 폴더 규칙, 문서 작성 규칙, commit/tag 규칙 정리 | 완료 |
+| 하네스    | `CLAUDE.md`                                                | Claude Code가 프론트엔드 구현 시 참고할 작업 지침 정리          | 완료 |
+| 하네스    | `CODEX.md`                                                 | Codex가 백엔드 설계 및 문서화 작업 시 참고할 작업 지침 정리     | 완료 |
+| 하네스    | `PROMPT_LOG.md`                                            | AI 도구에 입력한 프롬프트, 결과, 수정 사항 기록 기준 정리       | 완료 |
+| 디자인    | `SCREEN_FLOW.md`, `UI_DESIGN_GUIDE.md`, `DESIGN_SYSTEM.md` | 앱 화면 구조와 UI 기준 정의                                     | 예정 |
 
 ---
 
@@ -184,7 +190,7 @@ git push origin main --tags
 
 현재 저장소에는 프로젝트 정의서, 프로젝트 관리 계획서, 형상관리 계획서, CHANGELOG, 폴더 구조 설명 문서가 포함되어 있다.
 
-또한 `docs/product/` 폴더에는 SmartPark의 제품 기획을 구체화하기 위한 다음 문서가 추가되었다.
+또한 `docs/product/` 폴더에는 SmartPark의 제품 기획을 구체화하기 위한 다음 문서 5종이 추가되었다.
 
 - `PERSONA.md`
 - `USER_JOURNEY.md`
@@ -194,7 +200,19 @@ git push origin main --tags
 
 이를 통해 SmartPark의 주요 사용자, 사용자 여정, 경쟁 서비스 대비 차별성, 실제 서비스 시나리오, 비즈니스 모델을 정리하였다.
 
-이후 단계에서는 요구사항 정의서, 요구사항 분석서, 소프트웨어 설계서, 인스팩션 예제, 테스트 결과서를 순차적으로 작성한다.
+`docs/harness/` 폴더에는 Claude Code, Codex 등 AI 개발 도구가 SmartPark 프로젝트를 일관성 있게 이해하고 작업할 수 있도록 다음 하네스 문서 7종이 추가되었다.
+
+- `PRD.md`
+- `FEATURE_SPEC.md`
+- `SCREEN_STRUCTURE.md`
+- `PROJECT_RULES.md`
+- `CLAUDE.md`
+- `CODEX.md`
+- `PROMPT_LOG.md`
+
+이를 통해 SmartPark의 제품 요구사항, 기능 명세, 화면 구조, 프로젝트 작업 규칙, Claude Code 프론트엔드 작업 기준, Codex 백엔드 작업 기준, AI 프롬프트 기록 기준을 정리하였다.
+
+현재까지 제품 기획 문서와 하네스 문서 작성이 완료되었으며, 이후 단계에서는 요구사항 정의서, 요구사항 분석서, 소프트웨어 설계서, 인스팩션 예제, 테스트 결과서를 순차적으로 작성한다.
 
 ---
 
