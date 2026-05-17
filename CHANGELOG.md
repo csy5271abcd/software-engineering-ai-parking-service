@@ -153,3 +153,16 @@ SmartPark 프로젝트의 주요 변경 사항과 버전 tag 기록을 정리한
 - HomeMapScreen, DestinationSearchScreen, RecommendedParkingScreen, ParkingDetailScreen, ActiveParkingSessionScreen, PaymentScreen, ProviderHomeScreen 등 주요 화면별 구현 기준 작성
 - API 연동, mock 데이터, 상태값, 네비게이션, Prompt 작성 기준 정리
 - Claude Code 작업 결과 보고 형식과 검증 기준 정리
+
+---
+
+## v0.3.5
+
+- `docs/harness/CODEX.md` 추가
+- Codex가 SmartPark Spring Boot 백엔드 설계 및 문서화 작업 시 참고할 작업 지침 정리
+- Codex의 역할, 작업 범위, 금지 사항, 기본 작업 흐름 정의
+- 백엔드 폴더 구조, 도메인 설계 기준, Entity/DTO/API 작성 규칙 정리
+- User, Provider, ParkingLot, ParkingSpace, ParkingSession, Payment, Settlement, Report, CongestionPrediction, NfcTag 등 핵심 도메인 기준 작성
+- 주차장 조회, 목적지 기반 검색, 공급자 등록, 관리자 승인, NFC 이용 시작/종료, 결제 및 정산, 신고 처리, 혼잡도 분석 로직 기준 정리
+- 공통 응답, 예외 처리, 외부 API 연동, 데이터베이스 설계, 보안/권한, 테스트 작성 기준 정리
+- Codex Prompt 작성 기준과 작업 결과 보고 형식 정리
