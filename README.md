@@ -262,6 +262,15 @@ git push origin main --tags
 - `constants/status.ts`: 주차장/혼잡도/결제/승인/세션 상태값 상수 및 TypeScript union type
 - 이후 네비게이션 구성, 타입 정의, mock 데이터, 화면 구현에서 이 기준을 사용한다.
 
+`src/frontend/src/types/`와 `src/frontend/src/mocks/`에 타입 정의와 화면 검증용 Mock 데이터가 구현되었다.
+
+- `types/common.ts`: `Coordinates`, `AddressInfo`, `ApiResponse<T>` 공통 타입
+- `types/parking.ts`: `ParkingLotSummary`(목록), `ParkingLotDetail`(상세), `ParkingFee`, `OperationHours` 등
+- `types/user.ts`: `UserRole`, `User`, `ProviderProfile` 타입
+- `types/payment.ts`: `ParkingSession`, `Payment`, `PaymentMethod` 타입
+- `mocks/parkingLots.mock.ts`: 9개 가상 주차장 데이터 (AVAILABLE/FULL/SOON_AVAILABLE/OCCUPIED/INACTIVE 상태, LOW~VERY_HIGH/UNKNOWN 혼잡도 포함)
+- 이후 서비스/훅 구조, 네비게이션, 화면 구현에서 이 데이터를 사용한다.
+
 ---
 
 ## 12.1 구현 진행 방향

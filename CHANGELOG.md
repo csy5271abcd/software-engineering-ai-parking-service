@@ -291,3 +291,18 @@ SmartPark 프로젝트의 주요 변경 사항과 버전 tag 기록을 정리한
 - `src/frontend/src/constants/status.ts` 추가 — 주차장/혼잡도/결제/승인/세션 상태값 상수 및 TypeScript union type
 - `npx tsc --noEmit` 검증 통과 (오류 없음)
 - 이후 React Navigation 설치, 타입 정의, mock 데이터, 화면 구현 단계로 연결 예정
+
+---
+
+## v1.0.5
+
+- `src/frontend/src/types/common.ts` 추가 — `Coordinates`, `AddressInfo`, `ApiResponse<T>` 공통 타입
+- `src/frontend/src/types/parking.ts` 추가 — `ParkingLotSummary`(목록), `ParkingLotDetail`(상세), `ParkingFee`, `OperationHours`, `ParkingSpace` 타입
+- `src/frontend/src/types/user.ts` 추가 — `UserRole`, `User`, `ProviderProfile` 타입
+- `src/frontend/src/types/payment.ts` 추가 — `ParkingSession`, `Payment`, `PaymentMethod` 타입
+- `src/frontend/src/types/index.ts` 추가 — 전체 타입 통합 export
+- `src/frontend/src/mocks/parkingLots.mock.ts` 추가 — 9개 가상 주차장 Mock 데이터 (AVAILABLE/FULL/SOON_AVAILABLE/OCCUPIED/INACTIVE 상태 혼합, LOW~VERY_HIGH/UNKNOWN 혼잡도 혼합)
+- `src/frontend/src/mocks/index.ts` 추가 — mock 데이터 통합 export
+- FEATURE_SPEC.md 상태값과 SCREEN_STRUCTURE.md 화면 흐름 기준 반영
+- `npx tsc --noEmit` 검증 통과 (오류 없음)
+- 이후 서비스/훅 구조 또는 React Navigation 설치 및 화면 구현 단계로 연결 예정
