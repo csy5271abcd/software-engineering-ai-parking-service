@@ -251,6 +251,17 @@ SmartPark 프로젝트의 주요 변경 사항과 버전 tag 기록을 정리한
 - React Native 0.85.3 + TypeScript 기반 CLI 프로젝트 생성 (`@react-native-community/cli` 사용)
 - `App.tsx`를 SmartPark 기본 앱 화면으로 정리 (예제 문구 제거)
 - `package.json`, `tsconfig.json`, `android/`, `ios/`, `index.js` 구조 확인
-- `npm install` 완료, Android 실행 가능 상태 준비
+- `npm install` 완료 및 Android 실행을 위한 기본 프로젝트 구조 준비
 - 이후 Android 실기기 실행 확인 단계로 연결 예정
-- 다음 단계: Naver Map 스타일 UI, 지도 화면, 바텀시트, 주차장 카드, 네비게이션 구현
+
+---
+
+## v1.0.2
+
+- Android 실기기 실행 검증 중 발생한 CMake/NDK 링크 오류 수정
+- `android/app/src/main/jni/CMakeLists.txt` 추가 또는 수정
+- `c++_shared` 링크 설정을 명시하여 React Native Android Native 빌드 오류 보완
+- `android/app/build.gradle`의 CMake 설정 확인 및 보완
+- Gradle/CMake 캐시 정리 후 재빌드 수행
+- `npm run android` 실행 결과 Android 실기기 `SM-S911N`에 APK 설치 및 앱 실행 성공
+- 이후 Naver Map 스타일 UI, 지도 화면, 바텀시트, 주차장 카드, 네비게이션 구현 단계로 연결 예정

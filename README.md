@@ -70,16 +70,16 @@ SmartPark는 기존 주차 서비스와 비교했을 때 다음과 같은 차별
 
 ## 6. 기술 스택
 
-| 구분                   | 기술                               |
-| ---------------------- | ---------------------------------- |
-| Frontend               | React Native                       |
-| Backend                | Spring Boot, Swagger/OpenAPI       |
-| Database               | MySQL                              |
-| Map API                | Naver Maps API, Tmap API           |
+| 구분                   | 기술                                                  |
+| ---------------------- | ----------------------------------------------------- |
+| Frontend               | React Native                                          |
+| Backend                | Spring Boot, Swagger/OpenAPI                          |
+| Database               | MySQL                                                 |
+| Map API                | Naver Maps API, Tmap API                              |
 | AI/Analysis            | Python, CSV/Excel Mock Data, 규칙 기반/ML 혼잡도 분석 |
-| Deployment             | AWS 배포 예정                      |
-| Version Control        | Git, GitHub                        |
-| AI Development Support | Claude Code, Codex                 |
+| Deployment             | AWS 배포 예정                                         |
+| Version Control        | Git, GitHub                                           |
+| AI Development Support | Claude Code, Codex                                    |
 
 ---
 
@@ -114,14 +114,14 @@ software-engineering-ai-parking-service/
 
 ## 8. 산출물 구성
 
-| 구분           | 위치                 | 설명                                                   |
-| -------------- | -------------------- | ------------------------------------------------------ |
-| 요구사항 문서  | `docs/requirements/` | 프로젝트 정의서, 요구사항 정의서, 요구사항 분석서      |
-| 계획 문서      | `docs/plan/`         | 프로젝트 관리 계획서, 형상관리 관련 문서               |
-| 설계 문서      | `docs/design/`       | 소프트웨어 설계서, 화면 흐름, 디자인 시스템            |
-| 제품 기획 문서 | `docs/product/`      | 페르소나, 사용자 여정, 경쟁 서비스 분석, 비즈니스 모델 |
-| 하네스 문서    | `docs/harness/`      | PRD, 기능 명세, Claude/Codex 작업 지침, 프롬프트 기록  |
-| 테스트 문서    | `docs/test/`         | 인스팩션 예제, 테스트 결과서, 결함 기록                |
+| 구분           | 위치                 | 설명                                                                       |
+| -------------- | -------------------- | -------------------------------------------------------------------------- |
+| 요구사항 문서  | `docs/requirements/` | 프로젝트 정의서, 요구사항 정의서, 요구사항 분석서                          |
+| 계획 문서      | `docs/plan/`         | 프로젝트 관리 계획서, 형상관리 관련 문서                                   |
+| 설계 문서      | `docs/design/`       | 소프트웨어 설계서, 화면 흐름, 디자인 시스템                                |
+| 제품 기획 문서 | `docs/product/`      | 페르소나, 사용자 여정, 경쟁 서비스 분석, 비즈니스 모델                     |
+| 하네스 문서    | `docs/harness/`      | PRD, 기능 명세, Claude/Codex 작업 지침, 프롬프트 기록                      |
+| 테스트 문서    | `docs/test/`         | 인스팩션 예제, 테스트 결과서, 결함 기록                                    |
 | 소스코드       | `src/`               | React Native 프론트엔드, Spring Boot 백엔드, Python AI 분석 모듈 구현 코드 |
 
 ---
@@ -158,7 +158,7 @@ software-engineering-ai-parking-service/
 | 하네스    | `CLAUDE.md`                                                | Claude Code가 프론트엔드 구현 시 참고할 작업 지침 정리          | 완료 |
 | 하네스    | `CODEX.md`                                                 | Codex가 백엔드 설계 및 문서화 작업 시 참고할 작업 지침 정리     | 완료 |
 | 하네스    | `PROMPT_LOG.md`                                            | AI 도구에 입력한 프롬프트, 결과, 수정 사항 기록 기준 정리       | 완료 |
-| 디자인    | `NAVER_MAP_STYLE_GUIDE.md`                                  | Naver Map Design System 기반 SmartPark UI 스타일 기준 정리      | 완료 |
+| 디자인    | `NAVER_MAP_STYLE_GUIDE.md`                                 | Naver Map Design System 기반 SmartPark UI 스타일 기준 정리      | 완료 |
 | 디자인    | `SCREEN_FLOW.md`, `UI_DESIGN_GUIDE.md`, `DESIGN_SYSTEM.md` | 앱 화면 구조와 UI 기준 정의                                     | 예정 |
 
 ---
@@ -237,7 +237,10 @@ git push origin main --tags
 
 - React Native 0.85.3 + TypeScript 기반 CLI 프로젝트
 - `App.tsx`, `index.js`, `tsconfig.json`, `package.json`, `android/`, `ios/` 구조 포함
-- `npm install` 완료, Android 실행 준비 상태
+- `npm install` 완료 및 Android 실행을 위한 기본 프로젝트 구조 구성
+- Android 실기기 실행 검증 중 발생한 CMake/NDK 링크 오류를 수정하였다.
+- `android/app/src/main/jni/CMakeLists.txt`와 `android/app/build.gradle` 설정을 보완하여 `c++_shared` 링크 문제를 해결하였다.
+- `npm run android` 실행 결과 Android 실기기에서 SmartPark 기본 앱 실행을 확인하였다.
 - 이후 단계에서 Naver Map 스타일 UI, 지도 화면, 바텀시트, 주차장 카드, 네비게이션을 순차적으로 구현한다.
 
 ---
@@ -246,11 +249,11 @@ git push origin main --tags
 
 현재 구현 단계는 프론트엔드, 백엔드, AI 혼잡도 분석 모듈을 다음 기준으로 진행한다.
 
-| 영역 | 구현 방향 | 주요 도구 |
-| ---- | --------- | --------- |
-| 프론트엔드 | NaverMaps 스타일의 지도 중심 React Native 앱 구현 | Claude Code, Android 실기기 USB 테스트 |
-| 백엔드 | 주차장 조회, 목적지 검색, 혼잡도 조회 API 구현 | Spring Boot, MySQL, Swagger, Codex |
-| AI 분석 | 약 5년 치 가상 주차장 Mock 데이터 생성 및 혼잡도 예측 | Python, CSV/Excel, ML 모델 |
+| 영역       | 구현 방향                                             | 주요 도구                              |
+| ---------- | ----------------------------------------------------- | -------------------------------------- |
+| 프론트엔드 | NaverMaps 스타일의 지도 중심 React Native 앱 구현     | Claude Code, Android 실기기 USB 테스트 |
+| 백엔드     | 주차장 조회, 목적지 검색, 혼잡도 조회 API 구현        | Spring Boot, MySQL, Swagger, Codex     |
+| AI 분석    | 약 5년 치 가상 주차장 Mock 데이터 생성 및 혼잡도 예측 | Python, CSV/Excel, ML 모델             |
 
 1차 MVP는 다음 흐름을 우선 구현한다.
 
