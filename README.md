@@ -250,6 +250,18 @@ git push origin main --tags
 - `components` 하위: `common`, `map`, `parking`, `bottomSheet`, `provider`, `admin` 분리
 - 이후 디자인 토큰 구현, 네비게이션 구성, 지도 화면 구현 단계로 연결한다.
 
+`src/frontend/src/theme/`과 `src/frontend/src/constants/`에 공통 디자인 토큰과 상수 파일이 구현되었다.
+
+- `theme/colors.ts`: Naver Map 스타일 기준 색상 토큰 (Primary Green `#03AA5A`, Warm Gray, Red, semantic 색상)
+- `theme/spacing.ts`: 2px 단위 간격 토큰 (2~22px, Layout margin alias 포함)
+- `theme/radius.ts`: 모서리 반지름 토큰 (4~20px, bottomSheet/searchBar/card/pill alias 포함)
+- `theme/typography.ts`: title/body/caption/label/numeric 타이포그래피 토큰
+- `theme/shadow.ts`: small/medium/large shadow 토큰 (Android elevation + iOS shadow 대응)
+- `theme/index.ts`: `theme` 객체로 통합 export
+- `constants/routes.ts`: SCREEN_STRUCTURE.md 기준 전체 화면 route 이름 상수
+- `constants/status.ts`: 주차장/혼잡도/결제/승인/세션 상태값 상수 및 TypeScript union type
+- 이후 네비게이션 구성, 타입 정의, mock 데이터, 화면 구현에서 이 기준을 사용한다.
+
 ---
 
 ## 12.1 구현 진행 방향

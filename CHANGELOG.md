@@ -276,3 +276,18 @@ SmartPark 프로젝트의 주요 변경 사항과 버전 tag 기록을 정리한
 - `components` 하위: `common`, `map`, `parking`, `bottomSheet`, `provider`, `admin` 분리
 - 빈 폴더 Git 추적을 위해 각 폴더에 `.gitkeep` 추가
 - 이후 디자인 토큰 구현, 네비게이션 구성, 지도 화면 구현 단계로 연결 예정
+
+---
+
+## v1.0.4
+
+- `src/frontend/src/theme/colors.ts` 추가 — Naver Map 스타일 색상 토큰 (Primary Green, Warm Gray, Red, semantic/status/congestion 색상)
+- `src/frontend/src/theme/spacing.ts` 추가 — 2px 단위 간격 토큰 (2~22px, Layout margin alias)
+- `src/frontend/src/theme/radius.ts` 추가 — 모서리 반지름 토큰 (4~20px, component alias 포함)
+- `src/frontend/src/theme/typography.ts` 추가 — title/body/caption/label/numeric 타이포그래피 토큰
+- `src/frontend/src/theme/shadow.ts` 추가 — small/medium/large shadow 토큰 (Android/iOS 대응)
+- `src/frontend/src/theme/index.ts` 추가 — theme 객체로 통합 export
+- `src/frontend/src/constants/routes.ts` 추가 — SCREEN_STRUCTURE.md 기준 전체 화면 route 이름 상수
+- `src/frontend/src/constants/status.ts` 추가 — 주차장/혼잡도/결제/승인/세션 상태값 상수 및 TypeScript union type
+- `npx tsc --noEmit` 검증 통과 (오류 없음)
+- 이후 React Navigation 설치, 타입 정의, mock 데이터, 화면 구현 단계로 연결 예정
