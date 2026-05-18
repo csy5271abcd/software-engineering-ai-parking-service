@@ -158,6 +158,7 @@ software-engineering-ai-parking-service/
 | 하네스    | `CLAUDE.md`                                                | Claude Code가 프론트엔드 구현 시 참고할 작업 지침 정리          | 완료 |
 | 하네스    | `CODEX.md`                                                 | Codex가 백엔드 설계 및 문서화 작업 시 참고할 작업 지침 정리     | 완료 |
 | 하네스    | `PROMPT_LOG.md`                                            | AI 도구에 입력한 프롬프트, 결과, 수정 사항 기록 기준 정리       | 완료 |
+| 디자인    | `NAVER_MAP_STYLE_GUIDE.md`                                  | Naver Map Design System 기반 SmartPark UI 스타일 기준 정리      | 완료 |
 | 디자인    | `SCREEN_FLOW.md`, `UI_DESIGN_GUIDE.md`, `DESIGN_SYSTEM.md` | 앱 화면 구조와 UI 기준 정의                                     | 예정 |
 
 ---
@@ -225,6 +226,12 @@ git push origin main --tags
 과제4 요구사항 분석서를 통해 SmartPark의 소프트웨어 문맥, Use Case Description, 정적 분석, CRC 카드, 동적 분석, 인터페이스 분석, 제약사항, 요구사항 추적표를 구체화하였다.
 
 현재까지 과제1 프로젝트정의서, 과제2 프로젝트관리계획서, 과제3 요구사항정의서, 과제4 요구사항분석서, 제품 기획 문서, 하네스 문서 작성이 완료되었으며, 이후 단계에서는 소프트웨어 설계서, 인스팩션 예제, 테스트 결과서를 순차적으로 작성한다.
+
+`docs/design/` 폴더에는 SmartPark 프론트엔드 구현을 위한 UI 스타일 기준 문서가 추가되었다.
+
+- `NAVER_MAP_STYLE_GUIDE.md`: Naver Map Design System 이미지를 분석하여 색상, 타이포그래피, 간격, 반지름, 레이아웃, 아이콘 토큰과 컴포넌트별 적용 기준 정리
+
+이를 통해 SmartPark의 React Native 화면 및 컴포넌트 구현에 필요한 디자인 토큰, 컴포넌트 스펙, 화면별 적용 기준을 정리하였다. v1.0.0부터 프론트엔드 구현 단계를 시작한다.
 
 ---
 

@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(Get-Command *)",
+      "PowerShell(python -c \"import pypdf; print\\('pypdf available'\\)\" 2>&1; python -c \"import PyPDF2; print\\('PyPDF2 available'\\)\" 2>&1; python -c \"import pdfplumber; print\\('pdfplumber available'\\)\" 2>&1; python -c \"import fitz; print\\('fitz available'\\)\" 2>&1)",
+      "PowerShell(pip install *)"
+    ]
+  }
+}

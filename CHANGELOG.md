@@ -232,3 +232,13 @@ SmartPark 프로젝트의 주요 변경 사항과 버전 tag 기록을 정리한
 - `docs/harness/PROMPT_LOG.md`에 구현 방향 수립 및 문서 보강 프롬프트 기록 추가
 - `docs/product/SERVICE_SCENARIO.md`의 SS-09를 AI Mock 데이터 생성 및 혼잡도 예측 흐름 중심으로 보강
 - `README.md`에 구현 진행 방향과 `src/ai` 구조 반영
+
+---
+
+## v1.0.0
+
+- SmartPark 프론트엔드 구현 단계 시작
+- `docs/design/reference/naver-map-design-system/` 하위에 Naver Map Design System 이미지 reference 추가
+- `docs/design/NAVER_MAP_STYLE_GUIDE.md` 추가
+- Component 기준 정리: BottomSheet, SearchBar, Chip, Button(CTA/Pill), Header, NaviBar, Modal, Tab, Card, MapMarker, Pagination, Radio, Switch, TimePicker, Drop Down
+- Foundation 기준 정리: Color(Black&White/Warm Gray/Cool Gray/Green/Red/Orange), Typography(KR/EN,NUM), Radius, Spacing, Layout, Elevation, Icon

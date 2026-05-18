@@ -1,0 +1,2622 @@
+
+===== Typo_Color_Icon.pdf =====
+-- Page 1 --
+T ypogr aphy
+T ypogr aphy는 계층 구조는 콘텐츠의 중요도를 구분하고 사용자가 쉽게 정보를 탐색할 수 있도록 돕습니다. 
+네이버 지도의 T ypogr aphy는 각 스타일을 정의하여 특정 용도에 맞게 배치합니다. 
+F o n t  s t a c k s
+숫 자 와  영 문  서 체 는  가 독 성 과  일 관 성 을  고 려 하 여  P r e t e n d a r d  폰 트 를  사 용 합 니 다 .   이 를  통 해  U I 의  시 각 적  안 정 성 을  유 지 하 고 ,  다 양 한  플 랫 폼 에 서  일 관 된  사 용 자  경 험 을  제 공 할  수  있 습 니 다 .
+P r e t e n d a r d N o t o  S a n s  K R
+숫 자 와  영 문  서 체 는  가 독 성 과  일 관 성 을  고 려 하 여  P r e t e n d a r d  폰 트 를  사 용 합 니 다 .   
+이 를  통 해  U I 의  시 각 적  안 정 성 을  유 지 하 고 ,  다 양 한  플 랫 폼 에 서  일 관 된  
+사 용 자  경 험 을  제 공 할  수  있 습 니 다 .
+N o t o  S a n s  K R 를  사 용 하 여  정 보  전 달 력 을  극 대 화 합 니 다 .  
+지 도  내  지 명 ,  길  찾 기  안 내 ,  장 소  정 보  등 은  빠 르 고  정 확 한  인 식 이  필 수 적 이 므 로 ,  명 확 한  형 태
+와  적 절 한  자 간 을  갖 춘  서 체 를  적 용 하 여  원 활 한  네 비 게 이 션 을  할  수  있 도 록  지 원 합 니 다 .
+Numeric & English K o r e a n
+aA 01 가나다
+F o n t  s i z e  u n i t s
+다 양 한  플 랫 폼 ( 예 :  A n d r o i d ,  i O S ,  W e b ) 에 서 의  일 관 된  사 용 자  경 험 을  제 공 하 기  위 해  r e m 과  p t  단 위 를  사 용 합 니 다 .
+w e b 에 서 는  r e m ,  i O S 에 서 는  p t  단 위 를  사 용 하 며  이  단 위 들 은  다 양 한  화 면  크 기 와  해 상 도 에 서  텍 스 트 가  적 절 하 게  표 시 될  수  있 도 록  도 와 줍 니 다 .
+P l a t f o r m
+F o n t  s i z e  u n i t
+A n d r o i d ,  i O S
+p t
+T a b l e t ,  A c c e s s i b i l i t y
+p t  +  r e m
+C o n v e r s a t i o n  r a t i o 1 . 0 1 . 0  /  r e m  기 반  조 정
+P u r p o s e O S 에 서  기 본  제 공 하 는  기 본  텍 스 트  스 케 일 링  적 용 ,   
+고 해 상 도  디 스 플 레 이 에 서  가 독 성  유 지
+다 양 한  태 블 릿  화 면  크 기 에 서  균 형  잡 힌  텍 스 트  크 기  제 공 ,
+접 근 성 ( 큰  글 씨  보 기  등 )  대 응
+-- Page 2 --
+N u m e r i c  &  E n g l i s h  T y p e f a c e  U s a g e
+숫 자 와  영 문  서 체 는  가 독 성 과  일 관 성 을  고 려 하 여  P r e t e n d a r d  폰 트 를  사 용 합 니 다 .   이 를  통 해  U I 의  시 각 적  안 정 성 을  유 지 하 고 ,  다 양 한  플 랫 폼 에 서  일 관 된  사 용 자  경 험 을  제 공 할  수  있 습 니 다 .
+T i t l e
+T ypogr aphy T ok en L e v el Weight 	F ont Siz e 	Line Height L e t t er -sp acing
+$ n u m - t i t l e - 3 0
+$ n u m - t i t l e - 1 8
+$ n u m - t i t l e - 1 6
+$ n u m - t i t l e - 1 5
+$ n u m - t i t l e - 1 5
+$ n u m - t i t l e - 1 4
+$ n u m - t i t l e - 1 1
+Tit le 30 Bold 30p x/1 . 87 5r em Aut o 0%
+Tit le 18 Sembiold 18p x/1 . 125r em Aut o 0%
+T i t l e  1 6 S e m b i o l d 1 6 px / 1 r e m A u t o 2 %
+Tit le 15 Medium 15p x/0 . 937 5r em Aut o 0%
+T i t l e  1 5 R e g u l a r 1 5 p x / 0 . 9 3 7 5 r e m A u t o - 2 %
+Tit le 1 4 Sembiold 1 4 p x/0 . 8 7 5r em Aut o 0%
+Tit le 11 b old 11p x/0 . 6 87 5r em Aut o 0%
+B o d y
+T ypogr aphy T ok en L e v el Weight 	F ont Siz e 	Line Height L e t t er -sp acing
+$ n u m - b o d y - 1 5
+$ n u m - b o d y - 1 5
+$ n u m - b o d y - 1 5
+$ n u m - b o d y - 1 4
+$ n u m - b o d y - 1 3
+$ n u m - b o d y - 1 3
+Bod y  15 Bold 15p x/0 . 9 37 5r em Aut o 0%
+B od y  15 Sembiold 15p x/0 . 937 5r em Aut o 0%
+Body  15 R egular 15 p x/0 . 937 5r e m A ut o 0%
+Body  1 4 R egular 1 4p x/0 . 87 5r e m A ut o 0%
+B o d y  1 3 S e m b i o l d 1 3 px / 0 . 8 1 2 5 r e m A u t o 2 %
+B o d y  1 3 R e g u l a r 1 3 p x / 0 . 8 1 2 5 r e m A u t o 1 %
+C a p t i o n
+T ypogr aphy T ok en L e v el Weight 	F ont Siz e 	Line Height L e t t er -sp acing
+$ n u m - c a p t i o n - 1 4
+$ n u m - c a p t i o n - 1 4
+$ n u m - c a p t i o n - 1 3
+$ n u m - c a p t i o n - 1 2
+C a p ti o n  1 4 S e m i b o l d 1 4p x/0 . 87 5r e m A ut o 0%
+C a p ti o n  1 4 R egular 1 4p x/0 . 87 5r e m A ut o 0%
+C a p ti o n  1 3 R egular 1 3p x/0 . 8 1 2 5r e m A ut o 0%
+C a p ti o n  1 2 S e m b i o l d 1 2p x/0 . 7 5r e m A ut o 0%
+-- Page 3 --
+K o r e a n  T y p f a c e  U s a g e
+네 이 버  지 도 에 서 는  한 글  가 독 성 을  최 적 화 한  서 체  N o t o  S a n s  K r 를  사 용 하 여  정 보  전 달 력 을  극 대 화 합 니 다 .  
+지 도  내  지 명 ,  길  찾 기  안 내 ,  장 소  정 보  등 은  빠 르 고  정 확 한  인 식 이  필 수 적 이 므 로 ,  명 확 한  형 태 와  적 절 한  자 간 ( 글 자  간 격 ) 을  갖 춘  서 체 를  적 용 하 여  사 용 자 가  원 활 하 게  네 비 게 이 션 할  수  있 도 록  지 원 합 니 다 .
+T i t l e
+T ypogr aphy T ok en L e v el Weight 	F ont Siz e 	Line Height L e t t er -sp acing
+$ k r - t i t l e - 2 0
+$ k r - t i t l e - 2 0
+$ k r - t i t l e - 1 8
+$ k r - t i t l e - 1 8
+$ k r - t i t l e - 1 6
+$ k r - t i t l e - 1 6
+$ k r - t i t l e - 1 6
+$ k r - t i t l e - 1 4
+$ k r - t i t l e - 1 4
+$ k r - t i t l e - 1 3
+$ k r - t i t l e - 1 2
+$ k r - t i t l e - 1 2
+$ k r - t i t l e - 1 2
+T i t l e  2 0 S e m i b o l d 2 0 p x / 1 . 2 5 r e m A u t o - 2 %
+T i t l e  2 0 M e d i u m 2 0 p x / 1 . 2 5 r e m A u t o - 6 %
+T i t l e  1 8 S e m b i o l d 1 8 p x / 1 . 1 2 5 r e m A u t o - 2 %
+Title 1 8 Medium 1 8 p x/1.125r em A ut o 0 %
+Title 1 6 Semibold 1 6 p x/1r em A ut o -2%
+T i t l e  1 6 M e d i u m 1 6 p x / 1 r e m A u t o - 1 %
+Title 16 R e g u lar 16 p x/1 r e m A u t o 0%
+Title 1 4 Medium 1 4 p x/0. 87 5r em A ut o 0 %
+Title 14 R e g u lar 14 p x/0 . 875 r e m A u t o 0%
+T i t l e  1 3 S e m i b o l d 1 3 p x / 0 . 8 1 2 5 r e m A u t o 1 %
+T i t l e  1 2 S e m i b o l d 1 2 p x / 0 . 7 5 r e m A u t o 2 %
+Title 12 Medium 12p x/0. 7 5r em A ut o 0 %
+Title 1 2 R e g u lar 1 2 p x/0 . 75 r e m A u t o 0%
+B o d y
+T ypogr aphy T ok en L e v el Weight 	F ont Siz e 	Line Height L e t t er -sp acing
+$ k r - b o d y - 1 6
+$ k r - b o d y - 1 6
+$ k r - b o d y - 1 4
+$ k r - b o d y - 1 4
+$ k r - b o d y - 1 3
+$ k r - b o d y - 1 3
+B od y  1 6 Medium 1 6 p x/1r em A ut o 0 %
+B o d y  1 6 R e g u l a r 1 6 p x / 1 r e m 1 3 5 % - 3 %
+B od y  1 4 Semibold 1 4 p x/0. 8 7 5r em A ut o 0 %
+B o d y 14 R e g u lar 14 p x/0 . 875 r e m A u t o 0%
+B o d y  1 3 R e g u l a r 1 3 p x / 0 . 8 1 2 5 r e m A u t o - 6 %
+Body  13 R e u l ar 13p x / 0.8125r e m A ut o 0%
+C a p t i o n
+T ypogr aphy T ok en L e v el Weight 	F ont Siz e 	Line Height L e t t er -sp acing
+$ k r - c a p t i o n - 1 6
+$ k r - c a p t i o n - 1 2
+$ k r - c a p t i o n - 1 0
+C ap tion 16 R e g u lar 16 p x/1 r e m A u t o 0%
+C ap tion 1 2 R e g u lar 1 2 p x/0 . 75 r e m A u t o 0%
+C ap tion 10 R e g u lar 10 p x/0 . 6 2 5 r e m A u t o 0%
+-- Page 4 --
+Color T ok ens_Black & Whit e
+일관된 브랜드 경험을 만들수 있도록 표준 색상 차트와 사용자 가이드를 제공합니다
+다양한 디지털 채널에서 일관된 사용자 경험을 제공할 수 있도록 유도합니다
+C o l o r  T o k e n s
+$ i c - f i l l - w h i t e
+# H e x
+# F F F
+C o n t r a s t  r a t i o
+N o r m a l L a r g e G r a p h i c s
+1 . 0 0 : 1 A A A A A AA A AA A A A A A
+# F F F
+$ b g - f i l l - w h i t e 1 . 0 0 : 1
+N o r m a l
+A A AA A
+L a r g e
+A A AA A
+G r a p h i c s
+A A AA A
+# F F F
+$ b t n - f i l l - w h i t e 1 . 0 0 : 1
+N o r m a l
+A A AA A
+L a r g e
+A A AA A
+G r a p h i c s
+A A AA A
+-- Page 5 --
+Color T ok ens_W arm Gr ay Sc ale
+일관된 브랜드 경험을 만들수 있도록 표준 색상 차트와 사용자 가이드를 제공합니다
+다양한 디지털 채널에서 일관된 사용자 경험을 제공할 수 있도록 유도합니다
+C o l o r  T o k e n s
+$ b g - f i l l - w a r m - p r i m a r y
+# H e x
+# E D E D E D
+C o n t r a s t  r a t i o
+N o r m a l L a r g e G r a p h i c s
+1 . 1 7 : 1 A A A A A A A A A A A A A A A
+$ b t n - f i l l - w a r m - p r i m a r y
+# C 5 C 5 C 7
+1 . 7 2 3 : 1 N o r m a l
+A A A A A
+L a r g e
+A A A A A
+G r a p h i c s
+A A A A A
+$ t x t - f i l l - w a r m - p r i m a r y
+# 2 2 2 2 2 5
+1 5 . 8 6 6 : 1
+N o r m a l
+A A AA A
+L a r g e
+A A AA A
+G r a p h i c s
+A A AA A
+$ t x t - f i l l - w a r m - s e c o n d a r y
+# 3 7 3 7 3 7
+1 1 . 9 0 4 : 1
+N o r m a l
+A A AA A
+L a r g e
+A A AA A
+G r a p h i c s
+A A AA A
+$ t x t - f i l l - w a r m - t e r t i a r y
+# 6 5 6 5 6 5
+5 . 8 2 8 . 0 0
+N o r m a l
+A A A A A
+L a r g e
+A A AA A
+G r a p h i c s
+A A AA A
+$ t x t - f i l l - w a r m - q u a t e r n a r y
+# 9 3 9 3 9 6
+3 . 0 6 3 : 1 N o r m a l
+A A A A A
+L a r g e
+A A A A A
+G r a p h i c s
+A A A A A
+$ t x t - f i l l - w a r m - w e a k
+# C 5 C 5 C
+1 . 7 3 2 : 1 N o r m a l
+A A A A A
+L a r g e
+A A A A A
+G r a p h i c s
+A A A A A
+$ t x t - f i l l - w a r m - p r i m a r y
+# 4 4 4 4 4 7
+9 . 7 0 5 : 1
+N o r m a l
+A A AA A
+L a r g e
+A A AA A
+G r a p h i c s
+A A AA A
+$ t x t - f i l l - w a r m - s e c o n d a r y
+# 6 5 6 5 6 5
+5 . 8 2 8 : 1
+N o r m a l
+A A A A A
+L a r g e
+A A AA A
+G r a p h i c s
+A A AA A
+$ i c - s t r o k e - w a r m - p r i m a r y
+# 6 5 6 5 6 5
+5 . 8 2 8 : 1
+N o r m a l
+A A A A A
+L a r g e
+A A AA A
+G r a p h i c s
+A A AA A
+$ i c - s t r o k e - w a r m - s e c o n d a r y
+# 9 3 9 3 9 6
+3 . 0 6 3 : 1 N o r m a l
+A A A A A
+L a r g e
+A A A A A
+G r a p h i c s
+A A A A A
+$ i c - s t r o k e - w a r m - s e c o n d a r y _ p r e s s e d
+# 4 4 4 4 4 7
+9 . 7 0 5 : 1
+N o r m a l
+A A AA A
+L a r g e
+A A AA A
+G r a p h i c s
+A A AA A
+$ i c - s t r o k e - w a r m - w e a k
+# C 5 C 5 C 7
+1 . 7 2 3 : 1 N o r m a l
+A A A A A
+L a r g e
+A A A A A
+G r a p h i c s
+A A A A A
+-- Page 6 --
+Color T ok ens_Cool Gr ay Sc ale
+일관된 브랜드 경험을 만들수 있도록 표준 색상 차트와 사용자 가이드를 제공합니다
+다양한 디지털 채널에서 일관된 사용자 경험을 제공할 수 있도록 유도합니다
+C o l o r  T o k e n s
+$ b g - f i l l - c o o l - p r i m a r y
+# H e x
+# E 5 E A F 1
+C o n t r a s t  r a t i o
+N o r m a l L a r g e G r a p h i c s
+1 . 2 0 8 : 1 A A A A A A A A A A A A A A A
+$ b g - f i l l - c o o l - s e c o n d a r y
+# F 8 F 9 F B
+1 . 0 5 3 : 1 N o r m a l
+A A A A A
+L a r g e
+A A A A A
+G r a p h i c s
+A A A A A
+$ b g - s t r o k e - c o o l - w e a k
+# F 0 F 4 F F
+1 . 1 : 1 N o r m a l
+A A A A A
+L a r g e
+A A A A A
+G r a p h i c s
+A A A A A
+$ b g - f i l l - c o o l - o p a c i t y - p r i m a r y
+# 2 2 2 2 2 5 ( 5 0 % )
+3 . 1 8 6 : 1 N o r m a l
+A A A A A
+L a r g e
+A A A A A
+G r a p h i c s
+A A A A A
+$ b t n - s t r o k e - c o o l - p r i m a r y
+# E 5 E A F 1
+1 . 2 0 8 : 1 N o r m a l
+A A A A A
+L a r g e
+A A A A A
+G r a p h i c s
+A A A A A
+$ b t n - s t r o k e - c o o l - s e c o n d a r y
+# C A D 1 D B
+1 . 5 3 7 : 1 N o r m a l
+A A A A A
+L a r g e
+A A A A A
+G r a p h i c s
+A A A A A
+$ b t n - s t r o k e - c o o l - t e r t i a r y
+# 3 6 4 2 4 E
+1 0 . 2 6 3 : 1
+N o r m a l
+A A AA A
+L a r g e
+A A AA A
+G r a p h i c s
+A A AA A
+$ b t n - f i l l - c o o l - p r i m a r y
+# 8 B 9 9 A C
+2 . 8 9 6 : 1 N o r m a l
+A A A A A
+L a r g e
+A A A A A
+G r a p h i c s
+A A A A A
+$ b t n - f i l l - c o o l - p r i m a r y _ p r e s s e d
+# D A D D E 6
+1 . 3 5 7 : 1 N o r m a l
+A A A A A
+L a r g e
+A A A A A
+G r a p h i c s
+A A A A A
+$ b t n - f i l l - c o o l - s e c o n d a r y
+# 3 D 4 A 5 7
+9 . 0 6 9 : 1
+N o r m a l
+A A AA A
+L a r g e
+A A AA A
+G r a p h i c s
+A A AA A
+$ b t n - f i l l - c o o l - s e c o n d a r y _ p r e s s e d
+# 1 7 1 C 2 F
+1 6 . 8 8 6 : 1
+N o r m a l
+A A AA A
+L a r g e
+A A AA A
+G r a p h i c s
+A A AA A
+$ b t n - f i l l - c o o l - t e r t i a r y
+# C A D 1 D B
+1 . 5 3 7 : 1 N o r m a l
+A A A A A
+L a r g e
+A A A A A
+G r a p h i c s
+A A A A A
+$ b t n - f i l l - c o o l - q u a t e r n a r y
+# F 5 F 6 F 9
+1 . 0 8 : 1 N o r m a l
+A A A A A
+L a r g e
+A A A A A
+G r a p h i c s
+A A A A A
+$ t x t - f i l l - c o o l - p r i m a r y
+# 4 4 4 4 4 7
+9 . 7 0 5 : 1
+N o r m a l
+A A AA A
+L a r g e
+A A AA A
+G r a p h i c s
+A A AA A
+$ t x t - f i l l - c o o l - s e c o n d a r y
+# 4 D 5 A 6 A
+7 . 0 3 2 : 1
+N o r m a l
+A A AA A
+L a r g e
+A A AA A
+G r a p h i c s
+A A AA A
+$ t x t - f i l l - c o o l - t e r t i a r y
+# 6 B 7 C 9 2
+4 . 2 6 5 : 1 N o r m a l
+A A A A A
+L a r g e
+A A A A A
+G r a p h i c s
+A A A A A
+$ t x t - f i l l - c o o l - q u a t e r n a r y
+# 8 B 9 9 A C
+2 . 8 9 6 : 1 N o r m a l
+A A A A A
+L a r g e
+A A A A A
+G r a p h i c s
+A A A A A
+$ i c - f i l l - c o o l - p r i m a r y
+# 8 B 9 9 A C
+2 . 8 9 6 : 1 N o r m a l
+A A A A A
+L a r g e
+A A A A A
+G r a p h i c s
+A A A A A
+$ i c - f i l l - c o o l - w e a k
+# C A D 1 D B
+1 . 5 3 7 : 1 N o r m a l
+A A A A A
+L a r g e
+A A A A A
+G r a p h i c s
+A A A A A
+$ i c - f i l l - c o o l - w e a k _ p r e s s e d
+# 8 B 9 9 A C
+2 . 8 9 6 : 1 N o r m a l
+A A A A A
+L a r g e
+A A A A A
+G r a p h i c s
+A A A A A
+$ i c - s t r o k e - c o o l - p r i m a r y
+# 2 2 2 2 2 5
+1 5 . 8 6 6 : 1
+N o r m a l
+A A AA A
+L a r g e
+A A AA A
+G r a p h i c s
+A A AA A
+$ i c - s t r o k e - c o o l - s e c o n d a r y
+# 4 4 4 4 4 7
+9 . 7 0 5 : 1
+N o r m a l
+A A AA A
+L a r g e
+A A AA A
+G r a p h i c s
+A A AA A
+$ i c - s t r o k e - c o o l - t e r t i a r y
+# 4 D 5 A 6 A
+7 . 0 3 2 : 1
+N o r m a l
+A A AA A
+L a r g e
+A A AA A
+G r a p h i c s
+A A AA A
+$ i c - s t r o k e - c o o l - q u a t e r n a r y
+# 6 B 7 C 9 2
+4 . 2 6 5 : 1 N o r m a l
+A A A A A
+L a r g e
+A A A A A
+G r a p h i c s
+A A A A A
+$ i c - s t r o k e - c o o l - w e a k
+# F 0 F 0 F 3
+1 . 1 3 7 : 1 N o r m a l
+A A A A A
+L a r g e
+A A A A A
+G r a p h i c s
+A A A A A
+-- Page 7 --
+Color T ok ens_R ed Sc ale
+일관된 브랜드 경험을 만들수 있도록 표준 색상 차트와 사용자 가이드를 제공합니다
+다양한 디지털 채널에서 일관된 사용자 경험을 제공할 수 있도록 유도합니다
+C o l o r  T o k e n s
+$ b g - f i l l - w i d e  a r e a  b u s
+# H e x
+# F B 5 8 5 2
+C o n t r a s t  r a t i o
+N o r m a l L a r g e G r a p h i c s
+3 . 1 7 2 : 1 A A A A A A A A A A A A A A A
+$ b t n - s t r o k e - w a r n i n g - p r i m a r y
+# F F 4 0 4 3
+3 . 4 6 1 : 1 N o r m a l
+A A A A A
+L a r g e
+A A A A A
+G r a p h i c s
+A A A A A
+$ b t n - s t r o k e - h i g h l i g h t - p r i m a r y
+# F 6 1 0 2 4
+4 . 1 8 4 : 1 N o r m a l
+A A A A A
+L a r g e
+A A A A A
+G r a p h i c s
+A A A A A
+$ b t n - s t r o k e - h i g h l i g h t - s e c o n d a r y
+# F F 4 0 4 3
+3 . 4 6 1 : 1 N o r m a l
+A A A A A
+L a r g e
+A A A A A
+G r a p h i c s
+A A A A A
+$ t x t - f i l l - w a r n i n g - p r i m a r y
+# F 6 1 0 2 4
+4 . 1 8 4 : 1 N o r m a l
+A A A A A
+L a r g e
+A A A A A
+G r a p h i c s
+A A A A A
+$ t x t - f i l l - w a r n i n g - s e c o n d a r y
+# F F 4 0 4 3
+3 . 4 6 1 : 1 N o r m a l
+A A A A A
+L a r g e
+A A A A A
+G r a p h i c s
+A A A A A
+$ t x t - f i l l - h i g h l i g h - p r i m a r y
+# F 6 1 0 2 4
+4 . 1 8 4 : 1 N o r m a l
+A A A A A
+L a r g e
+A A A A A
+G r a p h i c s
+A A A A A
+$ t x t - f i l l - h i g h l i g h - s e c o n d a r y
+# F F 4 0 4 3
+3 . 4 6 1 : 1 N o r m a l
+A A A A A
+L a r g e
+A A A A A
+G r a p h i c s
+A A A A A
+$ i c - f i l l - w a r n i n g - p r i m a r y
+# F 6 1 0 2 4
+4 . 1 8 4 : 1 N o r m a l
+A A A A A
+L a r g e
+A A A A A
+G r a p h i c s
+A A A A A
+$ i c - f i l l - h i g h l i g h t - p r i m a r y
+# F 6 1 0 2 4
+4 . 1 8 4 : 1 N o r m a l
+A A A A A
+L a r g e
+A A A A A
+G r a p h i c s
+A A A A A
+$ i c - f i l l - h i g h l i g h t - s e c o n d a r y
+# F F 4 0 4 3
+3 . 4 6 1 : 1 N o r m a l
+A A A A A
+L a r g e
+A A A A A
+G r a p h i c s
+A A A A A
+$ i c - f i l l - s u b w a y 5
+# 8 9 3 6 E 0
+5 . 7 2 5 : 1
+N o r m a l
+A A A A A
+L a r g e
+A A AA A
+G r a p h i c s
+A A AA A
+$ i c - f i l l - s u b w a y 8
+# E 5 1 F 6 E
+4 . 4 1 8 : 1 N o r m a l
+A A A A A
+L a r g e
+A A A A A
+G r a p h i c s
+A A A A A
+$ i c - f i l l - s u b w a y S B D
+# A 7 1 E 3 0
+7 . 3 1 3 : 1
+N o r m a l
+A A AA A
+L a r g e
+A A AA A
+G r a p h i c s
+A A AA A
+-- Page 8 --
+Color T ok ens_Or ang e Sc ale
+일관된 브랜드 경험을 만들수 있도록 표준 색상 차트와 사용자 가이드를 제공합니다
+다양한 디지털 채널에서 일관된 사용자 경험을 제공할 수 있도록 유도합니다
+C o l o r  T o k e n s
+$ x t - f i l l - h i g h l i g h t - p r i m a r y _ f i l l
+# H e x
+# F 5 6 8 3 C
+C o n t r a s t  r a t i o
+N o r m a l L a r g e G r a p h i c s
+3 . 0 3 1 : 1 A A A A A A A A A A A A A A A
+$ i c - f i l l - p r i m a r y
+# F D 8 B 5 2
+2 . 3 3 5 : 1 N o r m a l
+A A A A A
+L a r g e
+A A A A A
+G r a p h i c s
+A A A A A
+$ i c - f i l l - l o c a l  b u s
+# F E B 9 0 1
+1 . 7 2 7 : 1 N o r m a l
+A A A A A
+L a r g e
+A A A A A
+G r a p h i c s
+A A A A A
+$ i c - f i l l - s u b w a y 3
+# F 0 6 E 0 0
+3 . 0 2 7 : 1 N o r m a l
+A A A A A
+L a r g e
+A A A A A
+G r a p h i c s
+A A A A A
+$ i c - f i l l - s u b w a y 6
+# B 5 5 0 0 A
+5 . 1 0 1 : 1
+N o r m a l
+A A A A A
+L a r g e
+A A AA A
+G r a p h i c s
+A A AA A
+$ i c - f i l l - s u b w a y 9
+# D 0 A 6 2 D
+2 . 2 8 8 : 1 N o r m a l
+A A A A A
+L a r g e
+A A A A A
+G r a p h i c s
+A A A A A
+$ i c - f i l l - s u b w a y S B
+# E B A 8 0 0
+2 . 0 7 2 : 1 N o r m a l
+A A A A A
+L a r g e
+A A A A A
+G r a p h i c s
+A A A A A
+$ i c - f i l l - s u b w a y B 1
+# F 0 6 0 2 F
+3 . 2 7 1 : 1 N o r m a l
+A A A A A
+L a r g e
+A A A A A
+G r a p h i c s
+A A A A A
+-- Page 9 --
+Color T ok ens_Gr een Sc ale
+일관된 브랜드 경험을 만들수 있도록 표준 색상 차트와 사용자 가이드를 제공합니다
+다양한 디지털 채널에서 일관된 사용자 경험을 제공할 수 있도록 유도합니다
+C o l o r  T o k e n s
+$ t x t - f i l l - p r i m a r y
+# H e x
+# 0 3 A A 5 A
+C o n t r a s t  r a t i o
+N o r m a l L a r g e G r a p h i c s
+3 . 0 4 2 : 1 A A A A A A A A A A A A A A A
+$ t x t - f i l l - l o c a l  b u s
+# 3 C C 3 4 4
+2 . 3 1 2 : 1 N o r m a l
+A A A A A
+L a r g e
+A A A A A
+G r a p h i c s
+A A A A A
+$ t x t - f i l l - v i l l a g e  b u s
+# 8 7 C 7 0 0
+2 . 0 5 8 : 1 N o r m a l
+A A A A A
+L a r g e
+A A A A A
+G r a p h i c s
+A A A A A
+$ i c - f i l l - p r i m a r y
+# 0 3 A A 5 A
+3 . 0 4 2 : 1 N o r m a l
+A A A A A
+L a r g e
+A A A A A
+G r a p h i c s
+A A A A A
+$ i c - f i l l - l o c a l  b u s
+# 3 C C 3 4 4
+2 . 3 1 2 : 1 N o r m a l
+A A A A A
+L a r g e
+A A A A A
+G r a p h i c s
+A A A A A
+$ i c - f i l l - v i l l a g e  b u s
+# 8 7 C 7 0 0
+2 . 0 5 8 : 1 N o r m a l
+A A A A A
+L a r g e
+A A A A A
+G r a p h i c s
+A A A A A
+$ i c - f i l l - s u b w a y 2
+# 3 C B 4 4 A
+2 . 6 8 5 : 1 N o r m a l
+A A A A A
+L a r g e
+A A A A A
+G r a p h i c s
+A A A A A
+$ i c - f i l l - s u b w a y 7
+# 6 9 7 2 1 5
+5 . 2 2 5 : 1
+N o r m a l
+A A A A A
+L a r g e
+A A AA A
+G r a p h i c s
+A A AA A
+$ i c - f i l l - s u b w a y G B
+# 7 D C 4 A 6
+2 . 0 3 5 : 1 N o r m a l
+A A A A A
+L a r g e
+A A A A A
+G r a p h i c s
+A A A A A
+$ i c - f i l l - s u b w a y G C
+# 0 8 A F 7 B
+2 . 8 2 7 : 1 N o r m a l
+A A A A A
+L a r g e
+A A A A A
+G r a p h i c s
+A A A A A
+$ i c - f i l l - s u b w a y B 2
+# 3 C B 4 4 A
+2 . 6 8 5 : 1 N o r m a l
+A A A A A
+L a r g e
+A A A A A
+G r a p h i c s
+A A A A A
+-- Page 10 --
+Color T ok ens_Blue Sc ale
+일관된 브랜드 경험을 만들수 있도록 표준 색상 차트와 사용자 가이드를 제공합니다
+다양한 디지털 채널에서 일관된 사용자 경험을 제공할 수 있도록 유도합니다
+C o l o r  T o k e n s
+$ b g - f i l l - o p a c i t y - p r i m a r y
+# H e x
+# 7 E D A E 0
+C o n t r a s t  r a t i o
+N o r m a l L a r g e G r a p h i c s
+1 . 6 1 6 : 1 A A A A A A A A A A A A A A A
+$ b g - f i l l - o p a c i t y - s e c o n d a r y
+# 7 E D A E 0 ( 6 0 % )
+1 . 3 3 2 : 1 N o r m a l
+A A A A A
+L a r g e
+A A A A A
+G r a p h i c s
+A A A A A
+$ b g - f i l l - o p a c i t y - t e r t i a r y
+# 7 E D A E 0 ( 3 5 % )
+1 . 1 8 3 : 1 N o r m a l
+A A A A A
+L a r g e
+A A A A A
+G r a p h i c s
+A A A A A
+$ b g - f i l l - o p a c i t y - q u a t e r n a r y
+# 7 E D A E 0 ( 2 5 % )
+1 . 1 2 5 : 1 N o r m a l
+A A A A A
+L a r g e
+A A A A A
+G r a p h i c s
+A A A A A
+$ b t n - s t r o k e - p r i m a r y
+# 0 0 6 C F F
+4 . 5 7 6 : 1
+N o r m a l
+A A A A A
+L a r g e
+A A AA A
+G r a p h i c s
+A A AA A
+$ b t n - f i l l - p r i m a r y
+# 0 0 6 C F F
+4 . 5 7 6 : 1
+N o r m a l
+A A A A A
+L a r g e
+A A AA A
+G r a p h i c s
+A A AA A
+$ b t n - f i l l - p r i m a r y _ p r e s s e d
+# 2 4 4 2 8 7
+9 . 5 2 7 : 1
+N o r m a l
+A A AA A
+L a r g e
+A A AA A
+G r a p h i c s
+A A AA A
+$ b t n - f i l l - s e c o n d a r y
+# 4 3 7 B F E
+3 . 8 1 6 : 1 N o r m a l
+A A A A A
+L a r g e
+A A A A A
+G r a p h i c s
+A A A A A
+$ i c - f i l l - p r i m a r y
+# 0 0 6 C F F
+4 . 5 7 6 : 1
+N o r m a l
+A A A A A
+L a r g e
+A A AA A
+G r a p h i c s
+A A AA A
+$ i c - s t r o k e - p r i m a r y
+# 0 0 6 C F F
+4 . 5 7 6 : 1
+N o r m a l
+A A A A A
+L a r g e
+A A AA A
+G r a p h i c s
+A A AA A
+$ i c - s t r o k e - s e c o n d a r y
+# 4 3 7 B F E
+3 . 8 1 6 : 1 N o r m a l
+A A A A A
+L a r g e
+A A A A A
+G r a p h i c s
+A A A A A
+$ t x t - f i l l - p r i m a r y
+# 0 0 6 C F F
+4 . 5 7 6 : 1
+N o r m a l
+A A A A A
+L a r g e
+A A AA A
+G r a p h i c s
+A A AA A
+$ t x t - f i l l - s e c o n d a r y
+# 4 3 7 B F E
+3 . 8 1 6 : 1 N o r m a l
+A A A A A
+L a r g e
+A A A A A
+G r a p h i c s
+A A A A A
+$ t x t - f i l l - t e r t i a r y
+# 0 0 6 8 C 3
+5 . 5 7 3 : 1
+N o r m a l
+A A A A A
+L a r g e
+A A AA A
+G r a p h i c s
+A A AA A
+$ t x t - f i l l - q u a t e r n a r y
+# 1 A A 7 B 5
+2 . 9 0 1 : 1 N o r m a l
+A A A A A
+L a r g e
+A A A A A
+G r a p h i c s
+A A A A A
+$ b t n - f i l l - t r u n k
+# 3 8 6 D E 8
+4 . 6 4 5 : 1
+N o r m a l
+A A A A A
+L a r g e
+A A AA A
+G r a p h i c s
+A A AA A
+$ i c - f i l l - s u b w a y 1
+# 2 7 3 C 9 7
+9 . 6 3 5 : 1
+N o r m a l
+A A AA A
+L a r g e
+A A AA A
+G r a p h i c s
+A A AA A
+$ i c - f i l l - s u b w a y 4
+# 2 B 8 E C 5
+3 . 6 3 4 : 1 N o r m a l
+A A A A A
+L a r g e
+A A A A A
+G r a p h i c s
+A A A A A
+-- Page 11 --
+Ic o
+Ic on을 통해 사용자에게 시각적인 아이디어와 정보를 가장 효율적으로 사용됩니다.
+다양한 케이스의 아이콘들을 해당 페이지 내에서 규칙을 인지하고 규칙에 따라 아이콘을 만들어내야합니다.
+S i z e  G u i d e l i n e
+F i l l  I c o n L i n e  I c o n
+
+===== Radius_Layout_Spacing_Effect.pdf =====
+-- Page 1 --
+R adius
+시각적인  편안함과 화면의 일관성을 유도합니다
+4 p x 6 p x 8 p x 1 2 p x 1 4 p x 1 8 p x 2 0 p x
+4 p x
+6 p x
+8 p x
+1 2 p x
+1 4 p x
+1 8 p x
+2 0 p x
+라 벨 ,  최 소 버 튼  등 의  작 은  사 이 즈 의  컴 포 넌 트 에  사 용 합 니 다 .
+중 간 사 이 즈 의  버 튼  등 의  컴 포 넌 트 에  사 용 합 니 다 .
+중 간 사 이 즈 의  버 튼  등 의  컴 포 넌 트 에  사 용 합 니 다 .
+드 롭 박 스  등 의  컴 포 넌 트 에  사 용 합 니 다 .
+이 미 지  박 스 등 의  화 면  내 의  콘 텐 츠 의  형 식 구 분 이  필 요 한  경 우  사 용 합 니 다 .
+서 치 바  등 의  컴 포 넌 트 에  사 용 합 니 다 .
+바 텀 시 트  상 단  컨 트 롤 러  B G 역 할 을  하 는  영 역 에 만  사 용 합 니 다 .
+-- Page 2 --
+Lay out
+균일한 간격을 사용해 UI의 체계적인 배열을 도와줍니다.
+페이지, 컴포넌트 등의 사이즈와 간격 및 수치를 맞춰 사용하는 것을 권장합니다.
+C o l u m n
+컬 럼  단 위 를  사 용 해  콘 텐 츠 의  크 기 를  조 정 합 니 다 .
+콘 텐 츠  영 역 을  동 일  너 비 의  균 일 한  컬 럼 으 로  나 눠  1 개  이 상 의  컬 럼 을  조 합 해  콘 텐 츠 의  크 기 를  결 정 합 니 다 .
+기 본  컬 럼 은  4 컬 럼  8 거 터 로  사 용 을  권 장 합 니 다 .
+메뉴 8 메뉴판 이미지로 보기
+살치살규카츠스테이크
+1 5 , 5 0 0 원
+... 살치살규카츠스테이크
+1 5 , 5 0 0 원
+...
+M a r g i n 살치살규카츠스테이크
+1 5 , 5 0 0 원
+... 살치살규카츠스테이크
+1 5 , 5 0 0 원
+...
+마 진 은  콘 텐 츠 와  화 면  양 측  가 장 자 리  사 이 의  공 간 입 니 다 .
+상 황 에  따 라  다 양 한  마 진 값 을  사 용 할  수  있 습 니 다 메뉴 보기
+1 2 p x 1 6 p x 1 8 p x
+-- Page 3 --
+Sp acing
+균일한 간격을 사용해 UI의 체계적인 배열을 도와줍니다.
+페이지, 컴포넌트 등의 사이즈와 간격 및 수치를 맞춰 사용하는 것을 권장합니다.
+D e f a u l t
+다 양 한  정 보 를  전 달 하 기 위 하 여  세 분 화 된  2 배 수 를  기 본  간 격 으 로  합 니 다 .
+모 든  구 성 요 소  및  타 이 포  그 래 피 의  모 든  간 격 은  2 배 수 로  사 용 합 니 다 .
+2 p x 4 p x 6 p x 8 p x 1 0 p x 1 2 p x 1 4 p x 1 6 p x 1 8 p x 2 0 p x 2 2 p x
+-- Page 4 --
+Elav a tion
+화면 안에서 일어나는 구성요소를 사용자에게 집중시키기위해 유도합니다.
+C o l o r
+배 경 에  컬 러 를  사 용 함 으 로 서  콘 텐 츠 의  위 계 를  표 현 합 니 다 .
+지 도  위 에 서  사 용 될  경 우  그 림 자  효 과 를  이 용 해 야 합 니 다 .  콘 텐 츠 의  속 성 에  따 라  D i m  처 리 를  해 야 합 니 다 .  
+S h a d o w
+의 미 있 는  그 림 자  효 과 를  이 용 해  콘 텐 츠  간 의  위 계 를  지 정 하 고 ,   돋 보 여 야 할  컴 포 넌 트 를  돋 보 이 게  표 현 해 야 할  경 우 에  사 용 합 니 다 .
+
+===== BottomSheet.pdf =====
+-- Page 1 --
+Bo t t om Shee t
+-
+Bottom Sheet_C ontr oller
+Ana t omy
+1 2
+컨테이너 영역
+바텀시트의 컨트롤러 영역을 감싸고 터치가 가능한 배경 영역입니다.
+컨트롤러 영역
+바텀시트의 내용을 더 많이 확인할 수 있도록 컨트롤 할 수 있는 영역입니다. 
+Component
+Default
+Default
+-
+Gr adient
+-
+Badge
+-
+U sag e guidelines
+바텀시트를 움직일 수 있는 컨트롤러 컴포넌트 입니다.
+바텀시트의 내용 콘텐츠에 따라 타입을 다양하게 사용할 수 있습니다.
+해당 컴포넌트는 상하로 컨트롤 할 수 있습니다.
+U se c ase
+De f ault
+Do
+컨트롤러의 위치는 중앙 고정 되어야합니다.
+Do Don ’t
+Gr adient
+전체 리스트
+해당 컴포넌트는 바텀시트의 상 단  콘텐츠가 이 미지  그리드 가 삽 입 될  경 우  사용 됩 니다.
+컨트롤러의 위치는 중앙 고정 되어야합니다.
+Do
+Do
+장소
+1 0
+경로
+Don ’t
+장소
+전체 리스트 1 0
+경로
+B ad g e
+Do
+해당 컴포넌트는 저장 한 리스 트가 노출될  경 우  사용 됩 니다.
+컨트롤러의 위치는 중앙 고정 되어야합니다.
+Do
+ 
+ 영     해
+ 
+비공개
+7
+전체
+부 산  여 행
+부 산  여 행
+ 
+공
+27 개
+여행
+Don ’t
+소
+ 리
+일당
+7
+출 도
+공
+에 저장 수정부 산  여 행
+전체 여행
+리 사
+지 도
+정
+ 수영 로 22 수 
+리
+ 해
+부 산  여 행
+로 그  리
+비공개
+장
+27 개
+ 중2
+ 중2
+ 
+ 중 중앙로 12  
+ 중 중앙로 12
+-- Page 2 --
+Bo t t om Shee t
+-
+Default
+Ana t omy
+- 1
+2
+장소
+4 전체 리스트 1 0
+Title
+T i t l e
+N N N
+T i t l e
+N N N
+경로 3
+5
+6
+컨테이너 영역
+바텀시트의 요소들을 감싸는 배경 영역입니다.
+컨트롤러 영역
+바텀시트의 내용을 더 많이 확인할 수 있도록 컨트롤 할 수 있는 영역입니다.
+확장 가능한 시트임을 사용자에게 안내합니다.  
+헤더 영역
+버튼, 탭 등의 요소를 활용하여 다양한 콘텐츠 탐색이 용이하도록 하는 영역입니다.
+일부 타입에서는 사용자에게 이동 경로를 시각화하여 제공하는 영역입니다. 
+타이틀 영억
+바텀시트에서 현재 표시되는 콘텐츠의 주제를 명확하게 나타내는 영역입니다. 
+콘텐츠 영역
+일 반  화 면처럼  자 유롭 게 구성 할 수 있는 영역입니다.  
+콘텐츠 내용이 시트 높 이를 초과 하 면  스크 롤이 가능 해집 니다.
+배너 영역 (선택  사 항)
+특정  프 로 모션 을 제공할 때  활용하는 영역입니다.
+T i t l e
+N N N
+T i t l e
+N N N
+T i t l e
+N N N
+Component
+Default Scr oll do wn
+S a v e  Lis t
+T yp e ( Default ,  Scr oll do wn )
+저장  수(27)
+공개여부(비공개)
+저장  제목(부산  여행)
+최신 순
+해운 대
+부산  해운 대구1 5 km
+여 행
+부 산  여 행
+비공 개
+편집 공 유
+전체 쇼핑 음식점 여행
+27 개
+최신 순 전체
+부 산  여 행  -  1 일 차
+쇼핑 음식점 여행
+국제시장
+부산  중 구3 .2 km
+쇼핑
+이재모피자  본점
+부산  중 구  광복중앙로  3 12. 5 km
+음식점
+Lis t
+-
+장소
+전체 리스트 1 0
+Title
+T i t l e
+N N N
+T i t l e
+N N N
+경로 장소
+전체 리스트 1 0
+새  리스트  만들 기
+T i t l e
+N
+T i t l e
+N
+경로
+Lis t _dr op down
+-
+T i t l e
+N N N
+T i t l e
+N N N
+T i t l e
+N N N
+T i t l e
+N
+T i t l e
+N
+T i t l e
+N
+Deta i l s
+블로그  리뷰  수(3,537)
+장소종류(일식당)
+장소명(소연옥  부산광안점)
+방문자  리뷰  수(3,186)
+주소 
+(부산  수영구  민락로22  
+  수연옥  부산광안점)
+소 연 옥  부 산 광 안 점 일식당
+3 , 18 6방 문자  리뷰 블로그  리뷰
+출발
+3 , 5 3 7
+도 착
+알림받 기
+홈
+전 화 문 의 네 비 게 이 션저 장
+부 산  여 행 에  저 장 됨 수 정
+소식 메뉴 리뷰 사진
+부산  수영 구  민락로  22  수연옥  부산광안점
+리뷰
+공 유
+주변
+지도
+정보
+Ch a nn el
+-
+14 분
+오전 10:12 - 오전 10:12 원
+7 0
+오전 10:18 기준
+출발
+서울대입구역
+번  출구까지
+도보 392m
+10 : 18
+1 분
+( 출발  대기
+80 분
+33 분
+10 분 )
+4 분
+10 : 18
+지 하 철  노 선 도  미 리 보 기
+2호선 서울대입구역 승차
+봉천역  방면
+빠른  하차 3- 2,  5-1 실시간 시간표
+7 0 여유
+배차  간격이  긴  노선
+7 0 여유
+배차  간격이  긴  노선
+7 0 여유
+배차  간격이  긴  노선
+3 분
+3 분
+3 분
+3 정류장
+3 정류장
+3 정류장
+11 개  역  이동 80 스  도 착 정보  더 보기분
+10 : 18
+10 : 18
+도 착
+서울대입구역 하차
+내 리 는  문 : 왼 쪽
+번  출구에서  
+도보 392m
+서 울 대 입 구 역
+서 울  중 구  구 름로  20 1 - 96
+전 화 하기 예약 하기
+80 분
+도 로 의 왼 쪽 에 있 습 니 다 .
+G u i d e
+-
+1 4 분
+오전 10: 32 도 착 미리보기 안내시작
+U sag e  guid e li ne s
+Bo t t om  Shee t 는 현재 화 면 을 떠 나 지  않고 도 관련  정 보 , 액 션 을 제공하여 사용자의 흐름 을 유 지 하는 요소입니다.
+작은  화 면 에서도 주요 기 능을 쉽 게 사용할 수 있도록 화 면  하 단 에서 슬라 이 드  업  방식으 로 나타 납 니다.
+U se c a se
+Sav e  Lis t
+Do
+S av e  Lis t  타입 은  사용자가 저 장 리 스 트에서 특정  항 목 을 선택 하 면 , 저 장 여 행 지  리 스 트 관련  상세  정 보 를 Bo t t om  Shee t 에서 제공합니다.
+공 유 , 삭 제, 편 집  등을 제공하여 리 스 트의 개별  항 목 을 효율적 으 로 관 리 할 수 있도록 합니다.  
+사용자가 여 행 지  리 스 트를 필터링 하 거 나 정 렬 할 수 있도록 옵 션 을 제공합니다.  
+항 목 에 대 한 미리 보기 를 제공하여 사용자가 페 이 지  이동 없 이 빠르 게 정 보 를 확인 가능하도록 합니다.
+Do n ’ t
+Bo t t om  Shee t  내에 너 무  많 은  정 보 를 한 번 에 제공하여 가 독 성 이 떨어 지 거 나 사용 성 이 저 하되도록 하 지  않 습 니다.
+사용자가 여 행 지  리 스 트를 필터링 하 거 나 정 렬 할 수 없어  탐색이 어렵 도록 하 지  않 습 니다. 
+D o D on ’ t
+최신 순
+해운 대
+부산  해운 대구1 5 km
+여 행
+부 산  여 행
+비공 개
+편집 공 유
+전체 쇼핑 음식점 여행
+27 개
+해운 대
+부산  해운 대구1 5 km
+전체
+여 행
+부 산  여 행
+비공 개
+편집 공 유
+27 개
+국제시장
+부산  중 구3 .2 km
+쇼핑 국제시장
+부산  중 구3 .2 km
+쇼핑
+이재모피자  본점
+부산  중 구  광복중앙로  3 12. 5 km
+음식점 이재모피자  본점
+부산  중 구  광복중앙로  3 12. 5 km
+음식점
+Do
+사용자가 리 스 트 영역에서 아래 로 스크 롤하 면 , S av e  Lis t  Bo t t om  Shee t 가 하 단으 로 내 려 가 며  축 소 됩 니다.
+축 소 된  바텀시트는 13 0p x  he i g ht 를 유 지 합니다.  
+바텀시트를 다시 확장하 려 면  리 스 트 영역을 위 로 스크 롤합니다.
+D o
+최신 순
+해운 대
+부산  해운 대구1 5 km
+여 행
+부 산  여 행  -  1 일 차
+비공 개
+편집 공 유
+전체 쇼핑 음식점 여행
+27 개
+S cr o ll  D o wn
+국제시장
+부산  중 구3 .2 km
+쇼핑 최신 순 전체
+부 산  여 행  -  1 일 차
+쇼핑 음식점 여행
+Lis t
+Do
+Bo t t om  Shee t  Lis t 는 사용자가 장소나 경로 정 보 를 빠르 게 탐색하 고  선택 할 수 있도록 구성 합니다.
+장소 또 는 경로 탭을 선택 하여 사용자가 원 하는 정 보 를 필터링 해 서 볼  수 있도록 합니다.
+리 스 트 아 이 템마 다 핵심 정 보 ( 이 름 , 아 이콘 등 ) 를 제공하여 사용자가 한 눈 에 비교  가능하도록 합니다.
+음식점Do n ’ t
+리 스 트에서 선택 하 지  않으 면  Bo t t om  Shee t 가 닫히 지  않 도록 하 지  않 습 니다.
+컨트롤러를 임의로 생략 하여 사용자가 Bo t t om  Shee t 를 닫 을 때  불 편 하도록 하 지  않 습 니다.
+이재모피자  본점
+2. 5 km 부산  중 구  광복중앙로  3 1
+D o D on ’ t
+장소
+전체 리스트 1 0
+Title
+T i t l e
+N N N
+T i t l e
+N N N
+경로 장소
+전체 리스트 1 0
+Title
+T i t l e
+N N N
+T i t l e
+N N N
+경로
+T i t l e
+N N N
+T i t l e
+N N N
+T i t l e
+N N N
+Lis t  Dr opdo wn
+Do
+Lis t  Dr opdo wn 은  사용자가 리 스 트를 직접  추 가할 수 있도록 “새  리 스 트 만 들 기 " 옵 션 을 제공합니다.
+“새  리 스 트 만 들 기 " 기 능을 상 단 에 배 치 하여 사용자의 탐색 흐름 을 방 해 하 지  않 도록 합니다. 
+Do n ’ t
+“새  리 스 트 만 들 기 ”  항 목 이 일 반  리 스 트 항 목 과  시각 적 으 로 동일하여 사용하 지  않 습 니다.
+“새  리 스 트 만 들 기 "  항 목 을 바텀시트 상 단 이 아 닌  곳 에 배 치 하 지  않 습 니다.
+새  리 스 트를 생 성 한 후  기 존  리 스 트에 즉 시 반 영되 지  않 아  사용자에게 혼란 을 주 지  않 습 니다.  
+광 고  배너를 너 무  과 도하게 배 치 하여 탐색이 어렵 도록 하 지  않 습 니다.
+D o D on ’ t
+T i t l e
+N N N
+T i t l e
+N N N
+T i t l e
+N N N
+장소
+전체 리스트 1 0
+새  리스트  만들 기
+T i t l e
+N
+T i t l e
+N
+경로 장소
+전체 리스트 1 0
+T i t l e
+N
+T i t l e
+N
+새  리스트  만들 기
+경로
+T i t l e
+N
+T i t l e
+N
+T i t l e
+N
+D e t ai l s
+Do
+D e t ai l s 는 특정  장소 ( 예:  음 식 점 ) 의 상세  정 보  및  주요 액 션 을 제공합니 다
+핵심  요 약  정 보 를 바텀 시트 상 단 에서 제공 해 야  합니다.  
+핵심  요 약  정 보 는 스크 롤에도 최 상 단 에 고 정 되 어  보 이도록 합니다.
+장소에 대 한 추 가 적 인 정 보 를 제공하되, 과 도한 스크 롤을 방지 하 기  위 해  탭 탐색 구 조 를 사용합니다.
+D o
+T i t l e
+N
+T i t l e
+N
+T i t l e
+N
+소 연 옥  부 산 광 안 점 일 식 당
+방 문 자 리 뷰 블 로 그  리 뷰3 , 18 6
+출발
+3 , 537
+도 착
+알림받 기
+S cr o ll  U p
+홈
+소 연 옥  부 산 광 안 점
+에 저 장 됨 수 정부 산  여 행
+소식 메뉴 리뷰 사진 주변
+부 산  수영 구  민락 로 22 수 연옥  부 산 광 안 점 지 도
+거리 뷰
+광 안역 1 번  출 구 에서 9 54 m
+광 안 리 해 변 에서 새 벽 집( 원 조콩 나 물국밥 )  방 면
+정보
+영 업  전
+휴 무 일 0 1 / 2 9  설날  당 일
+11 : 3 0 에 영 업  시 작
+홈
+전 화 문 의 저 장 네 비 게 이 션
+에 저 장 됨 수 정부 산  여 행
+소 식 메뉴 리 뷰 사 진
+부 산  수영 구  민락 로 22 수 연옥  부 산 광 안 점
+공 유
+주 변
+지 도
+정 보
+0 5 0 7- 13 0 9 - 1 7 9 5 복 사
+h t t p;// da m da m da n c e . c o .kr
+인 스 타 그 램
+단 체  이용 가능, 유 아 의자, 예약 , 무 선  인 터 넷 , 주 차
+블로그  리뷰  더 보기
+Ch a nn e l
+거리 뷰
+Do
+C h a nn e l  타입 은  대 중 교 통  및  경로 안내에 특 화 된  Bo t t om  Shee t  입니다.  
+사용자가 이동 경로를 한 눈 에 확인할 수 있도록 합니다.
+주요 정 보 는 이동 시 간 , 환승  정 보 , 실 시 간  교 통  상 태  등을 포함 하 며 , 사용자의 현재 상 태 를 반 영하여 업 데 이트 될  가능 성 이 높 습 니다.
+헤더에 경로 요 약  정 보 를 제공하여 사용자가 직 관 적 으 로 주요 정 보 는 파악 할 수 있도록 합니다. 
+Do n ’ t
+임의로 주요 정 보 를 생략 하 지  않 습 니다.
+D o D on ’ t
+14 분
+오전 10:1 2 - 오전 10:1 2 원
+7 0
+오전 10:18 기준
+출발
+서울대입구역
+번  출구까지
+도보 392m
+10 : 18
+10 : 18
+1 분
+11 개  역  이동
+지 하 철  노 선 도  미 리 보 기
+2호선 서울대입구역 승차
+봉천역  방면
+빠른  하차 3 - 2 , 5 -1 실시간 시간표
+7 0 여유
+배차  간격이  긴  노선
+7 0 여유
+배차  간격이  긴  노선
+7 0 여유
+배차  간격이  긴  노선
+( 출발  대기
+3 분
+3 분
+3 분
+80 분
+80 스  도 착 정보  더 보기
+분
+3 정류장
+3 정류장
+3 정류장
+33 분
+10 분 )
+4 분
+오 전
+출발
+10:18 기 준
+서울대입구역
+번  출구까지
+도보 392m
+10 : 18
+10 : 18
+10 : 18
+10 : 18
+도 착
+서울대입구역 하차
+내 리 는  문 : 왼 쪽
+번  출구에서  
+도보 392m
+서 울 대 입 구 역
+서 울  중 구  구 름로  20 1 - 96
+전 화 하기 예약 하기
+11 개  역  이동
+지 하 철  노 선 도  미 리 보 기
+2호선 서울대입구역 승차
+봉천 역 방 면
+빠 른  하 차 3 - 2 ,  5 -1 실시간 시간표
+( 출발  대 기
+80 분
+80 분
+80 분
+10 분 )
+10 : 18
+서울대입구역
+내 리 는  문 : 왼 쪽
+하차
+Gu i d e
+번  출구에서  
+Do 도보 392m 80 분 도 로 의 왼 쪽 에 있 습 니 다 .
+Gu i d e 타입 은  기 존  Bo t t om  Shee t  위 에 떠  있는 형 태 로 사용합니다.
+주요 정 보 를 요 약 하여 제공하 며  경로 안내, 탐색, 미리 보기  등의 핵심  액 션 을 수 행 하도록 설 계 됩 니다.
+이동 시 간  및  도 착  예 상  시 간 을 강 조 하여 사용자에게 빠 른  이 해 를 제공합니다.
+주요 정 보 ( 시 간 , 도 착  시각 ) 는 왼쪽  정 렬 하여 가 독 성 을 높 입니다.
+주요 액 션  버튼 은  오른쪽 에 배 치 하여 접 근 성 을 최 적 화합니다.
+10
+도 착
+: 18
+서 울 대 입 구 역
+서 울  중 구  구 름로  20 1 - 96
+전 화 하기 예약 하기Do n ’ t
+F l o a t i ng  Bo t t om  Shee t 는 빠 른  액 션 이 목적 이 므 로, 불 필 요한 정 보 (정 거 장 목 록, 혼 잡 도 등 ) 를 포함 하 면  안 됩 니다.
+D o D on ’ t
+도 로 의 왼 쪽 에 있 습 니 다 .
+1 4 분
+오전 10: 32 도 착
+미리보기 안내시작
+1 4 분
+오전
+매우  혼 잡
+배 차  간 격 이 긴  노 선 입니다.
+10: 32 도 착
+미리보기 안내시작
+Do
+F l o a t i ng  Bo t t om  Shee t  형 태 로 유 지 하 며  기 존  Bo t t om  Shee t 를 가 리 지  않고  상 단 에 떠  있는 형 태 로 위 치 하여 정 보  계 층 을 명확 히   합니다.
+사용자가 전 체  경로를 보고  있는 동안 빠르 게 액 션 을 실 행 할 수 있도록 설 계 합니다. 
+Do n ’ t
+기 존  Bo t t om  Shee t 를 가 리 는 형 태 로 사용하여 전 체 경로 탐색에 불 편 함 을 주 지  않 도록 해 야  합니다.
+D o
+최적 최소 시 간NN 분 분1 N 번 환 승   N 회 NN
+D on ’ t
+분 N 번 최적 NN 분 NN 분 N 번 최소 시 간NN 분 분1 N 번 환 승   N 회 NN 분 N 번 NN 분 N 번 NN 분
+14 분 14 분
+오전 10:1 2 - 오전 10:1 2 원
+7 0
+오전 10:18 기준
+출발
+서울대입구역
+번  출구까지
+도보 392m
+10 : 18
+1 분
+( 출발  대기
+80 분
+33 분
+10 분 )
+4 분
+NNN 분
+오전 10:1 2 - 오전 10:1 2 원
+7 0
+오전 10:18 기준
+출발
+서울대입구역
+번  출구까지
+도보 392m
+10 : 18
+1 분
+( 출발  대기
+80 분
+33 분
+10 분 )
+4 분
+NNN 분
+7 7
+1 410 : 분 18
+오전 주변 10:32
+2호선
+도 착 저 장
+서울대입구역 대 중 교통
+승차
+지 하 철  노 선 도  미 리 보 기
+미리보기 안내시작
+내 비 게 이 션 MY
+봉천역  방면
+빠른  하차 3 - 2 , 5 -1 실시간 시간표
+7 0 여유
+배차  간격이  긴  노선
+7 0 여유
+배차  간격이  긴  노선
+7 0 여유
+배차  간격이  긴  노선
+3 분
+3 분
+3 분
+3 정류장
+3 정류장
+3 정류장
+1 410 : 분 18
+오전 주변 10: 32
+2호선
+도 착 저 장
+서울대입구역 대 중 교통
+승차
+지 하 철  노 선 도  미 리 보 기
+미리보기 안내시작
+내 비 게 이 션 MY
+봉천역  방면
+빠른  하차 3 - 2 , 5 -1 실시간 시간표
+7 0 여유
+배차  간격이  긴  노선
+7 0 여유
+배차  간격이  긴  노선
+7 0 여유
+배차  간격이  긴  노선
+3 분
+3 분
+3 분
+3 정류장
+3 정류장
+3 정류장
+11 개  역  이동 80 스  도 착 정보  더 보기
+분 11 개  역  이동 80 스  도 착 정보  더 보기
+분
+10 : 18
+10 : 18
+도 착
+서울대입구역 하차
+내 리 는  문 : 왼 쪽
+번  출구에서  
+도보 392m
+서 울 대 입 구 역
+서 울  중 구  구 름로  20 1 - 96
+전 화 하기 예약 하기
+80 분
+10 : 18
+10 : 18
+도 착
+서울대입구역 하차
+내 리 는  문 : 왼 쪽
+번  출구에서  
+도보 392m
+서 울 대 입 구 역
+서 울  중 구  구 름로  20 1 - 96
+전 화 하기 예약 하기
+80 분
+도 로 의 왼 쪽 에 있 습 니 다 . 도 로 의 왼 쪽 에 있 습 니 다 .
+
+===== SearchBar.pdf =====
+-- Page 1 --
+Se ar ch Bar
+사용자는 검색 창을 사용하여 앱에서 제공하는 정보를 빠르게 찾을 수 있습니다. "검색 창"은 검색어를 입력하기 위한 필드 구성 요소를 말합니다.
+Sear ch Bar
+Ana t omy
+3
+장소, 버스, 지하철, 주소 검색
+2
+3
+1
+버튼 배경
+가장 넓은 영역을 차지하며, 버튼의 특성을 보여줍니다
+라인, 배경 그리고 그림자는 상황에 따라 변경할 수 있습니다.
+텍스트 영역
+버튼의 내용이 표시됩니다
+아이콘 영역
+관련 뱃지, 아이콘을 표시할 수 있습니다
+C om p on e nt
+Default Pr ess After Input
+Default
+State (Default, Pr ess)
+T e xt (C ontent)
+장소, 버스, 지하철, 주소 검색 장소, 버스, 지하철, 주소 검색
+Leadonly
+Righ t B tn ( O n /O ff)
+State   
+(Default, Pr ess, After Input)
+T e xt (C ontent)
+출발 지 입력
+출발 지 입력
+서 울 시 중 구 이상 해로  1 8
+서 울 시 중 구 이상 해로  1 8
+취업해빌딩
+E d i t
+State ( F o c us, Input)
+T e xt (C ontent)
+장소, 버스, 지하철, 주소 검색 인
+U s a g e guideli n es
+검색을 유도 하는 서 치바  또 는 입력 필드 (Input) 의 역할을 합니다 .
+장소, 대중교통( 버스, 지하철 )  및  주소 검색에 활 용됩니다 .
+사용 목적 에 따라 다 양 한 상 태(De f ault , Pr ess , A ft er  Input , R e adonly , E dit)로  변경하여 적 용할 수 있습니다 .
+사용자의 입력 상황에 따라 동적 인 시 각적  피 드 백 을 제공하여 검색 경 험 을 향 상시 킵 니다 .
+기 본적 인 플레 이스 홀더 가 존재 하며, E dit  T ype 에서는 입력 했 을 때  커 서가 글 자를 따라 갑 니다.
+U se c a se
+De f ault
+Do
+[검색]  아이콘  버튼  사용을  권장하여  사용자가  쉽게  검색  기능을  인식하고  접근할  수  있도록  합니다.
+플레이스홀더는  “장소,  버스,  지하철,  주소  검색"과  같이  명확하고  직관적인  안내  문구를  사용하여  검색  가능  범위를  이해할  수  있도록  합니다.
+Don ’ t
+[검색]  아이콘과  [검색]  버튼  동시  사용을  지양합니다.  
+D o D on ’ t
+장소, 버스, 지하철, 주소 검색 검색 검 색
+L e a dOn l y
+Do
+출발 지, 도 착 지, 경 유 지 입력 필드를 명확 하게 구 분 하여 제공합니다 .
+출발 지 및  도 착 지는 필수 입력 필드 로  최 소 하 나씩  포함 해 야  합니다 .
+경 로  설 정 시 경 유 지를 추 가할 수 있는 옵션 ( + ) 과  삭 제할 수 있는 옵션 ( - ) 을 모두  제공하여 유 연 한 경 로  설 정이 가 능 하 도 록  합니다 .
+경 유 지는 최 대  5개까 지 추 가할 수 있 도 록  제한합니다.  
+텍스트 필드 내에서 표시 가 능 한 최 대  너비 를 제한하여, 이를 초과 하는 내용은 가 독 성을 유 지하기 위 해  자 동 으 로  ... 처 리합니다 .
+경 유 지 추 가 ( + )  또 는 삭 제 ( - )  아이콘이 있을 경 우 , 텍스트가 해 당  아이콘 과  32 p x간격 을 침범 하 면   ... 적 용됩니다 .
+아이콘이 없 을 경 우 , 텍스트가 서 치바  오른쪽  끝 에서 8p x  간격 을 침범 하 면   ... 적 용됩니다.
+Don ’ t
+한  번의  길찾 기  과 정에서  출발 지  및  도 착 지를  여 러  개  설정 할  수  없 도록  제한 합니다.
+출발 지,  도 착 지,  경유 지  입력  필드의  플레이스홀더는  명확 한  안내를  제공 해 야  하 며 ,  모호한  표현 을  사용하지  않습 니다.
+텍 스 트  필드  내  표 시  가능 한  길 이를  초 과하는  경우 ,  두  줄로  표 시하지  않 고  자동 으로  ...  처리 합니다.
+D o D on ’ t
+경기 도  성 남 시 분당 구 구 미 동  1 99 - 2  분
+경 유 지 입력
+경 유 지 입력
+경 유 지 입력
+경 유 지 입력
+경 유 지 입력
+경 유 지 입력
+경기 도  성 남 시 분당 구 구 미 동  90
+출발 지 입력
+출발 지 입력
+경 유 지 입력
+경 유 지 입력
+경 유 지 입력
+경 유 지 입력
+경 유 지 입력
+경 유 지 입력
+경기 도  성 남 시 분당 구 구 미 동  1 99 - 2 천
+사 와  악마  오 피 스 텔
+E d i t
+Do
+사용자가  검색  바 에  입력한  검색 어와  일치 하 거나  유 사 한  키워 드 를  제공 합니다. 
+최대  3 개 까 지 의  관 련  검색 어  또 는  연 관 된  항목 을  추천 하여  검색  경 험 을  향상 시 킵 니다. 
+검색 어 가  포함된  단어  또 는  문구  내 에서  첫  글 자를  색 상 으로  강조 하여  인지하도록  합니다.  
+Don ’t
+사용자 의  검색 어와  연 관 성 이  없 는  추천  검색 어 를  제공 하지  않습 니다. 
+검색 어  하이 라 이 팅 을  과도하게  사용하여  가 독성 을  해 치 지  않 도록  합니다.
+최대  3 개의  추천  검색 어 를  초 과하여  결 과를  보 여주지  않습 니다.
+Do D on ’ t
+인
+인 천 공 항 1 터 미 널
+인천 공 항
+인덕원역
+인
+인 천 공 항 1 터 미 널
+인 천 공 항
+김 포 공 항
+
+===== Btn.pdf =====
+-- Page 1 --
+B tn (But t on)
+사용자의 행동을 유도하는 버튼으로, 필요에 따라 다양한 형태로 제공합니다. 
+Icon
+Ana t omy
+1
+2
+아이콘 영역
+버튼의 내용과 특성을 나타내는 영역입니다.
+컨테이너 영역
+아이콘 버튼에 접근 가능한 영역입니다.
+사용자가 클릭 또는 터치할 수 있도록 화보된 인터랙션 영역입니다.
+버튼의 작동을 보장하는 최소 터치 영역입니다. 
+Component
+Default Pr essed
+Default
+Siz e (12,14,16,18,24,32)
+U sag e guidelines
+사용자의 빠른  인 지를  돕고 , 주 요 액 션을 직관적 으로 안 내하는 역할을 합니다.
+아이콘 은  레 이 블 과 함께  사용할 수 있으 며 , 레 이 블  좌측 과 우측 에 모두  위 치할 수 있 습 니다.
+아이콘 만  단독 으로 사용할 경우 , 학습 이 필요 없 는 보 편적 인 아이콘을 선택 하 여  특 정  기 능을 명확 하 게  표현 합니다.
+배경 을 사용하 여  접근 가능한 터치 영역을 제공합니다. 
+U s e c a s e
+De f ault
+Do
+하 단  탐색  메뉴 의 아이콘 버튼 간  간격은  동 일해야  합니다.
+최소한의 터치 영역 (약  44x44p x) 을 확 보하 여  접근성을 보장 해야  합니다.
+Don ’t
+아이콘 버튼이 너무  작 거 나 클릭 영역이 부족 하 지  않 도록 해야  합니다.  
+버튼 간  간격 이 일정 하 지  않거 나 불균 형하 게  배 치 되지  않 도록 합니다.
+D o D on ’ t
+주변 저장 대중교통 내비게 이 션 MY 주변 저장 대중교통 내비게 이 션 MY
+Do
+가 독 성과 균 형을 유 지 하 기  위해  적절 한 크기 의 아이콘을 사용합니다.
+Don ’t
+아이콘 버튼이 본문 의 주 요 텍스트  크기 보다 과도하 게  크거 나 작 지  않 도록 합니다.
+D o D on ’ t
+음식점 음식점
+Do
+아이콘 만  단독 으로 사용할 때 , 의 미 가 명확 한 아이콘을 사용합니다.
+방향 성을 가 진  아이콘 ( 예:  >  → ) 이 레 이 블 과 올바 른  위 치에 정 렬 되 도록 합니다.
+상 단  탐색 창 에 서 는 아이콘 버튼 좌우 에 일정 한 여 백 을 확 보 해야  합니다.
+Don ’t
+좌측  방향 성을 가 진  아이콘이 우측 에 위 치하 지  않 도록 합니다.
+상 단  탐색 창 에 서  2개  이 상 의 아이콘 버튼을 연속  배 치하 여  사용하 지  않습 니다.
+D o D on ’ t
+쏘삼 208 시흥 배곧점 쏘삼 208 시흥 배곧점
+-- Page 2 --
+B tn (But t on)
+사용자의 행동을 유도하는 버튼으로, 필요에 따라 다양한 형태로 제공합니다. 
+Pill
+Ana t omy
+1
+3 3
+T e x t
+2
+버튼 배경
+가장 넓은 영역을 차지하며, 버튼의 특성을 보여줍니다
+라인, 배경 그리고 그림자는 상황에 따라 변경할 수 있습니다
+텍스트 영역
+버튼의 내용이 표시됩니다
+아이콘 영역
+관련 뱃지, 아이콘을 표시할 수 있습니다
+Component
+Default
+Siz e (L,M,S, XS, XXS)
+Ico (Left, Right Boolean)
+T e xt (C ontent)
+Default
+T e x t
+T e x t
+T e x t
+T e x t
+T e x t
+T e x t
+T e x t
+T e x t
+T e x t
+T e x t
+T e x t
+T e x t
+T e x t
+T e x t T e x t
+Pr essed
+T e x t
+T e x t
+T e x t
+T e x t
+T e x t
+T e x t
+T e x t
+T e x t
+T e x t
+T e x t
+T e x t
+T e x t
+T e x t
+T e x t T e x t
+Inf oEx
+T e xt (C ontent)
+T e x t
+T e x t
+MyPlacesFilter
+T e xt (C ontent)
+T e x t T e x t
+C ategor yFilter
+T e xt (C ontent)
+T e x t T e x t
+U sag e guidelines
+메 인 기능 을 뒷받침  하는 부 가 적 인 기능 을 하는 버튼, 서브  버튼 역할을 합 니다
+태 그, 보 조적 인 선택 지 사 용 합 니다
+C T A 에 비해  주목 성이 낮 습니다 ( 보 조  역할 )
+목적 에 따라 타입 이 나뉘 며, 중요도 에 따라 속 성 값 을 변경할 수 있습니다
+U se c ase
+D e f aul t
+화면 에 서  C T A  버튼을 제외 하고, 세부적으로  화면 을 유도 하는 버튼 으로  사 용 합 니다  
+버튼의 중요도 에 따라 아이콘의 유형(Lin e /Fill) 을 변경 및  삭제 하 거나 , 텍스트 컬러  및  크기와  아이콘의 크기를  조정 하여 확 장성 있 게  사 용 합 니다
+주로  왼쪽  아이콘에는 해당  버튼이 하는 역할에 따라 아이콘을 변경하며, 우측 에는 화살 표 아이콘을 사 용 합 니다
+역할이 크 지 않 은 경 우  모든  아이콘을 제 하고 텍스트 버튼 으로만  사 용 가 능합 니다
+Do
+타입  크기 보다 2배 이상 큰  아이콘은 사 용할 수 없 습니다
+우측 에는 Lin e 아이콘 만  사 용 되 며, Fill  아이콘은 사 용할 수 없 습니다
+Don ’ t
+D o D on ’ t
+예약 예약
+Inf oE x
+콘 텐츠  내에 서  추 가 적 인 내용을 노출 할 수 있 도 록  유도 하는 버튼 으로  사 용됩니다
+Colo r 는 지 정 된  색 상 으로만  사 용 합 니다
+Do
+타입  크기 보다 2배 이상 큰  아이콘은 사 용할 수 없 습니다
+우측 에는 Lin e 아이콘 만  사 용 되 며, Fill  아이콘은 사 용할 수 없 습니다
+상황에 맞 지 않 는 아이콘은 사 용할 수 없 습니다
+Don ’ t
+D o D on ’ t
+방문 자 리 뷰  더 보 기 방문 자 리 뷰  더 보 기
+MyP la c e sFi l t e r
+위치 를  기 준 으로  유 저 가 저 장 한  장 소들 의 리스트 를  보여 주 는 것 을 유도 하는 버튼 으로  사 용됩니다
+컬러와  텍스트 내용, 아이콘, 뱃지 모 두  그 대 로  사 용 되 며, 언어 를  변경할 시 텍스트 내용에 변 화 가 생깁 니다
+지 도  위 에 서  보여지는 버튼이 므 로 , D r o p  Do w n  효과 를  사 용 해 야 합 니다
+Do
+설 정 된  아이콘이 아 닌  다 른  아이콘은 사 용할 수 없 습니다
+지 도  위 가 아 닌  다 른위치 에 서 는 사 용이 불 가 합 니다 .
+Don ’ t
+D o D on ’ t
+이 주 변 저 장 장 소 이 주 변 저 장 장 소
+C a t e g o r yFi l t e r
+위치 를  기 준 으로  카테 고리에 해당 하는 장 소  리스트 를  보여 주기 위한  유도  버튼 으로  사 용됩니다
+카테 고리에 맞 는 아이콘 과  텍스트 를  지 정 할 수 있 으 며, 언어 를  변경할 시 텍스트 내용에 변 화 가 생깁 니다
+지 도  위 에 서  보여지는 버튼이 므 로 , D r o p  Do w n  효과 를  사 용 해 야 합 니다
+Do
+설 정 된  아이콘이 아 닌  다 른  아이콘은 사 용할 수 없 습니다
+지 도  위 가 아 닌  다 른위치 에 서 는 사 용이 불 가 합 니다
+Don ’ t
+D o D on ’ t
+편 의 점 편 의 점
+-- Page 3 --
+B tn (But t on)
+사용자의 행동을 유도하는 버튼으로, 필요에 따라 다양한 형태로 제공합니다. 
+Floating(F AB)
+Ana t omy
+Default T r anslucent
+2 2
+1 34 3 1 34 분 3
+4
+컨테이너 영역
+아이콘 버튼을 감싸고 클릭, 터치가 가능한 배경 영역입니다.
+아이콘 영역
+버튼의 내용과 특성을 나타내는 영역입니다. 
+아이콘 중앙 텍스트 영역(선택 사항)
+아이콘 버튼 기능을 보조하는 정보를 제공합니다.
+아이콘 하단 텍스트 영역(선택 사항)
+아이콘 버튼 기능을 보조하는 정보를 제공합니다.
+C om p on e nt
+Default Pr essed
+Default
+Siz e (40, 44, 50)
+Num (NN)
+State (Default, Pr essed)
+7 7
+T r anslucent
+Siz e (44, 50)
+Num (N, NN, NNN)
+T e x t ( 분 )
+State (Default, Pr essed)
+R oun dSq uar e
+T e x t ( 길찾기 )
+State (Default, Pr essed)
+길찾 기
+NNN 분
+길찾 기
+NNN 분
+E lli p se
+T e x t ( 지도보기 )
+State (Default, Pr essed)
+지 도보기 지 도보기
+U sag e guidelines
+단일  주요  동작을  수행하고,  아이콘이 포함된  버튼입니다.
+Z값  최상위에  배치되며,  화면에  고정되어  위치합니다.
+지도  기능을  보다  빠르고  직관적으로  사용할  수  있도록  돕는  요소입니다.  
+U se c a se
+De f ault
+Do
+상 단 Def ault   F AB 는 He ader와  8p x  간격 을 유 지 하 며  일관되게  배치합니다.  
+지 도 활 용과 관련된  명확 한 역 할 을 부여 하고, 사용자가 쉽게  예상할  수  있 는 아이콘을 사용합니다.  
+Def ault  F AB 는 3개 를 고정으로 배치합니다. 
+D o
+8p x
+Do
+하단 Def ault  F AB는 Bo t t om Shee t와 16p x 간격을 유지하며 일관되게 배치합니다.
+화면을 스크롤하거나 Bo t t om Shee t가 확장될 때 콘텐츠와 겹치지 않도록 명확하게 구분합니다. 
+여러개의 액션을 포함하는 경우, 시각적 피드백을 명확히 제공하고 단계적으로 나타나도록 구성합니다. 
+D o
+16p x
+T r a ns lu c e n t
+Do
+T r ansluc ent  B t n 의 아이콘 은  텍스트 상 단에 위 치하 며  컨테이너 중앙에 정 렬 합니다 .
+지 도 및  다 른  UI 요 소 와  겹 치는 부 분 의 가 독 성 확 보를 위해  그림 자 효 과를 적 용합니다 .
+상 황 에 따라 적절 한 불투 명 도 값 을 지 정하 여  사용합니다. 
+Do n ’t
+컨테이너 내 부  아이콘과 텍스트 정 렬 을 임 의 변 경하 지  않습 니다 .
+3 자 이 상 의 텍스트 사용을 지 양합니다.  
+지 정 된  불투 명 도 값 을 변 경하 여  가 독 성을 해 치 지  않습 니다.
+Do D on ’ t
+34 분소 요
+34 분
+Do
+방향 을 나타내 거 나 뒤 로가기를 의 미 하는 T r ansluc ent  B t n은  S t a tu s  Bar  하단이 면서  콘 텐츠  최 상 단에 위 치합니다 .
+뒤 로가기를 의 미 하는 X 버튼 은  우측  상 단에 고정하 여  정 렬 합니다 .
+화살표  버튼 은  아이콘이 나타내는 방향 을 고 려 하 여  정 렬 합니다. ( 예 :  <  버튼 은  좌측  상 단에 고정 )
+화살표  버튼 은  단 계 가 있 는 경 우 에 만  표시 합니다 .
+배경과 구분 되 는 그림 자 효 과를 적 용합니다. 
+Do
+R o u n d s q au r e
+Do
+R o u n d s q uar e  F AB 는 아이콘과 텍스트를 함께  제공하 여  가 독 성을 높 여 야  합니다 .
+아이콘이 컨테이너 내 부  중앙에 정 렬 되 도 록  배치합니다 .
+사용자가 기능을 즉각 적 으로 이 해 할  수  있 는 텍스트( 예 : 길찾 기)를 추 가합니다. 
+Do n ’t
+아이콘 만  배치하 여  사용자가 기능을 이 해 하기 어렵 게  만 들 면  안됩 니다 .
+아이콘이 중앙에 서  벗어 나 거 나 정 렬 이 어긋 나 지  않 도 록  합니다.
+D o D on ’ t
+길찾 기
+E ll ip s e
+Do
+E ll i p s e  F AB 는 한 화면 에 하나 씩 만  사용합니다 .
+하단 홈바 와  4 0 p x  간격 을 일 정하 게  유 지 하 여  항 상  접근  가능한 위 치 해  배치합니다 .
+화면  하단 중앙에 정 렬 하도 록  하고 주 요 동 작 을 위해  활 용합니다.
+D o
+지도보기
+40 p x
+-- Page 4 --
+B tn (But t on)
+사용자의 행동을 유도하는 버튼으로, 필요에 따라 다양한 형태로 제공합니다. 
+Ana t omy
+T e xt
+1 T e x t
+컨테이너 영역
+텍스트 버튼을 감싸고 클릭, 터치가 가능한 배경 영역입니다.
+텍스트 영역
+버튼 내용에 맞는 텍스트가 작성되는 영역입니다.
+U sag e guidelines
+단일 주요 동작을 수행하는 버튼입니다.
+정보 텍스트 주변에서 특정 기능을 수행할 수 있도록 만듭니다.
+Component
+Default Pr essed Disabled
+Default
+State (Default, Pr essed)
+T e xt (C ontent)
+T e x t T e x t
+Modal
+T ype
+(Primary , Secondary)
+State (Default, Disabled)
+T e xt (C ontent)
+T e x t T e x t T e x t T e x t T e x t
+U se c ase
+De f ault
+Do
+콘텐츠  내에서 사 용 돼야  하 며 , 콘텐츠  텍스트 의  우측  또 는 하단에 위 치 합 니다.  
+사 용 자의  눈 에서 거슬리지  않지 만 쉽게  인식 할 수 있도록 합 니다.
+글자의  수는 최대 한 간결 하 게  작성 합 니다.
+Don ’t
+콘텐츠  내에서 어울리지  않 는 U X  Writing 을 지양합 니다.
+D o D on ’ t
+내 장소 에 저장됨 수정 로 드맵 0507- 1 234- 1 234
+Modal
+Do
+모달  푸 터에 위 치하 며 , 모달의  내용 속 성에 따라  버튼이 사 용 됩 니다.
+텍스트 버튼 은  1 -2개 만 혼합해  사 용이 가능 합 니다.
+Don ’t
+U X  Writing의  중 요도 와  색상 을 맞 지않게  사 용하 지  않습 니다.
+D o D on ’ t
+지금  출발 완료 취소 지금  출발 완료
+-- Page 5 --
+B tn (But t on)
+사용자의 행동을 유도하는 버튼으로, 필요에 따라 다양한 형태로 제공합니다. 
+Link
+Ana t omy
+1 ht tp;// damdamdanc e. c o .kr
+2
+아이콘 영역(선택 사항)
+링크를 인식할 수 있도록 돕는 시각적 요소 아이콘입니다.
+텍스트 영역
+실제 URL을 나타내는 텍스트 영역입니다.
+Component
+Default
+Ico (T rue/False)
+T e xt (C ontent)
+Default
+ht tp;// damdamdanc e. c o .kr
+ht tp;// damdamdanc e. c o .kr
+Pr essed
+ht tp;// damdamdanc e. c o .kr
+ht tp;// damdamdanc e. c o .kr
+U sag e guidelines
+URL유형에 따라 아이콘이 변경될 수 있습니다
+사용자를 특정 페이지, 문서, 외부 사이트 등으로 이동시키는 역할을 수행합니다.
+일반 버튼과 달리, 클릭 시 페이지 전환이 발생합니다. 
+U se c ase
+De f ault
+Do
+지정된  범위 를 넘어가 는 URL을 그대 로 노출 하 지  않고 , 가독성 을 유 지 하 기  위해  자동으로 말줌임표 ( ... ) 처리 합니다 .
+버튼 형태로 제공 함 을 사용자 가  쉽게  인식할 수 있도록 합니다. 
+D on ’ t
+긴  URL을 그대 로 노출 시 키지  않습 니다 .
+사용자 가  단순 한 텍스트로 오 인하 지  않 도록 합니다. 
+D o
+가격표  이 미 지로 보기
+ht tp s: // 524 hhhhhh. gi th ub . i o/ D . sig ner -s t or yb oo
+k/ ? p a th = / doc s / bu t t on s -fl o a t i n gb tn -- doc s인스타그램
+D on ’ t
+가격표  이 미 지로 보기
+ht tp s: // 524 hhhhhh. gi th ub . i o/ D . sig ner -
+s t or yb ook/ ? p a th = / doc s / bu t t on s -fl o a t i n gb tn --
+doc s
+인스타그램
+Pr ess
+Do
+Pr ess  상 태에 서  배경색  추가 를 통해  버튼을 눌렀음 으로 명확 한 시각적 피드백 을 제공합니다.
+D on ’ t
+사용자 가  알 아 차 리 기  어려운  클릭 경 험 을 제공하면  안됩 니다.
+지 나치게  극단적 인  피드백 으로 혼란 을 주면  안됩 니다.
+D o D on ’ t
+ht tp;// damdamdanc e. c o .kr ht tp;// damdamdanc e. c o .kr
+-- Page 6 --
+B tn (But t on)
+사용자의 행동을 유도하는 버튼으로, 필요에 따라 다양한 형태로 제공합니다. 
+Filter
+Ana t omy
+1 최 적 경 로 순 2
+텍스트 영역
+선택된 필터 옵션을 나타내는 영역입니다.
+아이콘 영역
+클릭, 터치로 필터 옵션을 변경할 수 있는 아이콘 영역입니다.
+Component
+Default
+Default
+Siz e (R/M)
+T e xt (C ontent)
+최 적 경 로 순 최적경로 순
+Time
+T ype (Default, Selected)
+Date 
+(T oday/T omorr o w/Month)
+Time (Default/AM/PM)
+Num (10:06)
+출발시각  설정
+오늘  오전 NN:NN
+오늘  오후 NN:NN
+출발
+출발
+내일
+내일
+ 오전
+ 오후
+NN:NN
+NN:NN
+출발
+출발
+N월 NN일
+N월 NN일
+ 오전
+ 오후
+NN:NN
+NN:NN
+출발
+출발
+U sag e guidelines
+화살표  아이콘을 통해  필터 옵션 모달 이 열리 는 동 작 을 유도하는 버튼입니다 .
+경로 검색  결과를  사용자의 선 호 도 또 는 목 적에 맞게  정렬 하는 기능 을 제공합니다.
+U s e c a s e
+Default
+Do
+필터 옵션 모달 이 열리기  전  사용자 가  정렬  기준 을 선택하 고  변경할 수 있 음 을 명확 하 게  전달해야  합니다 .
+아이콘 은  텍스트  우측 에 일정 한 간격 을 두고  배 치하 여야  합니다. 
+Don ’t
+화살표  아이콘의 방향 을 임 의로 수 정 하 면  안  됩 니다.
+D o D on ’ t
+최적경로 순 최적경로 순
+Time
+Do
+기본 적으로 현재  시간  기준 으로 자동 설정되며 , 사용자 가  원 하는 시간 으로 조정 할 수 있 음 을 전달해야  합니다 .
+출발  시간과  현재  시간 을 혼 동하 지  않 도 록  “출발" 이라는 단어를  필수적으로 포함 합니다. 
+Don ’t
+화살표  아이콘 없 이 텍스트 만  표시 하 면  안  됩 니다 .
+출발  시간 을 강 조 하는 색 상 을 임 의로 변경하 여  시 인성 을 해 치 지  않 습 니다. 
+D o D on ’ t
+오늘  오전 NN:NN 출발 오늘  오전 NN:NN
+공통
+Do
+각  필터 버튼 은  역할에 맞게  지정 된 위 치에 배 치 되어야  합니다 .
+사용자의 탐 색  흐름 과  직관성 을 유 지 하 기  위 해  일 관 된 위 치에 배 치 해야  합니다.
+Don ’t
+필터 버튼을 예상 치 못 한 위 치에 배 치하 여 , 사용자 가  혼 란 을 느끼 지  않 도 록  합니다 .
+상 하로 나 란히  여 러개 의 필터 버튼을 배 치하 지  않 습 니다.
+D o D on ’ t
+오늘  오전 NN:NN 출발 최적경로 순 오늘  오전 NN:NN 출발
+최적경로 순
+-- Page 7 --
+B tn (But t on)
+사용자의 행동을 유도하는 버튼으로, 필요에 따라 다양한 형태로 제공합니다. 
+C ontr ol
+Ana t omy
+1
+버스 도착정보 더보기
+2
+3
+컨테이너 영역
+버튼을 감싸고 클릭, 터치가 가능한 배경 영역입니다.
+외곽 보더라인은 타입에 따라 다양하게 쓰입니다.
+텍스트 영역 (선택)
+버튼의 내용과 특성을 나타내는 영역입니다.
+타입에 따라 사용되지 않을 수 있습니다,  
+아이콘 영역
+버튼의 내용과 특성을 나타내는 영역입니다. 
+버튼의 타입에 따라 중앙 또는 좌,우측에 제공됩니다.
+C om p on e nt
+Default
+DefaultMoveInf o
+Default- 버스 도착정보 더보기
+Aler t
+Num (N) 폐업했거 나 정보가 없 는 장소 NN
+MapEx
+-
+MoveT ype
+T e xt (대중교통)
+Cont ent
+Utile
+T e xt ( 전화 ) C o n t e n t
+E d it S u gg e s t
+-
+정보 수정 제 안
+Dr opC ontentDr opC ontent
+T e xt ( C on te n t )
+Num (N)
+T e xt ( C on te n t )
+Num (N)
+Cont ent NN
+R evie w  C ate g or y
+T e xt ( C on te n t)
+Cont ent
+R evie w  Mor e
+Num (N)
++ N
+Aut h orit y
+T e xt ( C on te n t)
+Cont ent
+무료로 직접 관리해보세요! 권 한 받 기
+U sag e guidelines
+단일  주요  동작 을 수 행 하고, 아이콘이 포함된  버튼입니다.
+큰  콘 텐츠  내에 서  사용되 며 , 상황 에 따라 타입을 선택 해  사용하 면  됩니다.
+U se c a se
+Mo v eInf o
+Do
+버스 노 선 도착 정보 를  추 가 적으로  불  수 있다는 사 실 을 명확 하게 전달 해 야  합 니다. 
+우측 아이콘은 해 당  뎁 스 를  유 도하는 아이콘인 화살표  아이콘을 사용 해 야합 니다.
+Don ’ t
+카드  안 에 종속 되는 버튼 으로  카드  사이 즈 보다 커질  수 없 습니다.
+D o D on ’ t
+버스 도착정보 더보기 버스 도착정보 더보기
+Al e r t
+Do
+저 장된  장소  카테 고 리  중 폐업했거 나 정보가 사라 진  장소 를  명확 하게 전달 해 야  합 니다. 
+리 스트 내에 좌우 패딩 을 제외하고 Fill값으로  적 용되 어야합 니다.
+우측 아이콘은 해 당  뎁 스 를  유 도하는 아이콘인 우측 화살표  아이콘을 사용 해 야합 니다.
+Don ’ t
+상황 에 맞 는 컬러를  사용 해 야합 니다.
+화살표 의 방향 은 임 의 로  수정하 면  안  됩니다.
+D o
+폐업했거 나 정보가 없 는 장소 NN
+D on ’ t
+폐업했거 나 정보가 없 는 장소 NN
+M apE x
+Do
+해 당  위 치의 지도 위 치 를  더 자세히  볼  수 있다는 사 실 을 명확 하게 전달 해 야  합 니다.
+아이콘 만  단 독 으로  사용 할  경우 범 용 적 인 아이콘을 사용하도 록  합 니다. 
+Don ’ t
+위 치는 항 상  오른쪽  상단 에 위 치 해  있 어야합 니다.
+목 적 과 맞 지않는 아이콘은 지양 합 니다.
+D o D on ’ t
+Mo v e T y p e
+Do
+아이콘은 해 당  버튼을 인지하기 위 해  텍스트 왼쪽 에 배치되 어야  합 니다.
+조 합 형 으로  사용되는 아이콘 으로 , 텍스트가 간결 해 야합 니다.
+Don ’ t
+텍스트 와  맞 지않는 아이콘은 지양 합 니다.
+영 어 와  한 글 을 동 시 에 사용하는 것 은 지양 합 니다.
+D o D on ’ t
+대 중 교통 자 동 차 도보 대 중 교통 아우 디  자 동 차 W a l k
+U t i l e
+Do
+아이콘은 해 당  버튼을 인지하기 위 해  텍스트 위쪽 에 배치되 어야  합 니다.
+조 합 형 으로  사용되는 버튼 으로 , 텍스트가 간결 해 야합 니다.
+조 합 형 으로  사용되는 버튼 으로 , 내 부  패딩 에는 큰  영 향 이 없 습니다.
+Don ’ t
+텍스트 와  맞 지않는 아이콘은 지양 합 니다.
+D o
+C o n t e n t 문 의 저 장 네 비 게 이 션 공 유
+D on ’ t
+C o n t e n t 문 의 S a v e N a v i g a t i o n 공 유
+E d i t Sugg e s t
+Do
+제 안 과 관련 된  버튼 으로  직관 적 인 단 어를  조 합 한 내용을 작 성 해 야합 니다.
+우측 아이콘은 해 당  뎁 스 를  유 도하는 아이콘인 우측 화살표  아이콘을 사용 해 야합 니다.
+Don ’ t
+텍스트 와  맞 지않는 아이콘은 지양 합 니다.
+D o D on ’ t
+정보 수정 제 안 정보 수정 제 안
+D r o p Cont ent
+Do
+조 합 형 으로  사용되 므 로 , 들 어 가는 텍스트는 공 백 포함  12 글자  이내 로  간결 해 야합 니다.
+배경, 외 부  경 계 선 등 과 같 은 요소 가 없 습니다.
+Don ’ t
+영 문 과 한 글 을 혼 용 해서  함 께  사용하는 것 을 지양 합 니다.
+D o
+전 체  리 스트 15
+D on ’ t 리 스트에 리 스트 15
+리 스트에 L i s t 에 리 스튼이 리 스트 를  더 해서
+리 스트에 리 스 리 스 15
+15
+A u t h o r i t y
+Do
+텍스트 버튼과 조 합 형 으로  사용되 므 로 , 텍스트 버튼의 내용은 간결 해 야합 니다.
+Don ’ t
+임 의 로  아이콘과 텍스트의 위 치 를  변 경하지 않습니다.
+텍스트 와  맞 지않는 아이콘은 지양 합 니다.
+영 문 과 한 글 을 혼 용 해서  함 께  사용하는 것 을 지양 합 니다.
+D o D on ’ t
+전체  리스트
+무료로 직접 관리해보세요! 권 한 받 기
+전체  리스트
+무료로 직접 관리해보세요!
+권 한 받 기
+-- Page 8 --
+B tn (But t on)
+사용자의 행동을 유도하는 버튼으로, 필요에 따라 다양한 형태로 제공합니다. 
+PhotoBadge
+Ana t omy
+1
+999+
+2
+3
+컨테이너  영역
+아이콘과 텍스트를 감싸고 터치가 가능한 배경 영역입니다. 
+아이콘 영역
+버튼의 내용과 특성을 시각적으로 나타내는 영역입니다. 
+숫자 영역
+추가적인 정보를 나타내는 영역입니다. 
+Component
+Default
+Default
+Num (NNN)
+999+
+U sag e guidelines
+시청각(영상, 사진, GIF) 그리드 내에서 더 많은 시청각 콘텐츠를 볼 수 있도록 유도하는 버튼입니다.
+사용자에게 추가적인 정보가 더 있다는 것을 확실하게 인지할 수 있도록 만들어야합니다.
+U se c ase
+Default
+Do
+상 황 에 맞 는 아이콘을 사용 해 야합니다.
+시청각 콘텐츠가 999개 가 넘 는 경 우  999+ 로 표현해 야합니다.
+Don ’t
+시청각 콘텐츠가 999개 가 넘 더 라 더도 모든  숫자를 다 표 시하지 않습 니다.
+D o D on ’ t
+999+ 1 , 99 6 ,201
+-- Page 9 --
+B tn (But t on)
+사용자의 행동을 유도하는 버튼으로, 필요에 따라 다양한 형태로 제공합니다. 
+CT A
+Ana t omy
+-
+1
+2
+안내시작 3
+컨테이너 영역
+아이콘과 텍스트를 감싸고 터치가 가능한 배경 영역입니다. 
+아이콘 영역
+버튼의 내용과 특성을 시각적으로 나타내는 영역입니다. 
+텍스트 영역
+버튼의 주요 기능을 나타내는 영역입니다. 
+Component
+Default Pr essed
+DefaultEllipse
+DefaultSiz e (S/M/R)
+T ype
+(Primary , Secondary , T er tiary)
+안내시작
+도착
+출발
+미리보기
+도착 출발
+안내시작
+도착
+출발
+미리보기
+도착 출발
+RoundSquar e
+T ype 
+(Primary , T er tiary)
+안내 종료
+바로 안내시작
+안내 종료
+바로 안내시작
+U sag e guidelines
+C T A(Call  T o  Ac tion)  버튼 은  사용자 가  주 요 액션 을 수 행하는 데  도 움 을 주 는 핵심  인터페 이스 요 소입 니다 .
+사용자에 게  즉각적인  행동을 유도하는 버튼이 므 로 사용자 가  버튼을 클릭했 을 때  기대 하는 인터랙션 을 직관적 으로 전달해야  합니다 .
+Primar y 는 주 요 행동 유도, Sec ondar y 는 대체  액션  제공, T ertiar y 는  부가적인  기능  제공합니다. 
+U se c ase
+De f ault
+Do
+명확 하 고  직관적인  텍스트 를  용도에 맞게  사용하 여  버튼의 의 미를  쉽게  전달해야  합니다 .
+사용자 가  C T A  버튼을 클릭할  경우 , 명확 한 시 각적  피드백 을 제공 해야  합니다 .
+버튼의 역 할  및  중 요도에 따라 Primar y , Sec ondar y , T ertiar y  버튼을 적절 하 게  사용 해야  합니다. 
+Don ’t
+동 일 한 액션 을 수 행하는 버튼을 여러  스 타일 로 혼 합 사용하 면  안 됩 니다 .
+정해진  계층구조를  임 의로 변경 하 여  사용하 면  안 됩 니다. 
+D o D on ’ t
+출발 도착 출발 출발
+Do
+버튼 간  간격 을 일정 하 게  유 지 하 고  사용자 가  자 연 스 럽 게  터 치 할  수  있 도 록  합니다.  
+버튼의 스 타일 을 명확 하 게  구 분 하 여  사용자 가  주  행동을 쉽게  인 식 하도 록  합니다. 
+Don ’t
+정해진  버튼 간  간격 을 임 의로 수정 하 여  사용하 면  안 됩 니다.  
+버튼 내 부  요 소 의 정 렬 을 임 의로 수정 하 여  사용하 면  안 됩 니다.
+D o D on ’ t
+23 분
+1 0 : 2 2 도 착 미리보기 안내시작 23 분
+1 0 : 2 2 도 착 미리보기 안내시작
+De f ault
+Do
+버튼의 계층구조 에 맞 는 상 태 변 화 를  고 려 하 여  시 각적  피드백 을 제공 해야  합니다.
+Don ’t
+다 른  계층구조 의 버튼에 동 일 한 상 태 변 화 를  적 용하 여  사용하 면  안 됩 니다.
+D o D on ’ t
+바로 안내시작 바로 안내시작
+Do
+Primar y  C T A  버튼 은  가 장  눈 에 띄 도 록  배치 해야  하 며 , 주변  요 소 들과 의 대 비 를  고 려 하 여  강 조 합니다.
+Don ’t
+비슷 한 중 요도의 C T A를  한 화 면 에 다 수  배치 하 면  안 됩 니다.
+D o D on ’ t
+안내 종료
+안내 시작
+안내 종료
+출발 시작
+-- Page 10 --
+B tn (But t on)
+사용자의 행동을 유도하는 버튼으로, 필요에 따라 다양한 형태로 제공합니다. 
+Str eet Thumb
+Ana t omy
+1
+도 로 의 왼 쪽 에
+2
+있 습 니 다 . 3
+컨테이너  영역
+아이콘과 텍스트를 감싸고 터치가 가능한 배경 영역입니다. 
+텍스트 영역
+버튼의 부가적인 정보를 나타내는 영역입니다. 
+아이콘 영역
+버튼의 내용과 특성을 시각적으로 나타내는 영역입니다. 
+Component
+Default
+Default
+Buttom T e xt (Boolean)
+T ype (L/R)
+도 로 의 왼 쪽 에 있 습 니 다 .
+도 로 의 오 른 쪽 에 있 습 니 다 .
+U sag e guidelines
+사 용 자에게  자세 한 장소 를 로 드뷰 로 보 여주기위 한 유도  버튼 역 할 을 합 니다 .
+사 용 자에게  추 가적인 정보를 전달하기위 한 버튼으로 직관 적인 컴포넌 트 형식 으로 제공해야합 니다.
+U s e c a s e
+Default
+Do
+조합형  컴포넌 트 에  속하여  상위  컴포넌 트 가로 사 이 즈와  동일하게  사 용 되어야  합 니다.  
+해상도에  따라  비율 이 변하지  않습 니다 .
+하단  텍스트 같은  경 우  장소 의 로 드뷰  위 치 에  따라  존재하지  않 는 경 우도  존재합 니다.
+Don ’t
+단독 으로 사 용 되 는 경 우 는 없습 니다.
+헤 어  다 이 아  서 현 역 점D o 도착
+경 기  성 남 시 분당구  분당 로 5 3 번길  22 블루홀  플라자3
+층  헤어 다이아 서현 역 점
+전화하기 예약하기
+10 : 18
+D on ’ t
+도착
+10 : 18
+도 로 의 왼 쪽 에 있 습 니 다 .
+도 로 의 왼 쪽 에 있 습 니 다 .
+-- Page 11 --
+B tn (But t on)
+사용자의 행동을 유도하는 버튼으로, 필요에 따라 다양한 형태로 제공합니다. 
+Cir cle
+Ana t omy
+1 2
+컨테이너  영역
+아이콘을 감싸고 터치가 가능한 배경 영역입니다. 
+아이콘 영역
+버튼의 내용과 특성을 시각적으로 나타내는 영역입니다. 
+Component
+Default Pr essed
+Default
+Siz e (24,30,36)
+State (Default, Pr essed)
+U sag e guidelines
+특정 컴포넌트 내에서 부가적인 기능을 하는 버튼, 서브 버튼 역할을 합니다.
+상황에 따라 크기를 선택해 사용하면 됩니다.
+U se c ase
+Default
+Do
+상황에 맞 는 아이콘을 사용해 야 합니다.
+아이콘 만  단독 으로 사용할 경 우  범 용적인 아이콘을 사용하 도록  합니다.
+작 성 된  텍스 트는 공백 포 함  1 4글자  이상 일  경 우  말줄임  표 시가 되어야 합니다. 
+Do n ’t
+컨테이너의 크기 보 다 내부 아이콘의 크기가 더  커질  수  없습 니다.
+ 작 성 된  텍스 트의 내용이 영역을 벗어날  수  없습 니다
+D o
+서 울 시 중구  이상해로 1 8
+볏짚구 이이 야 기 서 울대 입 구 역 점
+D on ’ t
+서 울 시 중구  이상해로 1 8
+볏집구 이 이 야 기 서 울대 입 구 역
+점
+-- Page 12 --
+B tn (But t on)
+사용자의 행동을 유도하는 버튼으로, 필요에 따라 다양한 형태로 제공합니다. 
+Pr ofile
+Ana t omy
+1
+2
+닉네임 블로그명 2 4 . 12.26 . 요일
+3
+아이콘 영역 
+아이콘과 텍스트를 감싸고 터치가 가능한 배경 영역입니다. 
+텍스트 영역
+버튼의 내용과 특성을 시각적으로 나타내는 영역입니다. 
+상태 표시 영역 
+추가적인 정보를 나타내는 영역입니다. 
+Component
+Default Pr essed
+Blog
+T e xt (닉네임, 블로그명, 요일)
+Date Num (NN.NN.NN/NN.NN)
+R e v ie w
+T e xt   
+(닉네임, 블로그명, 요일, 간편결제 )
+Vi s i t Num(N/NN ) 
+Date Num (NN.NN.NN/NN.NN )
+닉네임 블로그명
+닉네임 2 4 . 12.26 . 요일
+2 4 . 12.26 . 요일
+1 번째 방문 간편결제
+닉네임 블로그명 2 4 . 12.26 . 요일
+닉네임 2 4 . 12.26 . 요일 1 번째 방문 간편결제
+U sag e guidelines
+Pr ofile  B tn  프 로필 버튼 은  사용자의 프 로필 정보  또 는 이용 인증  정보를  나타냅 니다 .
+클릭  또 는 터치  시 프 로필 페 이 지 로 이동하 여  사용자의 계정 을 확인할  수  있습 니다.  
+일 반적 으로 장소  홈 , 리뷰  섹션 에 배치되며  사용자 계정  관리  또 는 외부  링크  연 결 등 의 역 할 을 수 행합니다.
+U s e c a s e
+Blog
+Do
+Pr o file  B tn 의 Blog  스타 일은  사 용 자 의 프 로 필  정보 ( 이 름,  이 미지,  블 로 그  링크  등) 을 표 시 합 니다 .
+닉네임 의 Max  Width값 을 11 5p x 로 제한 하 고 ,  이를 넘어갈  시 닉네임 을 ... (말줄임표)  처리합 니다 .
+블 로 그명 의 Max  Width값 을 12 0p x 로 제한 하 고 ,  이를 넘어갈  시 블 로 그명 을 ... (말줄임표)  처리합 니다 .
+텍스트가 잘려도  의 미 가 전달될  수  있도록  충분 한 글자  수 를 보 여줍 니다.  
+기본저긴  패딩 과 폰 트 크기 를 고 려하여  정 렬 을 균형있게  배치 합 니다. 
+Don ’t
+블 로 그명 이 너무  길어  Width  제한을 넘지  않 도 록  합니다 .
+말줄임 표 를  적 용하 지  않 아 다 른  UI  요 소와  겹치지  않 도 록  합니다. 
+D o D on ’ t
+담벼락 damdamdan ... 2 4 . 12.26 . 수 담벼락 damdamdancedanc e
+dancedan
+2 4 . 12.26 . 요일
+Do
+가변 형 날짜  표 기  방 식 을 사용합니다 .
+올해(현재  연 도 ) 인  경우  “MM . DD . 요일 ”  로 표 기 합니다. (예:  02 . 11 . 화)
+올해가  아 닌  경우  “YY . MM . DD .요일 ” 로 표 기 합니다. (예:  24 . 12 . 25 . 수 )
+D o
+담벼락 damdam’ s Blog 0 2. 11 . 화
+만쥰델리 triplen 2 4 . 12.26 . 수
+R e v ie w
+Do
+Pr o file  B tn 의 R e v ie w  스타 일은  사 용 자 의 이용 인 증  정보 ( 간편결제 ,  영 수 증 ,  방문 횟 수,  예약  여 부  등) 을 표 시 합 니다 .
+사 용 자 가 입 력 하 는 방 식 이 아니 라 ,  시스 템에서  수 집된  데 이터를 기 반 으로 표 시 합 니다. 
+Don ’t
+필 수 로 포함 되어 야  하는 이용 인증  정보 의 원본  데 이 터를  임 의로 수정 하 거 나  생략 하 지  않습 니다.  
+표 기  정 렬  방 식  및  순서 를  임 의로 변경 하 지  않습 니다.
+D o D on ’ t
+만쥰델리 2 4 . 12.26 . 수 3 번째 방문 예약 만쥰델리  예약 2 4 . 12.26 . 수 요일
+Do
+Pr e ss ed  상태 를  명확 하 게  구분 하 여  사용자 가  상태 변화 를  인지할  수  있 도 록  합니다.  
+배 경  색 상 변경  등 을 활 용하 여  인터 랙 션 을 직 관적 으로 전달 합니다.  
+사용자의 실 제 이용 내 역에 따라 적 절 한 인증  정보를  표시합니다.
+Don ’t
+사용자 가  버튼을 눌렀 는 지  인지할  수  없 는 상태 를  만들 지  않습 니다 .
+잘못된  인증  정보를  제공하 지  않습 니다 .
+기 존 에 제공하 던  정보  제공 방 식 에 서  벗 어 난  UI를  사용하 지  않습 니다. 
+D o D on ’ t
+닉네임 2 4 . 12.26 . 수 1 번째 방문 간편결제 닉네임 2 4 . 12.26 . 수 1 번째 방문 간편결제 ,  영 수 증 ,  예약
+-- Page 13 --
+B tn (But t on)
+사용자의 행동을 유도하는 버튼으로, 필요에 따라 다양한 형태로 제공합니다. 
+T ag
+Ana t omy
+2
+1 G1233 마을
+3
+4 1
+2
+G1233 마을
+3
+4
+컨테이너 영역
+버튼을 감싸고 클릭, 터치가 가능한 배경 영역입니다.
+속성에 따라 컬러가 변화할 수 있습니다.
+텍스트 영역
+뱃지에 맞는 텍스트가 작성되는 영역입니다.
+뱃지 영역 (선택)
+해당 뱃지에 특이성을 나타내는 뱃지로 특정 데이터에서만 나타납니다.
+아이콘 영역
+해당 뱃지에 대한 자세한 정보를 유도하는 아이콘이 제공됩니다.
+컨테이너 영역
+버튼을 감싸고 클릭, 터치가 가능한 배경 영역입니다.
+속성에 따라 컬러가 변화할 수 있습니다.
+텍스트 영역
+뱃지에 맞는 텍스트가 작성되는 영역입니다.
+뱃지 영역 (선택)
+해당 뱃지에 특이성을 나타내는 뱃지로 특정 데이터에서만 나타납니다.
+아이콘 영역
+해당 뱃지에 대한 자세한 정보를 유도하는 아이콘이 제공됩니다.
+C om p on e nt
+Def a ult
+T ype (광역, 마을, 간선, 지선)
+T e xt (G9122)
+Badge (T rue/False)
+Default
+G1233
+G1233
+G1233
+G1233 마을
+SpeechBubble
+Location 
+(T op-L, T op-R,Bottom-L, 
+Bottom-R)
+C olor Pick er
+T e xt (G9122)
+Badge (T rue/False)
+G1233 G1233 G1233 G1233 G1233 마을 G1233 마을 G1233 마을 G1233 마을
+U sag e guidelines
+해당  버 스  또 는 지 하 철 의 정보만 을 나타냅 니다 .
+버튼을 클릭  시  해당 하는 대중교통 의 실시간  노선  페 이 지 로 이동 할  수  있 도 록  만듭 니다.
+U se c a se
+De f ault
+Do
+각  버스 노 선 의  텍스트 와  컬러 값은   데이터 기반으 로 나타납니다.
+조합형 에 속하는 버튼 으 로 상위  컴포넌 트에 속하 여  사용 됩니다. 
+Do n ’t
+사용 자 의  임의 로 색상 , 위 치, 크기  등 을 변경할 수 없 습니다.
+D o 7 0
+배 차  간격 이 긴  노 선
+도 착  예 정 정보 없음 과거시간표
+버스 도 착 정보 더 보 기
+SpeechBubble
+Do
+조합형 에 속하는 버튼 으 로 상위  컴포넌 트에 속하 여  사용 됩니다. 
+Do n ’t
+해당 컴포넌 트는 홀 로 사용될  수 없 습니다.
+사용 자 의  임의 로 색상 , 위 치, 크기  등 을 변경할 수 없 습니다. 
+D o
+G1233 마을
+D on ’ t
+D on ’ t
+7 0 도 착  예 정 정보 없음
+버스 도 착 정보 더 보 기
+과거  시간표
+G1233 마을
