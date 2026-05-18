@@ -233,6 +233,13 @@ git push origin main --tags
 
 이를 통해 SmartPark의 React Native 화면 및 컴포넌트 구현에 필요한 디자인 토큰, 컴포넌트 스펙, 화면별 적용 기준을 정리하였다. v1.0.0부터 프론트엔드 구현 단계를 시작한다.
 
+`src/frontend/` 폴더에는 React Native TypeScript 프로젝트가 설정되었다.
+
+- React Native 0.85.3 + TypeScript 기반 CLI 프로젝트
+- `App.tsx`, `index.js`, `tsconfig.json`, `package.json`, `android/`, `ios/` 구조 포함
+- `npm install` 완료, Android 실행 준비 상태
+- 이후 단계에서 Naver Map 스타일 UI, 지도 화면, 바텀시트, 주차장 카드, 네비게이션을 순차적으로 구현한다.
+
 ---
 
 ## 12.1 구현 진행 방향

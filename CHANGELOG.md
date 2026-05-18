@@ -242,3 +242,15 @@ SmartPark 프로젝트의 주요 변경 사항과 버전 tag 기록을 정리한
 - `docs/design/NAVER_MAP_STYLE_GUIDE.md` 추가
 - Component 기준 정리: BottomSheet, SearchBar, Chip, Button(CTA/Pill), Header, NaviBar, Modal, Tab, Card, MapMarker, Pagination, Radio, Switch, TimePicker, Drop Down
 - Foundation 기준 정리: Color(Black&White/Warm Gray/Cool Gray/Green/Red/Orange), Typography(KR/EN,NUM), Radius, Spacing, Layout, Elevation, Icon
+
+---
+
+## v1.0.1
+
+- `src/frontend/` 하위에 React Native TypeScript 프로젝트 설정 완료
+- React Native 0.85.3 + TypeScript 기반 CLI 프로젝트 생성 (`@react-native-community/cli` 사용)
+- `App.tsx`를 SmartPark 기본 앱 화면으로 정리 (예제 문구 제거)
+- `package.json`, `tsconfig.json`, `android/`, `ios/`, `index.js` 구조 확인
+- `npm install` 완료, Android 실행 가능 상태 준비
+- 이후 Android 실기기 실행 확인 단계로 연결 예정
+- 다음 단계: Naver Map 스타일 UI, 지도 화면, 바텀시트, 주차장 카드, 네비게이션 구현
