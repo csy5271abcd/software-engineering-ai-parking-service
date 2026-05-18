@@ -3,7 +3,14 @@
     "allow": [
       "PowerShell(Get-Command *)",
       "PowerShell(python -c \"import pypdf; print\\('pypdf available'\\)\" 2>&1; python -c \"import PyPDF2; print\\('PyPDF2 available'\\)\" 2>&1; python -c \"import pdfplumber; print\\('pdfplumber available'\\)\" 2>&1; python -c \"import fitz; print\\('fitz available'\\)\" 2>&1)",
-      "PowerShell(pip install *)"
+      "PowerShell(pip install *)",
+      "Bash(npm --version)",
+      "Bash(npx react-native@latest init SmartPark --directory src\\\\frontend --skip-install)",
+      "Bash(npx @react-native-community/cli@latest init SmartPark --directory src\\\\frontend --skip-install)",
+      "Bash(dir *)",
+      "Bash(cp *)",
+      "Bash(npm install *)",
+      "Bash(npx tsc *)"
     ]
   }
 }
