@@ -209,6 +209,34 @@ RootNavigator
 
 ---
 
+## 4.5 1차 MVP 화면 범위
+
+초기 구현은 모든 화면을 한 번에 만들지 않고, 지도 기반 주차장 탐색과 혼잡도 확인 흐름을 먼저 완성한다.
+
+### 4.5.1 1차 MVP 화면
+
+| 우선순위 | 화면 | 구현 목적 |
+| -------- | ---- | --------- |
+| 1 | SplashScreen | 앱 초기 로딩 및 권한 상태 확인 |
+| 2 | HomeMapScreen | 현재 위치 기반 지도와 주차장 마커 표시 |
+| 3 | ParkingBottomSheet | 지도 하단에서 주차장 목록과 요약 정보 표시 |
+| 4 | DestinationSearchScreen | 목적지명 또는 주소 검색 |
+| 5 | ParkingDetailScreen | 주차장 상세 정보와 혼잡도 표시 |
+| 6 | ParkingFilterModal | 거리, 요금, 혼잡도, 주차장 유형 필터 |
+
+### 4.5.2 2차 확장 화면
+
+| 화면 | 후순위 이유 |
+| ---- | ----------- |
+| ProviderHomeScreen | 공급자 등록 흐름은 주차장 탐색 MVP 이후 구현 |
+| ParkingLotCreateScreen | 공급자 기능과 함께 구현 |
+| ParkingSessionStartScreen | NFC 이용 흐름 확정 후 구현 |
+| ActiveParkingSessionScreen | 주차 세션 API 구현 이후 구현 |
+| PaymentScreen | 결제 API 또는 모의 결제 API 구현 이후 구현 |
+| AdminDashboardScreen | 관리자 웹 또는 관리자 화면 범위 확정 후 구현 |
+
+---
+
 ## 5. 사용자 유형별 주요 화면 흐름
 
 ### 5.1 일반 운전자 기본 흐름
@@ -217,6 +245,7 @@ RootNavigator
 SplashScreen
 → PermissionGuideScreen
 → HomeMapScreen
+→ ParkingBottomSheet
 → ParkingListScreen
 → ParkingDetailScreen
 → RouteGuideScreen
@@ -775,7 +804,6 @@ src/frontend/
 └── src/
     ├── navigation/
     │   ├── RootNavigator.tsx
-    │   ├── AuthStackNavigator.tsx
     │   ├── MainTabNavigator.tsx
     │   ├── HomeStackNavigator.tsx
     │   ├── SearchStackNavigator.tsx
@@ -784,7 +812,6 @@ src/frontend/
     │   └── MyPageStackNavigator.tsx
     ├── screens/
     │   ├── common/
-    │   ├── auth/
     │   ├── home/
     │   ├── search/
     │   ├── parking/
@@ -793,18 +820,22 @@ src/frontend/
     │   └── mypage/
     ├── components/
     │   ├── common/
+    │   ├── map/
     │   ├── parking/
+    │   ├── bottomSheet/
     │   ├── provider/
     │   └── admin/
     ├── services/
     │   ├── parkingApi.ts
     │   ├── placeApi.ts
+    │   ├── congestionApi.ts
     │   ├── sessionApi.ts
     │   ├── paymentApi.ts
     │   ├── providerApi.ts
     │   └── adminApi.ts
     ├── types/
     │   ├── parking.ts
+    │   ├── congestion.ts
     │   ├── session.ts
     │   ├── payment.ts
     │   ├── provider.ts
@@ -813,12 +844,20 @@ src/frontend/
     │   ├── useCurrentLocation.ts
     │   ├── useNearbyParkingLots.ts
     │   ├── useDestinationSearch.ts
+    │   ├── useCongestionPrediction.ts
     │   ├── useParkingSession.ts
     │   └── usePayment.ts
+    ├── mocks/
+    │   ├── parkingLots.mock.ts
+    │   └── congestion.mock.ts
+    ├── theme/
+    │   ├── colors.ts
+    │   ├── spacing.ts
+    │   ├── radius.ts
+    │   └── typography.ts
     └── constants/
         ├── routes.ts
-        ├── status.ts
-        └── colors.ts
+        └── status.ts
 ```
 
 ---
@@ -827,10 +866,10 @@ src/frontend/
 
 | 화면                        | API 후보                                                                        |
 | --------------------------- | ------------------------------------------------------------------------------- |
-| HomeMapScreen               | `GET /api/parking-lots/nearby`                                                  |
+| HomeMapScreen               | `GET /api/parking-lots/nearby`, `GET /api/congestion/predictions`               |
 | DestinationSearchScreen     | `GET /api/places/search`                                                        |
 | RecommendedParkingScreen    | `GET /api/parking-lots/by-destination`, `GET /api/parking-lots/recommendations` |
-| ParkingDetailScreen         | `GET /api/parking-lots/{parkingLotId}`                                          |
+| ParkingDetailScreen         | `GET /api/parking-lots/{parkingLotId}`, `GET /api/parking-lots/{parkingLotId}/congestion` |
 | SoonAvailableScreen         | `GET /api/parking-lots/nearby?status=SOON_AVAILABLE`                            |
 | ParkingSessionStartScreen   | `POST /api/parking-sessions/start`                                              |
 | ActiveParkingSessionScreen  | `GET /api/parking-sessions/active`                                              |

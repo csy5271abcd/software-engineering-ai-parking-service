@@ -544,6 +544,51 @@ git push origin main --tags
 
 ---
 
+## PL-09. 구현 방향 수립 및 문서 보강
+
+| 항목        | 내용 |
+| ----------- | ---- |
+| 작업일      | 2026-05-18 |
+| 사용 도구   | ChatGPT |
+| 작업 유형   | 문서 수정 / 구현 방향 정리 |
+| 관련 파일   | `FOLDER_STRUCTURE.md`, `PROJECT_RULES.md`, `FEATURE_SPEC.md`, `SCREEN_STRUCTURE.md`, `CLAUDE.md`, `CODEX.md`, `PRD.md`, `README.md`, `CHANGELOG.md`, `configuration_management_plan.md`, `SERVICE_SCENARIO.md` |
+| 관련 버전   | v0.4.0 후보 |
+
+### 1. 입력 프롬프트
+
+```text
+이제 본격적으로 프론트엔드, 백엔드, ai 혼잡도 분석 구현을 진행하자. 일단 어떻게 진행할지 방향을 제시해줘.
+프론트엔드: ReactNative 사용, 안드로이드 실기기를 usb로 연결해서 진행 예정, claude 바이브 코딩, NaverMaps 스타일로 화면 구성 예정
+백엔드: NaverMaps API, Tmap API, Mysql, AWS 배포, SpringBoot, Swagger 사용, codex 바이브 코딩
+AI 주차장 혼잡도 예측: 약 5년 치의 주차장 MockUp Data를 CSV/Excel 파일로 생성하고, 이를 분석하는 AI 프로그램을 생성하여 혼잡도를 예측
+```
+
+### 2. 생성 결과
+
+- 프론트엔드, 백엔드, AI 분석 모듈을 병렬로 준비하되 1차 MVP 흐름을 먼저 고정하는 방향을 정리하였다.
+- 1차 MVP를 `HomeMapScreen`, `ParkingBottomSheet`, `DestinationSearchScreen`, `ParkingDetailScreen`, `ParkingFilterModal` 중심으로 제한하였다.
+- `src/ai` 폴더와 Python 기반 데이터 생성, 전처리, 학습, 예측 스크립트 구조를 추가하였다.
+- AI 예측 결과는 초기에는 CSV/Excel 파일로 생성하고, MySQL에 적재하여 Spring Boot API가 조회하는 방식으로 정리하였다.
+
+### 3. 수정 및 검토 사항
+
+- `src/frontend`, `src/backend` 중심이던 문서 구조에 `src/ai`를 추가하였다.
+- `FEATURE_SPEC.md`의 F-09를 Mock 데이터 생성, 혼잡도 예측, 백엔드 연동 기준까지 보강하였다.
+- `CLAUDE.md`에는 Android 실기기 USB 검증과 NaverMaps 스타일 UI 구현 기준을 추가하였다.
+- `CODEX.md`에는 Swagger, AWS 배포 설정, Tmap API, AI 결과 MySQL 적재 기준을 추가하였다.
+
+### 4. 연결된 형상관리
+
+```bash
+git add FOLDER_STRUCTURE.md configuration_management_plan.md README.md CHANGELOG.md   docs/harness/PRD.md docs/harness/FEATURE_SPEC.md docs/harness/SCREEN_STRUCTURE.md   docs/harness/PROJECT_RULES.md docs/harness/CLAUDE.md docs/harness/CODEX.md   docs/harness/PROMPT_LOG.md docs/product/SERVICE_SCENARIO.md
+
+git commit -m "[DOCS-22] SmartPark 구현 준비 문서 보강"
+
+git tag -a v0.4.0 -m "SmartPark 구현 준비 문서 보강"
+```
+
+---
+
 ## 6. Claude Code 작업 프롬프트 예시
 
 ### 6.1 화면 구현 프롬프트 예시

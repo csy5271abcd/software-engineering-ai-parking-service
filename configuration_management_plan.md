@@ -38,7 +38,9 @@ SmartPark 프로젝트의 형상 항목은 공식 과제 산출물과 추가 프
 | 일정     | 과제2.프로젝트관리계획서 | `/docs/plan`         |
 | 테스트   | 과제6.인스팩션예제       | `/docs/test`         |
 | 테스트   | 과제7.테스트결과서       | `/docs/test`         |
-| 소스코드 | 소스코드                 | `/src`               |
+| 소스코드 | 프론트엔드 소스코드       | `/src/frontend`      |
+| 소스코드 | 백엔드 소스코드           | `/src/backend`       |
+| 소스코드 | AI 분석 모듈 소스코드      | `/src/ai`            |
 
 ### 2.2 추가 프로젝트 산출물
 
@@ -51,6 +53,7 @@ SmartPark 프로젝트의 형상 항목은 공식 과제 산출물과 추가 프
 | 제품 기획   | 페르소나, 사용자 여정, 경쟁 서비스 분석, 비즈니스 모델 | `/docs/product` |
 | 디자인      | 화면 흐름, UI 디자인 가이드, 디자인 시스템             | `/docs/design`  |
 | 하네스      | PRD, 기능 명세, Claude/Codex 지침, 프롬프트 기록       | `/docs/harness` |
+| AI 분석     | Mock 데이터 생성 스크립트, 전처리, 학습, 예측 모델      | `/src/ai`       |
 | 테스트 보조 | 결함 기록, 인스팩션 체크리스트                         | `/docs/test`    |
 
 모든 형상 항목은 Git 저장소에 등록하고, 변경 사항은 commit 메시지와 CHANGELOG를 통해 추적한다.
@@ -76,10 +79,13 @@ software-engineering-ai-parking-service/
 │   └── test/
 └── src/
     ├── frontend/
-    └── backend/
+    ├── backend/
+    └── ai/
 ```
 
 각 폴더의 자세한 역할은 `FOLDER_STRUCTURE.md`에 기록한다.
+
+AI 분석 모듈은 `src/ai` 하위에서 관리하며, Mock 데이터, 전처리 데이터, 예측 결과, 학습 모델은 데이터 성격에 따라 `data/raw`, `data/processed`, `data/output`, `models`로 구분한다. 대용량 원본 데이터는 필요 시 Git 추적 대상에서 제외하고 샘플 데이터와 스크립트를 우선 형상관리한다.
 
 ---
 

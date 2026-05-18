@@ -801,91 +801,182 @@ GET /api/provider/settlements
 | 목적        | 사용자가 실제 주차 가능성이 높은 공간을 선택할 수 있도록 한다. |
 | 주요 사용자 | 일반 운전자, 일정 기반 방문 운전자                             |
 | 우선순위    | 높음                                                           |
-| 관련 화면   | 주차장 목록 화면, 추천 주차장 화면, 주차장 상세 화면           |
-| 관련 데이터 | CongestionPrediction, ParkingSession, Availability             |
+| 관련 화면   | HomeMapScreen, ParkingBottomSheet, RecommendedParkingScreen, ParkingDetailScreen |
+| 관련 데이터 | ParkingLot, ParkingSpace, ParkingSession, CongestionPrediction, ParkingMockDataset |
 
 ---
 
-## 12.2 입력값
+## 12.2 구현 범위
 
-| 입력값                | 타입     | 필수 여부 | 설명                   |
-| --------------------- | -------- | --------- | ---------------------- |
-| parkingLotId          | number   | 필수      | 주차장 ID              |
-| targetTime            | datetime | 선택      | 도착 예정 시간         |
-| currentAvailableCount | number   | 선택      | 현재 이용 가능 공간 수 |
-| historicalUsage       | array    | 선택      | 과거 이용 데이터       |
-| locationFactor        | object   | 선택      | 지역 특성              |
-| eventFactor           | object   | 선택      | 행사/특수 상황 데이터  |
+F-09는 초기 MVP와 확장 구현을 구분하여 진행한다.
 
----
-
-## 12.3 출력값
-
-| 출력값              | 설명           |
-| ------------------- | -------------- |
-| congestionLevel     | 혼잡도 등급    |
-| recommendationScore | 추천 점수      |
-| reason              | 추천 사유      |
-| updatedAt           | 예측 갱신 시각 |
+| 단계 | 구현 방식 | 설명 |
+| ---- | --------- | ---- |
+| 1단계 | 규칙 기반 혼잡도 계산 | 시간대, 요일, 현재 이용 가능 수, 행사 여부 등을 점수화한다. |
+| 2단계 | Mock 데이터 기반 ML 모델 | 약 5년 치 가상 데이터를 기반으로 혼잡도 예측 모델을 학습한다. |
+| 3단계 | 백엔드 연동 | 예측 결과 CSV를 MySQL에 적재하고 Spring Boot API로 조회한다. |
+| 4단계 | 고도화 | 실제 이용 데이터가 쌓이면 모델을 재학습하고 추천 정확도를 개선한다. |
 
 ---
 
-## 12.4 기본 동작 흐름
+## 12.3 Mock 데이터 생성 기준
+
+초기 데이터는 실제 운영 데이터가 없다는 전제를 두고 서울 중심의 가상 데이터로 생성한다.
+
+| 항목 | 기준 |
+| ---- | ---- |
+| 주차장 수 | 서울 중심 약 10만 개 가상 주차장 생성 가능 |
+| 기간 | 약 5년 치 날짜/시간 데이터 생성 가능 |
+| 지역 | 강남, 성수, 홍대, 여의도, 대학가, 병원 주변, 상권 지역 등 서울 주요 권역 중심 |
+| 데이터 형식 | CSV를 기본으로 사용하고 필요 시 Excel 파일도 생성 |
+| 생성 방식 | 난수 기반 생성이지만 지역, 시간대, 요일, 날씨, 행사에 따른 패턴을 반영 |
+| 개인정보 | 실제 사용자, 차량번호, 결제 정보는 포함하지 않음 |
+
+---
+
+## 12.4 Mock 데이터 주요 컬럼
+
+| 컬럼명 | 타입 | 설명 |
+| ------ | ---- | ---- |
+| parking_lot_id | number | 주차장 ID |
+| parking_lot_name | string | 주차장명 |
+| district | string | 서울시 구 단위 지역 |
+| address | string | 가상 주소 |
+| latitude | number | 위도 |
+| longitude | number | 경도 |
+| parking_type | string | 공영, 민영, 개인공유, 상가 |
+| total_spaces | number | 총 주차면 수 |
+| occupied_spaces | number | 사용 중 주차면 수 |
+| available_spaces | number | 이용 가능 주차면 수 |
+| date | date | 기준 날짜 |
+| hour | number | 시간대 |
+| day_of_week | string | 요일 |
+| is_weekend | boolean | 주말 여부 |
+| is_holiday | boolean | 공휴일 여부 |
+| weather | string | 날씨 |
+| temperature | number | 기온 |
+| precipitation | number | 강수량 |
+| nearby_event | boolean | 주변 행사 여부 |
+| event_scale | string | 행사 규모 |
+| subway_distance | number | 지하철역까지 거리 |
+| commercial_area_level | number | 상권 밀집도 |
+| congestion_score | number | 0~100 혼잡도 점수 |
+| congestion_level | string | LOW, MEDIUM, HIGH, VERY_HIGH, UNKNOWN |
+| recommendation_score | number | 추천 정렬에 사용할 점수 |
+
+---
+
+## 12.5 입력값
+
+| 입력값 | 타입 | 필수 여부 | 설명 |
+| ------ | ---- | --------- | ---- |
+| parkingLotId | number | 선택 | 특정 주차장 혼잡도 조회 시 사용 |
+| latitude | number | 선택 | 현재 위치 또는 목적지 위도 |
+| longitude | number | 선택 | 현재 위치 또는 목적지 경도 |
+| targetDateTime | datetime | 선택 | 도착 예정 일시 |
+| currentAvailableCount | number | 선택 | 현재 이용 가능 공간 수 |
+| weather | string | 선택 | 날씨 정보 |
+| nearbyEvent | boolean | 선택 | 주변 행사 여부 |
+| radius | number | 선택 | 검색 반경 |
+
+---
+
+## 12.6 출력값
+
+| 출력값 | 설명 |
+| ------ | ---- |
+| parkingLotId | 주차장 ID |
+| congestionScore | 0~100 혼잡도 점수 |
+| congestionLevel | 혼잡도 등급 |
+| recommendationScore | 추천 점수 |
+| reason | 추천 또는 비추천 사유 |
+| predictedAt | 예측 생성 시각 |
+| modelVersion | 사용한 규칙 또는 모델 버전 |
+
+---
+
+## 12.7 기본 동작 흐름
 
 ```text
-사용자가 목적지 또는 현재 위치 기준 검색
-→ 시스템이 후보 주차장 목록 생성
-→ 현재 상태, 시간대, 이용 가능 수, 과거 이용률 분석
-→ 혼잡도 등급 계산
-→ 추천 점수 산출
-→ 추천 순위로 주차장 목록 표시
+Mock 주차장 데이터 생성
+→ 날짜, 시간, 날씨, 행사, 지역 특성 컬럼 생성
+→ 규칙 기반 혼잡도 점수 계산
+→ 학습용 데이터셋 저장
+→ ML 모델 학습 또는 규칙 기반 예측 수행
+→ 주차장별 혼잡도 예측 결과 CSV 생성
+→ MySQL CongestionPrediction 테이블에 적재
+→ Spring Boot API가 주차장 목록/상세 조회 시 혼잡도 결과 포함
+→ React Native 화면에서 혼잡도 배지와 추천 순위 표시
 ```
 
 ---
 
-## 12.5 초기 MVP 계산 기준
+## 12.8 초기 MVP 계산 기준
 
 초기 MVP에서는 실제 AI 모델보다 규칙 기반 점수를 우선 적용한다.
 
-| 기준              | 점수 반영 방향                                   |
-| ----------------- | ------------------------------------------------ |
-| 현재 이용 가능 수 | 이용 가능 공간이 많을수록 점수 증가              |
-| 도착 예정 시간    | 혼잡 시간대일수록 점수 감소                      |
-| 거리              | 목적지와 가까울수록 점수 증가                    |
-| 요금              | 요금이 낮을수록 점수 증가                        |
-| 곧 비워질 자리    | 가까운 시간 내 출차 예정 공간이 있으면 점수 증가 |
-| 신고/오류 이력    | 신고가 많으면 점수 감소                          |
+| 기준 | 점수 반영 방향 |
+| ---- | -------------- |
+| 현재 이용 가능 수 | 이용 가능 공간이 많을수록 혼잡도 감소 |
+| 점유율 | 점유율이 높을수록 혼잡도 증가 |
+| 시간대 | 출퇴근, 점심, 저녁 시간대는 혼잡도 증가 |
+| 요일 | 주말 상권, 평일 오피스 권역 등 지역별 패턴 반영 |
+| 날씨 | 비 또는 눈이 오는 경우 주차 수요 증가 가능성 반영 |
+| 주변 행사 | 행사 규모가 클수록 혼잡도 증가 |
+| 상권 밀집도 | 상권 밀집도가 높을수록 혼잡도 증가 |
+| 지하철역 거리 | 대중교통 접근성이 낮은 지역은 차량 수요 증가 가능성 반영 |
+| 곧 비워질 자리 | 출차 예정 공간이 있으면 추천 점수 증가 |
+| 신고/오류 이력 | 신고가 많은 주차장은 추천 점수 감소 |
 
 ---
 
-## 12.6 예외 상황
+## 12.9 백엔드 연동 기준
 
-| 예외 상황          | 처리 방식                         |
-| ------------------ | --------------------------------- |
-| 데이터 부족        | UNKNOWN 또는 기본 혼잡도 표시     |
-| 예측 실패          | 거리/요금 기준 기본 정렬 제공     |
-| 허위 데이터 의심   | 해당 데이터 제외 또는 관리자 검토 |
-| 실시간 상태 불일치 | 사용자 신고 및 상태 갱신 유도     |
+| 항목 | 기준 |
+| ---- | ---- |
+| 초기 연동 | 예측 결과 CSV를 MySQL에 적재한 뒤 Spring Boot가 조회 |
+| 테이블 | `congestion_predictions` 사용 |
+| 조회 방식 | 주차장 목록 조회와 상세 조회 응답에 혼잡도 필드 포함 |
+| 갱신 주기 | 초기에는 수동 배치 실행, 이후 스케줄러 적용 가능 |
+| 실패 처리 | 예측 결과가 없으면 `UNKNOWN` 반환 |
 
 ---
 
-## 12.7 API 후보
+## 12.10 예외 상황
+
+| 예외 상황 | 처리 방식 |
+| --------- | --------- |
+| Mock 데이터 생성 실패 | 오류 로그를 남기고 샘플 데이터 생성으로 대체 |
+| 데이터 부족 | `UNKNOWN` 또는 규칙 기반 기본 혼잡도 표시 |
+| 예측 실패 | 거리/요금 기준 기본 정렬 제공 |
+| CSV 적재 실패 | 기존 예측 결과 유지, 관리자 로그 기록 |
+| 허위 데이터 의심 | 해당 데이터 제외 또는 관리자 검토 대상으로 기록 |
+| 실시간 상태 불일치 | 사용자 신고 및 상태 갱신 유도 |
+
+---
+
+## 12.11 API 후보
 
 ```text
 GET /api/parking-lots/recommendations
 GET /api/parking-lots/{parkingLotId}/congestion
+GET /api/congestion/predictions
+POST /api/admin/congestion/import
+POST /api/admin/congestion/recalculate
 ```
 
 ---
 
-## 12.8 완료 기준
+## 12.12 완료 기준
 
-| 기준  | 설명                                                                     |
-| ----- | ------------------------------------------------------------------------ |
-| AC-01 | 주차장 목록에 혼잡도 등급이 표시되어야 한다.                             |
-| AC-02 | 추천 정렬 시 혼잡도와 거리 정보가 반영되어야 한다.                       |
-| AC-03 | 데이터가 부족한 경우에도 기본 추천 결과가 제공되어야 한다.               |
-| AC-04 | 혼잡도 등급은 사용자가 이해하기 쉬운 텍스트 또는 배지로 표시되어야 한다. |
+| 기준 | 설명 |
+| ---- | ---- |
+| AC-01 | Mock 데이터 생성 스크립트가 주차장, 날짜, 시간, 날씨, 행사 컬럼을 포함해야 한다. |
+| AC-02 | 주차장별 `congestion_score`와 `congestion_level`이 생성되어야 한다. |
+| AC-03 | 예측 결과를 CSV 또는 Excel 파일로 저장할 수 있어야 한다. |
+| AC-04 | 백엔드가 혼잡도 예측 결과를 조회할 수 있어야 한다. |
+| AC-05 | 주차장 목록과 상세 화면에 혼잡도 등급이 표시되어야 한다. |
+| AC-06 | 데이터가 부족한 경우에도 `UNKNOWN` 또는 기본 추천 결과가 제공되어야 한다. |
 
 ---
 
@@ -1169,7 +1260,11 @@ GET /api/provider/statistics
 | POST   | `/api/parking-sessions/start`                            | 주차 이용 시작             |
 | POST   | `/api/parking-sessions/end`                              | 주차 이용 종료             |
 | POST   | `/api/payments`                                          | 결제 처리                  |
-| GET    | `/api/users/me/payments`                                 | 내 결제 내역 조회          |
+| GET    | `/api/users/me/payments`                                 | 내 결제 내역 조회
+| GET    | `/api/parking-lots/{parkingLotId}/congestion`            | 주차장별 혼잡도 조회 |
+| GET    | `/api/congestion/predictions`                            | 혼잡도 예측 결과 목록 조회 |
+| POST   | `/api/admin/congestion/import`                           | AI 예측 결과 CSV 적재 |
+| POST   | `/api/admin/congestion/recalculate`                      | 혼잡도 예측 결과 재계산 요청 |          |
 | GET    | `/api/provider/settlements`                              | 공급자 정산 내역 조회      |
 | GET    | `/api/parking-lots/recommendations`                      | 추천 주차장 조회           |
 | GET    | `/api/parking-lots/{parkingLotId}/congestion`            | 주차장 혼잡도 조회         |
@@ -1231,6 +1326,18 @@ Codex는 본 문서를 기준으로 백엔드 API, DTO, 도메인 모델, 서비
 | API 명세 우선 | 입력값, 출력값, 예외 상황을 먼저 정리                       |
 | 상태값 관리   | 주차, 결제, 신고, 승인 상태는 enum으로 관리                 |
 | 테스트 가능성 | 핵심 서비스 로직은 단위 테스트가 가능하도록 분리            |
+
+---
+
+## 20.3 Python AI 모듈 적용 지침
+
+| 기준 | 설명 |
+| ---- | ---- |
+| 데이터 생성 | `src/ai/scripts/generate_mock_parking_data.py`에서 수행한다. |
+| 전처리 | `src/ai/scripts/preprocess_parking_data.py`에서 수행한다. |
+| 모델 학습 | `src/ai/scripts/train_congestion_model.py`에서 수행한다. |
+| 예측 생성 | `src/ai/scripts/predict_congestion.py`에서 수행한다. |
+| 백엔드 전달 | `data/output/`의 예측 결과 CSV를 MySQL에 적재한다. |
 
 ---
 

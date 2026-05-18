@@ -142,6 +142,25 @@ Claude Code는 다음 순서로 작업한다.
 
 ---
 
+### 3.3 1차 MVP 작업 순서
+
+Claude Code는 초기 구현 시 다음 순서를 우선한다.
+
+```text
+React Native 프로젝트 실행 확인
+→ Android 실기기 USB 연결 확인
+→ Naver Maps SDK 연동 또는 지도 영역 대체 View 구성
+→ HomeMapScreen 구현
+→ Mock 주차장 데이터 생성
+→ 지도 마커와 ParkingBottomSheet 연결
+→ ParkingDetailScreen 연결
+→ services/hooks 기반 API 호출 구조 분리
+```
+
+1차 MVP에서 우선 구현할 화면은 `HomeMapScreen`, `ParkingBottomSheet`, `DestinationSearchScreen`, `ParkingDetailScreen`, `ParkingFilterModal`이다. 공급자, 결제, 관리자 화면은 2차 구현 대상으로 분리한다.
+
+---
+
 ## 4. 프론트엔드 폴더 구조 기준
 
 ### 4.1 기본 구조
@@ -169,8 +188,9 @@ src/frontend/
     ├── services/
     ├── types/
     ├── hooks/
-    ├── constants/
-    └── data/
+    ├── mocks/
+    ├── theme/
+    └── constants/
 ```
 
 ---
@@ -697,6 +717,33 @@ src/frontend/src/mocks/
 
 ---
 
+### 13.4 Naver Map Design System 적용 기준
+
+React Native 화면은 NaverMaps 스타일을 참고하여 지도 중심, 검색 중심, 바텀시트 중심으로 구성한다.
+
+| 디자인 요소 | 적용 기준 |
+| ----------- | --------- |
+| SearchBar | 홈 지도 상단 또는 검색 화면 진입 요소로 사용한다. |
+| Chip | 주차장 필터, 정렬 조건, 상태 필터에 사용한다. |
+| Bottom Navigation | 홈, 검색, 이용, 공급자, 마이 등 3~5개 주요 탭으로 제한한다. |
+| Modal | 필터, 정렬, 출차 예정 시간, NFC 안내에 사용한다. |
+| Button | 경로 안내, 이용 시작, 결제하기 등 명확한 CTA에 사용한다. |
+| Radius/Spacing | 2배수 간격과 일관된 둥근 모서리 기준을 유지한다. |
+
+---
+
+### 13.5 Android 실기기 USB 검증 기준
+
+| 항목 | 기준 |
+| ---- | ---- |
+| 연결 확인 | `adb devices`로 실기기가 인식되는지 확인한다. |
+| 실행 확인 | `npx react-native run-android` 또는 Android Studio 실행을 통해 앱 실행을 확인한다. |
+| 위치 권한 | 위치 권한 허용/거부 상태를 모두 확인한다. |
+| 지도 화면 | 지도 또는 지도 대체 View가 화면 전체에 안정적으로 렌더링되는지 확인한다. |
+| 네트워크 | 실기기에서 로컬 백엔드 접근 시 포트 reverse 또는 같은 네트워크 접속 방식을 확인한다. |
+
+---
+
 ## 14. 네비게이션 구현 규칙
 
 ### 14.1 Navigator 구성 기준
@@ -823,6 +870,39 @@ SmartPark 앱 전체를 한 번에 만들어줘.
 ```
 
 위와 같은 요청은 범위가 너무 넓어 구조가 무너질 가능성이 높다. 반드시 화면, 기능, 파일 단위로 작업 범위를 나눈다.
+
+---
+
+### 15.4 1차 MVP Prompt 예시
+
+```text
+목표:
+- SmartPark 1차 MVP의 HomeMapScreen, ParkingBottomSheet, ParkingCard를 구현한다.
+
+참고 문서:
+- docs/harness/SCREEN_STRUCTURE.md
+- docs/harness/FEATURE_SPEC.md
+- docs/harness/CLAUDE.md
+
+작업 범위:
+- src/frontend/src/screens/home/HomeMapScreen.tsx
+- src/frontend/src/components/bottomSheet/ParkingBottomSheet.tsx
+- src/frontend/src/components/parking/ParkingCard.tsx
+- src/frontend/src/mocks/parkingLots.mock.ts
+- src/frontend/src/types/parking.ts
+
+구현 기준:
+- Android 실기기에서 실행 가능한 React Native 코드로 작성한다.
+- 지도 영역은 Naver Maps SDK 연동 전이라도 교체 가능한 구조로 만든다.
+- 주차장 카드에는 주차장명, 거리, 요금, 상태, 혼잡도를 표시한다.
+- NaverMaps 스타일의 SearchBar, Chip, BottomSheet 느낌을 반영한다.
+- API 연동은 services/hooks로 분리할 수 있게 mock 함수 기반으로 작성한다.
+
+완료 조건:
+- HomeMapScreen에서 mock 주차장 목록이 표시된다.
+- 주차장 선택 시 상세 화면 이동에 필요한 상태 또는 navigation 구조가 준비된다.
+- 변경 파일 목록과 실행 방법을 요약한다.
+```
 
 ---
 

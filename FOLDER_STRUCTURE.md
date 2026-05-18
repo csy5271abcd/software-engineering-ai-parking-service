@@ -23,7 +23,8 @@ software-engineering-ai-parking-service/
 │   └── test/
 └── src/
     ├── frontend/
-    └── backend/
+    ├── backend/
+    └── ai/
 ```
 
 ---
@@ -43,7 +44,7 @@ GitHub 저장소의 루트 위치이며, 프로젝트 소개 문서, 변경 이�
 | `CHANGELOG.md`        | 주차별 작업 내용, 변경 사항, 버전 tag 기록을 정리하는 문서                  |
 | `FOLDER_STRUCTURE.md` | 저장소의 폴더 구조와 각 폴더의 역할을 설명하는 문서                         |
 | `docs/`               | 소프트웨어공학 과제 문서와 추가 프로젝트 문서를 저장하는 폴더               |
-| `src/`                | 실제 프론트엔드와 백엔드 소스코드를 저장하는 폴더                           |
+| `src/`                | 실제 프론트엔드, 백엔드, AI 분석 모듈 소스코드를 저장하는 폴더                           |
 
 ---
 
@@ -213,18 +214,20 @@ src/
 ```
 
 SmartPark의 실제 구현 코드를 저장하는 폴더이다.  
-프론트엔드와 백엔드를 분리하여 관리한다.
+프론트엔드, 백엔드, AI 분석 모듈을 분리하여 관리한다.
 
 ```text
 src/
 ├── frontend/
-└── backend/
+├── backend/
+└── ai/
 ```
 
-| 하위 폴더   | 역할                                       |
-| ----------- | ------------------------------------------ |
-| `frontend/` | React Native 기반 모바일 앱 소스코드 저장  |
-| `backend/`  | Spring Boot 기반 백엔드 서버 소스코드 저장 |
+| 하위 폴더   | 역할                                                 |
+| ----------- | ---------------------------------------------------- |
+| `frontend/` | React Native 기반 모바일 앱 소스코드 저장            |
+| `backend/`  | Spring Boot 기반 백엔드 서버 소스코드 저장           |
+| `ai/`       | Python 기반 Mock 데이터 생성 및 혼잡도 분석 모듈 저장 |
 
 이 폴더는 설계 문서에서 정의한 내용을 실제 코드로 구현하는 공간이다.
 
@@ -300,7 +303,54 @@ src/backend/
 
 ---
 
-## 13. 문서 관리 원칙
+## 13. src/ai 폴더
+
+```text
+src/ai/
+```
+
+Python 기반 AI 혼잡도 분석 모듈, Mock 데이터 생성 스크립트, 학습 모델, 예측 결과를 저장하는 폴더이다.  
+초기 구현에서는 실제 운영 데이터가 없으므로 서울 중심의 가상 주차장 데이터를 생성하고, 이를 기반으로 규칙 기반 또는 머신러닝 기반 혼잡도 예측 흐름을 검증한다.
+
+예상 하위 구조는 다음과 같다.
+
+```text
+src/ai/
+├── data/
+│   ├── raw/
+│   ├── processed/
+│   └── output/
+├── notebooks/
+├── scripts/
+│   ├── generate_mock_parking_data.py
+│   ├── preprocess_parking_data.py
+│   ├── train_congestion_model.py
+│   └── predict_congestion.py
+├── models/
+└── README.md
+```
+
+| 하위 폴더/파일 | 역할 |
+| --------------- | ---- |
+| `data/raw/` | 생성 직후의 원본 Mock 데이터 저장 |
+| `data/processed/` | 전처리 완료 데이터 저장 |
+| `data/output/` | 예측 결과 CSV/Excel 파일 저장 |
+| `notebooks/` | EDA, 실험, 모델 비교용 노트북 저장 |
+| `scripts/` | 데이터 생성, 전처리, 학습, 예측 실행 스크립트 저장 |
+| `models/` | 학습된 모델 파일 저장 |
+| `README.md` | AI 모듈 실행 방법과 데이터 구조 설명 |
+
+AI 데이터는 다음 원칙으로 관리한다.
+
+1. 원본 Mock 데이터는 `data/raw/`에 저장한다.
+2. 전처리 결과는 `data/processed/`에 저장한다.
+3. 백엔드에 적재할 예측 결과는 `data/output/`에 저장한다.
+4. 실제 개인정보 또는 실제 차량 이용 데이터는 저장하지 않는다.
+5. 대용량 데이터 파일은 필요 시 Git 추적 대상에서 제외하고 샘플 데이터만 관리한다.
+
+---
+
+## 14. 문서 관리 원칙
 
 SmartPark 프로젝트의 문서는 다음 원칙에 따라 관리한다.
 
@@ -315,7 +365,7 @@ SmartPark 프로젝트의 문서는 다음 원칙에 따라 관리한다.
 
 ---
 
-## 14. Git commit 예시
+## 15. Git commit 예시
 
 ```bash
 git add FOLDER_STRUCTURE.md
@@ -329,7 +379,7 @@ git push origin main --tags
 
 ---
 
-## 15. 정리
+## 16. 정리
 
 이 저장소는 단순히 과제 문서만 저장하는 공간이 아니라, SmartPark 서비스를 기획, 분석, 설계, 구현, 검증하는 전체 과정을 기록하는 공간이다.
 

@@ -6,7 +6,7 @@
 
 ### 1.1 문서 목적
 
-본 문서는 Codex가 SmartPark 프로젝트의 Spring Boot 백엔드 설계, API 구현, 데이터베이스 구조 설계, 테스트 코드 작성, 문서화 작업을 일관성 있게 수행할 수 있도록 작업 기준을 정의하기 위해 작성되었다.
+본 문서는 Codex가 SmartPark 프로젝트의 Spring Boot 백엔드 설계, API 구현, 데이터베이스 구조 설계, Swagger 문서화, AWS 배포 준비, 테스트 코드 작성, 문서화 작업을 일관성 있게 수행할 수 있도록 작업 기준을 정의하기 위해 작성되었다.
 
 SmartPark는 사용자의 현재 위치와 목적지를 기반으로 주변 주차 가능 공간을 탐색하고, 곧 비워질 주차 공간 정보, 개인 주차장 공유, NFC 기반 간편 결제, AI 또는 규칙 기반 혼잡도 분석 기능을 제공하는 AI 기반 스마트 주차 플랫폼이다.
 
@@ -25,7 +25,7 @@ Codex는 본 문서를 기준으로 SmartPark 백엔드의 도메인 구조, Con
 | 도메인 모델링     | User, ParkingLot, ParkingSpace, ParkingSession, Payment, Report 등 핵심 도메인 설계 |
 | 데이터베이스 설계 | MySQL 테이블 구조, 관계, 인덱스, 상태값 관리                                        |
 | 서비스 로직       | 주차장 조회, 공급자 등록, 이용 세션, 결제, 정산, 신고, 승인 로직 작성               |
-| 외부 연동         | Naver Maps API, 결제 API, NFC 태그, AI/규칙 기반 혼잡도 분석 연동                   |
+| 외부 연동         | Naver Maps API, Tmap API, 결제 API, NFC 태그, AI/규칙 기반 혼잡도 분석 연동                   |
 | 테스트            | 단위 테스트, 통합 테스트, API 테스트 케이스 작성                                    |
 | 문서화            | API 명세, 설계 문서, 변경 이력, 프롬프트 기록 보조                                  |
 
@@ -212,6 +212,20 @@ src/backend/
 | 외부 API 격리    | 외부 연동 로직은 `external/` 또는 client 클래스로 분리한다. |
 | 공통 응답 통일   | 성공/실패 응답 형식을 일관되게 유지한다.                    |
 | 상태값 enum 관리 | 문자열 상태값을 직접 사용하지 않고 enum으로 관리한다.       |
+
+---
+
+### 4.4 초기 백엔드 구현 환경
+
+| 항목 | 기준 |
+| ---- | ---- |
+| Framework | Spring Boot |
+| Database | MySQL |
+| API 문서화 | Swagger/OpenAPI 사용 |
+| 외부 지도 API | Naver Maps API, 필요 시 Tmap API 연동 계층 분리 |
+| AI 결과 연동 | 초기에는 AI 예측 결과 CSV를 MySQL에 적재한 뒤 조회 |
+| 배포 | AWS 배포를 고려하여 local/prod 설정 분리 |
+| 설정 파일 | `application-local.yml`, `application-prod.yml` 분리 권장 |
 
 ---
 
@@ -820,23 +834,34 @@ NFC 태그 ID 수신
 
 ### 11.8 AI/규칙 기반 혼잡도 분석
 
-초기 MVP에서는 실제 AI 모델보다 규칙 기반 혼잡도 분석을 우선 적용한다.
+초기 MVP에서는 실제 운영 데이터가 없으므로 Python 기반 Mock 데이터 생성 및 규칙 기반 혼잡도 분석을 우선 적용한다. 이후 모델 학습 결과를 MySQL에 적재하여 Spring Boot API에서 조회할 수 있도록 설계한다.
 
 ```text
-주차장 상태 조회
-→ 시간대별 이용률 확인
-→ 현재 이용 가능 공간 수 확인
-→ 곧 비워질 자리 여부 확인
-→ 거리와 요금 기준 반영
-→ 혼잡도 등급 및 추천 점수 반환
+Python Mock 데이터 생성
+→ 전처리 및 혼잡도 점수 계산
+→ 예측 결과 CSV 생성
+→ 백엔드 관리자 API 또는 배치 스크립트로 MySQL 적재
+→ 주차장 목록/상세 조회 API에서 혼잡도 결과 포함
+→ 프론트엔드에서 혼잡도 배지와 추천 순위 표시
 ```
 
 작성 기준은 다음과 같다.
 
 1. 초기에는 `LOW`, `MEDIUM`, `HIGH`, `VERY_HIGH`, `UNKNOWN` 등급을 반환한다.
 2. 데이터 부족 시 `UNKNOWN` 또는 기본 추천 결과를 제공한다.
-3. 추후 Python 기반 AI 분석 모듈 또는 별도 추천 서비스와 연동 가능하도록 설계한다.
-4. 분석 결과는 `CongestionPrediction` 도메인에 저장하거나 캐싱할 수 있다.
+3. Python AI 모듈은 `src/ai`에서 관리하고, 백엔드는 예측 결과를 조회하는 역할을 우선 담당한다.
+4. 분석 결과는 `CongestionPrediction` 도메인과 `congestion_predictions` 테이블에 저장한다.
+5. `parking_lot_id`, `prediction_target_time`, `congestion_score`, `congestion_level`, `recommendation_score`, `model_version`, `predicted_at` 컬럼을 우선 고려한다.
+6. AI 예측 결과 적재 API는 운영 관리자 권한으로 제한한다.
+
+권장 API는 다음과 같다.
+
+```text
+GET /api/parking-lots/{parkingLotId}/congestion
+GET /api/congestion/predictions
+POST /api/admin/congestion/import
+POST /api/admin/congestion/recalculate
+```
 
 ---
 
@@ -859,6 +884,25 @@ Naver Maps API는 지도 표시 자체보다 백엔드에서는 주소 변환, �
 2. 외부 API 호출 실패 시 `ExternalApiException`으로 처리한다.
 3. API 응답 구조는 내부 DTO로 변환하여 사용한다.
 4. 프론트엔드에 외부 API 원본 응답을 그대로 노출하지 않는다.
+
+---
+
+### 12.1.1 Tmap API
+
+Tmap API는 경로, 예상 이동 시간, 목적지 접근성 등 Naver Maps API와 보완적으로 사용할 수 있다. 초기 MVP에서는 필수 연동 대상이 아니며, 백엔드 구조상 외부 경로 API 어댑터를 분리할 때 함께 고려한다.
+
+| 기능 | 백엔드 활용 |
+| ---- | ----------- |
+| 경로 조회 | 현재 위치에서 주차장까지 예상 이동 시간 계산 |
+| 목적지 접근성 | 주차장과 목적지 간 이동 편의성 보조 지표 계산 |
+| 대체 경로 | Naver Maps API 실패 시 보조 경로 정보 제공 가능 |
+
+작성 기준은 다음과 같다.
+
+1. Naver Maps API와 Tmap API 호출 코드는 서로 다른 adapter로 분리한다.
+2. API Key는 환경 변수 또는 배포 환경 설정으로 관리한다.
+3. 초기 MVP에서는 mock adapter를 먼저 작성할 수 있다.
+4. 두 API의 응답은 내부 `RouteInfoDto`로 통일한다.
 
 ---
 
@@ -1053,6 +1097,18 @@ Codex 작업 후에는 다음 내용을 요약한다.
 - 아직 mock 처리된 부분
 - 추후 실제 API Key 또는 결제 연동 필요 부분
 ```
+
+---
+
+### 16.3 Swagger/OpenAPI 작성 기준
+
+| 항목 | 기준 |
+| ---- | ---- |
+| 적용 범위 | 모든 `/api/**` endpoint에 요약과 설명을 작성한다. |
+| DTO 설명 | Request/Response DTO 필드에는 가능한 한 설명을 추가한다. |
+| 오류 응답 | 공통 오류 응답 형식을 문서화한다. |
+| 그룹 분리 | 필요 시 사용자 API, 공급자 API, 관리자 API를 그룹으로 분리한다. |
+| 민감 정보 | API Key, DB 비밀번호 등은 문서에 노출하지 않는다. |
 
 ---
 

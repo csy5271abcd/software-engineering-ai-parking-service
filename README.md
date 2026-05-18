@@ -73,10 +73,11 @@ SmartPark는 기존 주차 서비스와 비교했을 때 다음과 같은 차별
 | 구분                   | 기술                               |
 | ---------------------- | ---------------------------------- |
 | Frontend               | React Native                       |
-| Backend                | Spring Boot                        |
+| Backend                | Spring Boot, Swagger/OpenAPI       |
 | Database               | MySQL                              |
-| Map API                | Naver Maps API                     |
-| AI/Analysis            | AI 또는 규칙 기반 혼잡도 분석 로직 |
+| Map API                | Naver Maps API, Tmap API           |
+| AI/Analysis            | Python, CSV/Excel Mock Data, 규칙 기반/ML 혼잡도 분석 |
+| Deployment             | AWS 배포 예정                      |
 | Version Control        | Git, GitHub                        |
 | AI Development Support | Claude Code, Codex                 |
 
@@ -99,7 +100,8 @@ software-engineering-ai-parking-service/
 │   └── test/
 └── src/
     ├── frontend/
-    └── backend/
+    ├── backend/
+    └── ai/
 ```
 
 자세한 폴더 설명은 아래 문서를 참고한다.
@@ -120,7 +122,7 @@ software-engineering-ai-parking-service/
 | 제품 기획 문서 | `docs/product/`      | 페르소나, 사용자 여정, 경쟁 서비스 분석, 비즈니스 모델 |
 | 하네스 문서    | `docs/harness/`      | PRD, 기능 명세, Claude/Codex 작업 지침, 프롬프트 기록  |
 | 테스트 문서    | `docs/test/`         | 인스팩션 예제, 테스트 결과서, 결함 기록                |
-| 소스코드       | `src/`               | React Native 프론트엔드와 Spring Boot 백엔드 구현 코드 |
+| 소스코드       | `src/`               | React Native 프론트엔드, Spring Boot 백엔드, Python AI 분석 모듈 구현 코드 |
 
 ---
 
@@ -223,6 +225,30 @@ git push origin main --tags
 과제4 요구사항 분석서를 통해 SmartPark의 소프트웨어 문맥, Use Case Description, 정적 분석, CRC 카드, 동적 분석, 인터페이스 분석, 제약사항, 요구사항 추적표를 구체화하였다.
 
 현재까지 과제1 프로젝트정의서, 과제2 프로젝트관리계획서, 과제3 요구사항정의서, 과제4 요구사항분석서, 제품 기획 문서, 하네스 문서 작성이 완료되었으며, 이후 단계에서는 소프트웨어 설계서, 인스팩션 예제, 테스트 결과서를 순차적으로 작성한다.
+
+---
+
+## 12.1 구현 진행 방향
+
+현재 구현 단계는 프론트엔드, 백엔드, AI 혼잡도 분석 모듈을 다음 기준으로 진행한다.
+
+| 영역 | 구현 방향 | 주요 도구 |
+| ---- | --------- | --------- |
+| 프론트엔드 | NaverMaps 스타일의 지도 중심 React Native 앱 구현 | Claude Code, Android 실기기 USB 테스트 |
+| 백엔드 | 주차장 조회, 목적지 검색, 혼잡도 조회 API 구현 | Spring Boot, MySQL, Swagger, Codex |
+| AI 분석 | 약 5년 치 가상 주차장 Mock 데이터 생성 및 혼잡도 예측 | Python, CSV/Excel, ML 모델 |
+
+1차 MVP는 다음 흐름을 우선 구현한다.
+
+```text
+앱 실행
+→ 현재 위치 기반 지도 표시
+→ 주차장 마커 표시
+→ 하단 바텀시트 목록 확인
+→ 주차장 상세 확인
+→ 혼잡도/추천 점수 확인
+→ 경로 안내 버튼 제공
+```
 
 ---
 
