@@ -243,6 +243,13 @@ git push origin main --tags
 - `npm run android` 실행 결과 Android 실기기에서 SmartPark 기본 앱 실행을 확인하였다.
 - 이후 단계에서 Naver Map 스타일 UI, 지도 화면, 바텀시트, 주차장 카드, 네비게이션을 순차적으로 구현한다.
 
+`src/frontend/src/` 하위 기본 폴더 구조가 설정되었다.
+
+- `navigation`, `screens`, `components`, `services`, `hooks`, `types`, `mocks`, `theme`, `constants`, `utils`, `assets` 폴더 구성
+- `screens` 하위: `common`, `auth`, `home`, `search`, `parking`, `provider`, `mypage`, `admin` 분리
+- `components` 하위: `common`, `map`, `parking`, `bottomSheet`, `provider`, `admin` 분리
+- 이후 디자인 토큰 구현, 네비게이션 구성, 지도 화면 구현 단계로 연결한다.
+
 ---
 
 ## 12.1 구현 진행 방향

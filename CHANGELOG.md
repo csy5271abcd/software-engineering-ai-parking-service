@@ -265,3 +265,14 @@ SmartPark 프로젝트의 주요 변경 사항과 버전 tag 기록을 정리한
 - Gradle/CMake 캐시 정리 후 재빌드 수행
 - `npm run android` 실행 결과 Android 실기기 `SM-S911N`에 APK 설치 및 앱 실행 성공
 - 이후 Naver Map 스타일 UI, 지도 화면, 바텀시트, 주차장 카드, 네비게이션 구현 단계로 연결 예정
+
+---
+
+## v1.0.3
+
+- `src/frontend/src/` 하위 기본 폴더 구조 설정
+- `app`, `navigation`, `screens`, `components`, `services`, `hooks`, `types`, `mocks`, `theme`, `constants`, `utils`, `assets` 폴더 생성
+- `screens` 하위: `common`, `auth`, `home`, `search`, `parking`, `provider`, `mypage`, `admin` 분리
+- `components` 하위: `common`, `map`, `parking`, `bottomSheet`, `provider`, `admin` 분리
+- 빈 폴더 Git 추적을 위해 각 폴더에 `.gitkeep` 추가
+- 이후 디자인 토큰 구현, 네비게이션 구성, 지도 화면 구현 단계로 연결 예정
