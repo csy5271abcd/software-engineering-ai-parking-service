@@ -4,6 +4,88 @@ SmartPark 프로젝트의 주요 변경 사항과 버전 tag 기록을 정리한
 
 ---
 
+## v1.1.4
+
+### imports/ 폴더 참조 기반 SmartParkReDesign 재보정
+
+#### 분석 파일
+- `imports/tokens.jsx` — T 오브젝트 (PSTATUS/CONGEST/CATEGORIES), 실제 orange500 #F5683C 확인
+- `imports/Chrome.jsx` — 탭바 비활성 색상(iconTertiary/textTertiary), SearchBar 텍스트 스타일
+- `imports/HomeScreen.jsx` — DefaultSheetContent soon 배너 아이콘, QuickShortcuts 레이아웃
+- `imports/OtherScreens.jsx` — MyScreen 프로필 구조, MenuSection 레이아웃, 통계 그리드
+- `imports/SearchDetail.jsx` — RecommendedParking 뒤로가기 버튼, AI 배너 스타일
+
+#### 토큰 보정
+- `src/theme/tokens.ts` — `brandOrange` #F5A623 → #F5683C (T.orange500 실제값), `borderWeak: #F0F0F3` (T.strokeCoolWeak), `bgCool`, `bgCoolSecondary`, `bgCoolWeak`, `iconPrimary/Tertiary/Weak`, `textPrimary/Secondary/Tertiary/Quaternary` 추가
+
+#### 탭바 색상 보정
+- `MainTabNavigator.tsx` — 비활성 아이콘 색상 #8B99AC → #4D5A6A (T.iconTertiary), 비활성 레이블 #8B99AC → #6B7C92 (T.textTertiary)
+
+#### SearchBar 보정
+- `SearchBar.tsx` — placeholder 색상 #8B99AC → #222225, fontWeight '400' → '500', fontSize 14 → 15 (참조 디자인 기준)
+
+#### DefaultSheetContent 보정
+- `DefaultSheetContent.tsx` — soon 배너 아이콘 이모지(⏱) → AppIcon 'clock' 교체
+
+#### RecommendedParkingScreen 보정
+- `RecommendedParkingScreen.tsx` — 뒤로가기 버튼 Custom View chevron → AppIcon 'chevronLeft' 교체
+
+#### MyPageScreen 전면 재설계 (OtherScreens.jsx MyScreen 기준)
+- 프로필: #006CFF 원형 아바타 + 이니셜("김"), 이름(fontSize 18/fontWeight 700), 이메일 마스킹, 역할 배지(일반 이용자·공급자)
+- 통계 그리드: 저장한 곳 / 이용 횟수 / 신뢰도 (3열, value fontSize 17 상단, label fontSize 11 하단)
+- 4개 메뉴 섹션: 결제·차량 / 알림·설정 / AI 투명성 / 고객 지원
+- 각 항목: 이모지 아이콘 + 레이블 + 서브 레이블(옵션) + 빨간 배지(옵션) + 우측 chevron
+- 버전 표시: SmartPark v1.1.4
+
+- `npx tsc --noEmit` 검증 통과
+
+---
+
+## v1.1.3
+
+### SmartParkReDesign components/ui 분석 기반 React Native 공통 컴포넌트 구축 및 화면 재보정
+
+#### components/ui 48개 분석 및 토큰 반영
+- `src/theme/tokens.ts` 추가 — Figma Make `theme.css` `:root` 토큰의 React Native 변환
+  - `background: #FFFFFF`, `muted: #ECECF0`, `surfaceMuted: #F3F3F5`, `accent: #E9EBEF`
+  - `foreground: #030213`, `mutedForeground: #717182`
+  - `destructive: #D4183D`, `switchBg: #CBCED4`
+  - `border: rgba(0,0,0,0.09)`, `radiusSm: 6`, `radiusMd: 8`, `radiusLg: 10`, `radiusXl: 14`
+- `src/theme/index.ts` — `tokens` 추가 export
+
+#### 새 공통 컴포넌트 12종 (shadcn/ui → React Native 변환)
+- `AppButton.tsx` — primary/dark/secondary/outline/ghost/destructive 6 variant, sm/md/lg size, leftIcon/rightIcon, loading/disabled 상태
+- `AppCard.tsx` — white bg, border, subtle shadow, padding/radius variant
+- `AppBadge.tsx` — default/success/warning/danger/info/muted/outline/ai 8 variant, rounded-md 6px
+- `AppChip.tsx` — active/inactive pill chip, icon 지원, sm/md size
+- `AppTextInput.tsx` — #F3F3F5 bg, left/right icon, focus시 border #006CFF, borderRadius 10px
+- `AppTabs.tsx` — line variant(하단 border 인디케이터) + pill variant(muted bg + card active), scrollable 옵션
+- `AppSeparator.tsx` — 1px 수평/수직 구분선, rgba(0,0,0,0.09)
+- `AppProgress.tsx` — configurable color/track, height, rounded-full
+- `AppSwitch.tsx` — Animated 전환, #CBCED4→#030213 색상 보간, thumb translate
+- `AppSectionHeader.tsx` — fontSize 18 / fontWeight 600, sub 레이블, actionLabel/onAction 지원
+- `AppSurface.tsx` — default/muted/accent/info/success/warning 6 variant
+- `AppSheet.tsx` — SHEET_STYLE/SHEET_HANDLE_STYLE 상수, AppSheetHeader 컴포넌트
+
+#### 화면 디자인 재보정
+- `ParkingDetailScreen.tsx` — 뒤로가기·우측 버튼을 AppIcon(chevronLeft/share2/heart)으로 교체; 탭바를 AppTabs(line/scrollable)로 통일; 배지 radius 6px, muted color 토큰 적용
+- `DestinationSearchScreen.tsx` — 검색 아이콘 AppIcon(search), 필터 버튼 AppIcon(slidersHorizontal), input bg #F3F3F5, 뒤로가기 AppIcon
+- `SoonAvailableCard.tsx` — 링 차트→AppProgress(4px)+컬러 urgency 시스템(5분:red/10분:orange/이상:blue), AppButton '대기' CTA
+- `SoonAvailableScreen.tsx` — AppSurface(info) 배너, AppIcon(alertCircle), AppIcon(chevronLeft), paddingBottom insets+24
+- `RecommendationScreen.tsx` — AppSectionHeader, AppChip(상황 칩), AppBadge(AI), AppSurface(success), AppCard+AppButton(CTA), AppSeparator, 하단 paddingBottom insets+24
+- `MyPageScreen.tsx` — 기본 플레이스홀더 → 프로필카드(AppCard), 메뉴 섹션(AppIcon 아이콘), AppSeparator 구분선, 로그인 CTA 버튼
+
+#### 화면 겹침 및 interaction 보정
+- 모든 ScrollView contentContainerStyle에 `paddingBottom: insets.bottom + 24` 적용
+- Detail: `flex: 1` tabContent, CTA 외부 배치 유지
+- Search: KeyboardAvoidingView + `behavior: 'height'`(Android) 유지
+- Home: zIndex 레이어(chips:29 / searchBar:30 / fab:35/36 / sheet:40) 변경 없음
+
+- `npx tsc --noEmit` 검증 통과
+- `npm run android` BUILD SUCCESSFUL, Android 실기기 설치 완료
+
+---
+
 ## v0.1.1
 
 - 프로젝트정의서 파일명을 형상관리 규칙에 맞게 정리
@@ -473,6 +555,90 @@ SmartPark 프로젝트의 주요 변경 사항과 버전 tag 기록을 정리한
 - `npx tsc --noEmit` 검증 통과
 - `npm run android` BUILD SUCCESSFUL, Android 실기기 설치 완료
 - 미적용: Naver Map SDK, 실제 길찾기 API, 결제, NFC, GPS 권한
+
+---
+
+## v1.1.2
+
+### SmartParkReDesign 기준 주요 화면 디자인 폴리시
+
+#### 하단 탭 구조 변경
+- `src/navigation/MainTabNavigator.tsx` 수정
+  - 탭 구성: 주변 / 저장 / 이용 / **추천** / MY (공급자 탭 노출 제거)
+  - `ProviderTab` → `RecommendTab` 교체
+  - 추천 탭 아이콘: `sparkles`
+  - 탭 레이블 fontSize 10 → 10.5, letterSpacing -0.4, marginTop 3 → 2
+  - 뱃지(badge) 제거 (추천 탭 이후 미사용)
+- `src/navigation/navigationTypes.ts` 수정
+  - `RecommendStackParamList` 추가: `{ RecommendationScreen: undefined }`
+  - `MainTabParamList`에 `RecommendTab` 등록
+
+#### 추천 탭 화면 신규 구현
+- `src/navigation/RecommendStackNavigator.tsx` 추가
+- `src/screens/recommend/RecommendationScreen.tsx` 추가
+  - 상단 헤더: "추천" 제목 + 서브타이틀
+  - 상황별 chip 5종 (⚡지금 / 💼출근 / 🛍쇼핑 / 🍽외식 / 🏥병원)
+  - AI 배너: 선택 상황 기준 분석 안내
+  - AI 추천 주차장 섹션: 상황별 정렬 기준으로 상위 3곳 ParkingCard
+  - 추천 이유 chip: 도보 3분 이내 / 시간당 저렴 / AI 추천 1위
+  - 곧 비워질 자리 섹션: SOON_AVAILABLE 최대 3곳
+  - 목적지 주차 찾기 CTA 카드 → SearchTab 이동
+
+#### SearchBar 디자인 개선
+- `src/components/common/SearchBar.tsx` 수정
+  - borderRadius 14 → 24 (pill 형태)
+  - 왼쪽 아이콘: 햄버거 메뉴 → AppIcon `mapPin` (파란색 `#006CFF`)
+  - 오른쪽 아이콘: View 기반 마이크 → AppIcon `mic`
+  - 그림자 강화: elevation 4 → 6, shadowOpacity 0.08 → 0.12, shadowRadius 8 → 12
+
+#### 공통 컴포넌트 스타일 정합
+- `src/components/parking/SectionHeader.tsx` — fontSize 17 → 18, fontWeight '700' → '600'
+- `src/components/home/CategoryChips.tsx`
+  - chip paddingVertical 7 → 8
+  - borderColor `#CAD1DB` → `#E5EAF1`
+  - label fontSize 13 → 14, fontWeight '500' → '600', color `#4D5A6A` → `#222225`
+  - 그림자 소폭 강화 (elevation 1 → 2, shadowRadius 2 → 6)
+
+- `npx tsc --noEmit` 검증 통과
+- `npm run android` BUILD SUCCESSFUL, Android 실기기 설치 완료
+
+---
+
+## v1.1.1
+
+### lucide-react-native 아이콘 기반 구축 및 AppIcon 공통 컴포넌트 추가
+
+#### 패키지 설치
+- `lucide-react-native@1.16.0` 추가 — Figma Make 디자인과 동일한 lucide 아이콘 세트(SVG 기반)
+- `react-native-svg@15.15.5` 추가 — New Architecture(Fabric) 지원, lucide-react-native 의존성
+
+#### AppIcon 공통 컴포넌트
+- `src/components/common/AppIcon.tsx` 추가
+  - Props: `name`, `size`(기본 24), `color`(기본 `#222225`), `strokeWidth`(기본 2)
+  - `AppIconName` 유니온 타입으로 허용 아이콘 목록을 TS 레벨에서 제한
+  - 매핑 아이콘 27종:
+    - 지도/위치: `mapPin`(MapPin), `navigation`(Navigation), `mapPinned`(MapPinned)
+    - 탭/메뉴: `star`(Star), `calendarDays`(CalendarDays), `user`(User), `house`(House), `menu`(Menu)
+    - 검색/필터: `search`(Search), `slidersHorizontal`(SlidersHorizontal), `mic`(Mic)
+    - 액션: `chevronLeft`(ChevronLeft), `x`(X), `share2`(Share2), `heart`(Heart)
+    - 서비스: `sparkles`(Sparkles), `clock`(Clock), `car`(Car), `circleParking`(CircleParking)
+    - 결제/설정: `creditCard`(CreditCard), `bell`(Bell), `settings`(Settings), `alertCircle`(AlertCircle)
+    - 수익: `walletCards`(WalletCards), `circleDollarSign`(CircleDollarSign)
+    - 미디어: `camera`(Camera), `imagePlus`(ImagePlus)
+
+#### 하단 탭 아이콘 교체
+- `src/navigation/MainTabNavigator.tsx` 수정
+  - 기존 View/Text 기반 커스텀 아이콘 5종 제거
+  - `TabIcon` 함수가 `AppIcon`을 직접 호출하도록 교체
+  - 탭별 아이콘: 주변(mapPin), 저장(star), 이용(calendarDays), 공급자(house), MY(user)
+  - 활성 탭: `strokeWidth: 2.2` / 비활성 탭: `strokeWidth: 1.8` 로 시각 강조 차별화
+
+#### 버그 수정 (v1.1.0 코드 베이스)
+- `src/screens/search/RecommendedParkingScreen.tsx` — `navigateToDetail`에서 잘못된 self-navigate 호출 제거 (ParkingTab 직접 이동으로 수정)
+- `src/screens/parking/ParkingDetailScreen.tsx` — 미사용 `Dimensions` import 및 `SCREEN_W` 변수(`void` 억제 포함) 제거
+
+- `npx tsc --noEmit` 검증 통과
+- `npm run android` BUILD SUCCESSFUL, Android 실기기 설치 완료
 
 ---
 

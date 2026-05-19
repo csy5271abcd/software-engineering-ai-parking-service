@@ -1,6 +1,8 @@
 import React from 'react';
 import {View, Text, Pressable, StyleSheet} from 'react-native';
 import {CongestionBadge} from './ParkingStatusBadge';
+import {AppProgress} from '../common/AppProgress';
+import {AppButton} from '../common/AppButton';
 import type {ParkingLotDetail} from '../../types/parking';
 
 interface SoonAvailableCardProps {
@@ -16,32 +18,24 @@ export function SoonAvailableCard({
 }: SoonAvailableCardProps): React.JSX.Element {
   const walkMin = Math.max(1, Math.round(lot.distanceMeters / 80));
   const hasNfc = (lot.tags as string[]).includes('NFC');
-  const progress = Math.max(0, Math.min(1, (30 - soonMin) / 30));
+  // 0 = just exited, 1 = 30+ min away
+  const progress = Math.max(0, Math.min(100, ((30 - soonMin) / 30) * 100));
+  const urgency = soonMin <= 5 ? '#FB5852' : soonMin <= 10 ? '#F5A623' : '#006CFF';
 
   return (
     <Pressable onPress={onPress} style={styles.card}>
-      {/* Progress ring (View-based approximation) */}
-      <View style={styles.ringWrap}>
-        <View style={styles.ringOuter}>
-          <View style={styles.ringInner} />
-          {/* Fill arc indicator using border trick */}
-          {progress > 0 && (
-            <View
-              style={[
-                styles.ringFill,
-                {
-                  borderColor: progress > 0 ? '#006CFF' : 'transparent',
-                  // Rotate to show progress; simplified as opacity
-                  opacity: Math.min(1, progress * 1.5),
-                },
-              ]}
-            />
-          )}
+      {/* Timer column */}
+      <View style={styles.timerCol}>
+        <View style={[styles.timerCircle, {borderColor: urgency}]}>
+          <Text style={[styles.timerNum, {color: urgency}]}>{soonMin}</Text>
+          <Text style={styles.timerUnit}>분</Text>
         </View>
-        <View style={styles.ringTextWrap}>
-          <Text style={styles.ringNum}>{soonMin}</Text>
-          <Text style={styles.ringUnit}>분 후</Text>
-        </View>
+        <AppProgress
+          value={progress}
+          color={urgency}
+          height={4}
+          style={styles.timerProgress}
+        />
       </View>
 
       {/* Body */}
@@ -53,7 +47,7 @@ export function SoonAvailableCard({
           <CongestionBadge level={lot.congestionLevel} />
           {hasNfc && (
             <View style={styles.nfcBadge}>
-              <Text style={styles.nfcBadgeText}>NFC</Text>
+              <Text style={styles.nfcText}>NFC</Text>
             </View>
           )}
         </View>
@@ -63,9 +57,13 @@ export function SoonAvailableCard({
       </View>
 
       {/* CTA */}
-      <Pressable onPress={onPress} style={styles.waitBtn}>
-        <Text style={styles.waitBtnText}>대기</Text>
-      </Pressable>
+      <AppButton
+        label="대기"
+        variant="primary"
+        size="sm"
+        onPress={onPress}
+        style={styles.waitBtn}
+      />
     </Pressable>
   );
 }
@@ -80,54 +78,42 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     borderWidth: 1,
     borderColor: '#E5EAF1',
+    elevation: 1,
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 1},
+    shadowOpacity: 0.04,
+    shadowRadius: 4,
   },
 
-  // ── Ring
-  ringWrap: {
+  // ── Timer
+  timerCol: {
     width: 56,
-    height: 56,
     alignItems: 'center',
-    justifyContent: 'center',
+    gap: 6,
     flexShrink: 0,
   },
-  ringOuter: {
-    position: 'absolute',
+  timerCircle: {
     width: 52,
     height: 52,
     borderRadius: 26,
-    borderWidth: 4,
-    borderColor: '#E5EAF1',
-  },
-  ringInner: {
-    position: 'absolute',
-    inset: 0,
-  },
-  ringFill: {
-    position: 'absolute',
-    width: 52,
-    height: 52,
-    borderRadius: 26,
-    borderWidth: 4,
-    borderTopColor: '#006CFF',
-    borderRightColor: '#006CFF',
-    borderBottomColor: 'transparent',
-    borderLeftColor: 'transparent',
-    transform: [{rotate: '-45deg'}],
-  },
-  ringTextWrap: {
+    borderWidth: 3,
     alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#FAFBFC',
   },
-  ringNum: {
-    fontSize: 17,
+  timerNum: {
+    fontSize: 18,
     fontWeight: '800',
-    color: '#006CFF',
     includeFontPadding: false,
-    lineHeight: 20,
+    lineHeight: 21,
   },
-  ringUnit: {
+  timerUnit: {
     fontSize: 9,
     color: '#8B99AC',
     includeFontPadding: false,
+  },
+  timerProgress: {
+    width: 48,
   },
 
   // ── Body
@@ -146,7 +132,7 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     backgroundColor: 'rgba(0,108,255,0.08)',
   },
-  nfcBadgeText: {
+  nfcText: {
     fontSize: 10,
     fontWeight: '700',
     color: '#006CFF',
@@ -154,23 +140,13 @@ const styles = StyleSheet.create({
   },
   meta: {
     fontSize: 11.5,
-    color: '#8B99AC',
+    color: '#717182',
     letterSpacing: -0.2,
     includeFontPadding: false,
   },
 
-  // ── Wait btn
   waitBtn: {
-    paddingHorizontal: 14,
-    paddingVertical: 9,
     borderRadius: 20,
-    backgroundColor: '#006CFF',
     flexShrink: 0,
-  },
-  waitBtnText: {
-    fontSize: 12.5,
-    fontWeight: '700',
-    color: '#FFFFFF',
-    includeFontPadding: false,
   },
 });

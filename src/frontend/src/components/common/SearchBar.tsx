@@ -1,12 +1,12 @@
 import React from 'react';
 import {
   Pressable,
-  View,
   Text,
   StyleSheet,
   StyleProp,
   ViewStyle,
 } from 'react-native';
+import {AppIcon} from './AppIcon';
 import {spacing} from '../../theme';
 
 interface SearchBarProps {
@@ -24,28 +24,16 @@ export function SearchBar({
       style={[styles.bar, style]}
       accessibilityLabel="검색창 열기"
     >
-      {/* Hamburger menu icon */}
-      <View style={styles.menuIcon}>
-        <View style={styles.menuLine} />
-        <View style={styles.menuLine} />
-        <View style={styles.menuLine} />
-      </View>
+      <AppIcon name="mapPin" size={18} color="#006CFF" strokeWidth={2.2} />
 
       <Text style={styles.placeholder} numberOfLines={1}>
         장소, 버스, 지하철, 주소 검색
       </Text>
 
-      {/* Mic button */}
-      <View style={styles.micWrap}>
-        <View style={styles.micBody} />
-        <View style={styles.micStem} />
-        <View style={styles.micArm} />
-      </View>
+      <AppIcon name="mic" size={18} color="#6B7C92" strokeWidth={2} />
     </Pressable>
   );
 }
-
-const ICON_COLOR = '#222225';
 
 const styles = StyleSheet.create({
   bar: {
@@ -53,57 +41,23 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 8,
     backgroundColor: '#FFFFFF',
-    borderRadius: 14,
+    borderRadius: 24,
     borderWidth: 1,
     borderColor: '#E5EAF1',
     paddingHorizontal: spacing.md,
-    paddingVertical: 11,
-    elevation: 4,
+    paddingVertical: 12,
+    elevation: 6,
     shadowColor: '#000',
-    shadowOffset: {width: 0, height: 2},
-    shadowOpacity: 0.08,
-    shadowRadius: 8,
-  },
-  menuIcon: {
-    width: 20,
-    height: 14,
-    justifyContent: 'space-between',
-  },
-  menuLine: {
-    height: 2,
-    backgroundColor: ICON_COLOR,
-    borderRadius: 1,
+    shadowOffset: {width: 0, height: 3},
+    shadowOpacity: 0.12,
+    shadowRadius: 12,
   },
   placeholder: {
     flex: 1,
-    fontSize: 14,
-    color: '#8B99AC',
-    fontWeight: '400',
-  },
-  micWrap: {
-    width: 20,
-    height: 20,
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-    paddingTop: 2,
-  },
-  micBody: {
-    width: 9,
-    height: 12,
-    borderRadius: 4.5,
-    backgroundColor: ICON_COLOR,
-  },
-  micStem: {
-    width: 2,
-    height: 3,
-    backgroundColor: ICON_COLOR,
-    marginTop: 1,
-  },
-  micArm: {
-    width: 14,
-    height: 2,
-    borderRadius: 1,
-    backgroundColor: ICON_COLOR,
-    marginTop: 1,
+    fontSize: 15,
+    color: '#222225',
+    fontWeight: '500',
+    letterSpacing: -0.2,
+    includeFontPadding: false,
   },
 });

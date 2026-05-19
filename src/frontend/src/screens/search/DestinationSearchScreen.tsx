@@ -1,20 +1,20 @@
 import React, {useState, useRef, useCallback} from 'react';
 import {
   View,
-  TextInput,
   Pressable,
   StyleSheet,
   KeyboardAvoidingView,
   Platform,
-  Text,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import type {StackNavigationProp} from '@react-navigation/stack';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {TextInput} from 'react-native';
 import type {SearchStackParamList} from '../../navigation/navigationTypes';
 import {SearchInitialState} from '../../components/search/SearchInitialState';
 import {SearchLiveResults} from '../../components/search/SearchLiveResults';
 import {SearchFilterModal} from '../../components/search/SearchFilterModal';
+import {AppIcon} from '../../components/common/AppIcon';
 
 type NavProp = StackNavigationProp<SearchStackParamList, 'DestinationSearchScreen'>;
 
@@ -68,41 +68,35 @@ export function DestinationSearchScreen(): React.JSX.Element {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       keyboardVerticalOffset={0}
     >
-      <View style={[styles.container]}>
+      <View style={styles.container}>
         {/* ── Search header ── */}
-        <View
-          style={[
-            styles.header,
-            {paddingTop: insets.top + 10},
-          ]}
-        >
+        <View style={[styles.header, {paddingTop: insets.top + 10}]}>
           <Pressable
             onPress={() => navigation.goBack()}
             style={styles.backBtn}
             hitSlop={8}
           >
-            <View style={styles.chevronLeft} />
+            <AppIcon name="chevronLeft" size={20} color="#222225" strokeWidth={2.2} />
           </Pressable>
 
           <View style={styles.inputWrap}>
-            <View style={styles.searchIcon}>
-              <View style={styles.searchCircle} />
-              <View style={styles.searchTail} />
-            </View>
+            <AppIcon name="search" size={16} color="#717182" strokeWidth={2} />
             <TextInput
               ref={inputRef}
               value={query}
               onChangeText={setQuery}
               placeholder="장소, 버스, 지하철, 주소 검색"
-              placeholderTextColor="#8B99AC"
+              placeholderTextColor="#717182"
               style={styles.input}
               autoFocus
               returnKeyType="search"
               clearButtonMode="never"
+              autoCorrect={false}
+              autoCapitalize="none"
             />
             {query.length > 0 && (
               <Pressable onPress={clearQuery} style={styles.clearBtn} hitSlop={8}>
-                <Text style={styles.clearBtnText}>✕</Text>
+                <AppIcon name="x" size={10} color="#FFFFFF" strokeWidth={2.5} />
               </Pressable>
             )}
           </View>
@@ -112,11 +106,7 @@ export function DestinationSearchScreen(): React.JSX.Element {
             style={styles.filterBtn}
             hitSlop={8}
           >
-            <View style={styles.filterIcon}>
-              <View style={[styles.filterBar, {width: 14}]} />
-              <View style={[styles.filterBar, {width: 10}]} />
-              <View style={[styles.filterBar, {width: 6}]} />
-            </View>
+            <AppIcon name="slidersHorizontal" size={18} color="#4D5A6A" strokeWidth={2} />
           </Pressable>
         </View>
 
@@ -167,52 +157,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flexShrink: 0,
   },
-  chevronLeft: {
-    width: 9,
-    height: 9,
-    borderLeftWidth: 2,
-    borderBottomWidth: 2,
-    borderColor: '#222225',
-    transform: [{rotate: '45deg'}],
-  },
   inputWrap: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
-    backgroundColor: '#F8F9FB',
+    backgroundColor: '#F3F3F5',
     borderRadius: 10,
     paddingHorizontal: 12,
-    paddingVertical: 10,
-    borderWidth: 1,
-    borderColor: '#E5EAF1',
-  },
-  searchIcon: {
-    width: 16,
-    height: 16,
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexShrink: 0,
-  },
-  searchCircle: {
-    width: 11,
-    height: 11,
-    borderRadius: 5.5,
+    paddingVertical: Platform.OS === 'ios' ? 10 : 7,
     borderWidth: 1.5,
-    borderColor: '#8B99AC',
-    position: 'absolute',
-    top: 0,
-    left: 0,
-  },
-  searchTail: {
-    width: 5,
-    height: 1.5,
-    backgroundColor: '#8B99AC',
-    borderRadius: 1,
-    position: 'absolute',
-    bottom: 1,
-    right: 0,
-    transform: [{rotate: '45deg'}],
+    borderColor: 'transparent',
   },
   input: {
     flex: 1,
@@ -232,24 +187,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flexShrink: 0,
   },
-  clearBtnText: {
-    fontSize: 9,
-    color: '#FFFFFF',
-    fontWeight: '700',
-    includeFontPadding: false,
-  },
   filterBtn: {
     width: 36,
     height: 36,
     alignItems: 'center',
     justifyContent: 'center',
     flexShrink: 0,
-  },
-  filterIcon: {gap: 3, alignItems: 'center'},
-  filterBar: {
-    height: 1.5,
-    backgroundColor: '#4D5A6A',
-    borderRadius: 1,
   },
 
   content: {flex: 1},

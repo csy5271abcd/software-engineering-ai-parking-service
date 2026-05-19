@@ -14,6 +14,8 @@ import {mockParkingLots} from '../../mocks';
 import {MapPlaceholder} from '../../components/map/MapPlaceholder';
 import {ParkingMarker} from '../../components/map/ParkingMarker';
 import {SoonAvailableCard} from '../../components/parking/SoonAvailableCard';
+import {AppIcon} from '../../components/common/AppIcon';
+import {AppSurface} from '../../components/common/AppSurface';
 import type {ParkingStackParamList} from '../../navigation/navigationTypes';
 
 type NavProp = StackNavigationProp<ParkingStackParamList, 'SoonAvailableScreen'>;
@@ -47,7 +49,7 @@ export function SoonAvailableScreen(): React.JSX.Element {
       {/* ── Header ── */}
       <View style={[styles.header, {paddingTop: insets.top + 10}]}>
         <Pressable onPress={() => navigation.goBack()} style={styles.backBtn} hitSlop={8}>
-          <View style={styles.chevronLeft} />
+          <AppIcon name="chevronLeft" size={20} color="#222225" strokeWidth={2.2} />
         </Pressable>
         <View style={styles.headerCenter}>
           <Text style={styles.headerTitle}>곧 비워질 자리</Text>
@@ -62,10 +64,7 @@ export function SoonAvailableScreen(): React.JSX.Element {
       <View style={styles.mapWrap}>
         <MapPlaceholder>
           {soonLots.map(({lot}) => {
-            const pos = toMapPos(
-              lot.coordinates.latitude,
-              lot.coordinates.longitude,
-            );
+            const pos = toMapPos(lot.coordinates.latitude, lot.coordinates.longitude);
             return (
               <ParkingMarker
                 key={lot.id}
@@ -82,21 +81,19 @@ export function SoonAvailableScreen(): React.JSX.Element {
       </View>
 
       {/* ── Info banner ── */}
-      <View style={styles.infoBanner}>
-        <View style={styles.infoIcon}>
-          <View style={styles.infoClockFace} />
-        </View>
+      <AppSurface variant="info" style={styles.infoBanner}>
+        <AppIcon name="alertCircle" size={14} color="#006CFF" strokeWidth={2} />
         <Text style={styles.infoText}>
           출차 예정 정보는 사용자가 입력한 값이에요. 변동 가능성을 고려해 주세요.
         </Text>
-      </View>
+      </AppSurface>
 
       {/* ── List ── */}
       <ScrollView
         style={styles.scroll}
         contentContainerStyle={[
           styles.scrollContent,
-          {paddingBottom: insets.bottom + 20},
+          {paddingBottom: insets.bottom + 24},
         ]}
         showsVerticalScrollIndicator={false}
       >
@@ -140,14 +137,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flexShrink: 0,
   },
-  chevronLeft: {
-    width: 9,
-    height: 9,
-    borderLeftWidth: 2,
-    borderBottomWidth: 2,
-    borderColor: '#222225',
-    transform: [{rotate: '45deg'}],
-  },
   headerCenter: {flex: 1, alignItems: 'center'},
   headerTitle: {
     fontSize: 16,
@@ -158,14 +147,14 @@ const styles = StyleSheet.create({
   },
   headerSub: {
     fontSize: 11,
-    color: '#8B99AC',
+    color: '#717182',
     includeFontPadding: false,
   },
   headerRight: {width: 36},
 
   // ── Mini map
   mapWrap: {
-    height: 180,
+    height: 170,
     position: 'relative',
     overflow: 'hidden',
   },
@@ -174,7 +163,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    height: 80,
+    height: 70,
     backgroundColor: 'rgba(255,255,255,0.92)',
   },
 
@@ -185,28 +174,11 @@ const styles = StyleSheet.create({
     gap: 8,
     paddingHorizontal: 16,
     paddingVertical: 10,
-    backgroundColor: 'rgba(0,108,255,0.05)',
+    borderRadius: 0,
+    borderLeftWidth: 0,
+    borderRightWidth: 0,
     borderTopWidth: 1,
     borderBottomWidth: 1,
-    borderColor: 'rgba(0,108,255,0.18)',
-  },
-  infoIcon: {
-    width: 14,
-    height: 14,
-    borderRadius: 7,
-    borderWidth: 1.5,
-    borderColor: '#006CFF',
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexShrink: 0,
-  },
-  infoClockFace: {
-    width: 5,
-    height: 5,
-    borderBottomWidth: 1,
-    borderRightWidth: 1,
-    borderColor: '#006CFF',
-    transform: [{rotate: '45deg'}, {translateX: -0.5}, {translateY: -0.5}],
   },
   infoText: {
     flex: 1,
@@ -221,9 +193,5 @@ const styles = StyleSheet.create({
   scrollContent: {padding: 16, gap: 8},
 
   empty: {paddingVertical: 48, alignItems: 'center'},
-  emptyText: {
-    fontSize: 14,
-    color: '#8B99AC',
-    includeFontPadding: false,
-  },
+  emptyText: {fontSize: 14, color: '#717182', includeFontPadding: false},
 });

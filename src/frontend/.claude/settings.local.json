@@ -9,7 +9,18 @@
       "Bash(npx react-native *)",
       "Read(//c/Users/choi suyeon/Documents/SmartParkDesign/screenshots//**)",
       "Read(//c/Users/choi suyeon/Documents/SmartParkDesign//**)",
-      "Bash(Read \"C:\\\\Users\\\\CHOISU~1\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\C--sp-src-frontend\\\\4854c64f-fb70-4d1a-83eb-92b30f9b8f60\\\\tasks\\\\b5tf9o7qn.output\")"
+      "Bash(Read \"C:\\\\Users\\\\CHOISU~1\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\C--sp-src-frontend\\\\4854c64f-fb70-4d1a-83eb-92b30f9b8f60\\\\tasks\\\\b5tf9o7qn.output\")",
+      "Read(//c/Users/choi suyeon/Downloads/SmartParkReDesign/**)",
+      "Bash(dir \"C:\\\\Users\\\\choi suyeon\\\\Downloads\\\\SmartParkReDesign\")",
+      "Bash(npm install *)",
+      "Bash(node -e \"const p = require\\('./node_modules/lucide-react-native/package.json'\\); console.log\\('lucide-react-native:', p.version\\)\")",
+      "Bash(node -e \"const p = require\\('./node_modules/react-native-svg/package.json'\\); console.log\\('react-native-svg:', p.version\\)\")",
+      "Bash(node -e \"const l = require\\('./node_modules/lucide-react-native'\\); const icons = ['MapPin','Navigation','Star','CalendarDays','Clock','Sparkles','User','Search','Menu','SlidersHorizontal','Mic','ChevronLeft','X','Share2','Heart','Car','CircleParking','CreditCard','Bell','Settings','AlertCircle','MapPinned','Camera','ImagePlus','CircleDollarSign','WalletCards','House']; icons.forEach\\(n => console.log\\(n+':', !!l[n]\\)\\)\")",
+      "Bash(node -e \"const fs = require\\('fs'\\); const content = fs.readFileSync\\('./node_modules/lucide-react-native/dist/lucide-react-native.js', 'utf8'\\); const icons = ['MapPin','Navigation','Star','CalendarDays','Clock','Sparkles','User','Search','Menu','SlidersHorizontal','Mic','ChevronLeft','X','Share2','Heart','Car','CircleParking','CreditCard','Bell','Settings','AlertCircle','MapPinned','Camera','ImagePlus','CircleDollarSign','WalletCards','House']; icons.forEach\\(n => { const found = content.includes\\('const '+n+' ='\\) || content.includes\\('var '+n+' ='\\) || content.includes\\('function '+n+'\\('\\) || content.includes\\(n+':'\\); console.log\\(n+':', found\\); }\\)\")",
+      "PowerShell(Get-ChildItem -Path \"C:\\\\sp\" -Recurse -Directory | Where-Object {$_.Name -eq \"imports\"} | Select-Object FullName)",
+      "PowerShell(Get-ChildItem -Path \"C:\\\\\" -Recurse -Directory -ErrorAction SilentlyContinue | Where-Object {$_.Name -eq \"SmartParkReDesign\" -or $_.Name -eq \"imports\"} | Select-Object FullName | Select-Object -First 10)",
+      "PowerShell(Get-ChildItem -Path \"C:\\\\Users\\\\choi suyeon\" -Recurse -Directory -ErrorAction SilentlyContinue | Where-Object {$_.Name -eq \"SmartParkReDesign\" -or $_.Name -eq \"imports\"} | Select-Object FullName | Select-Object -First 10)",
+      "Bash(Get-Content *)"
     ]
   }
 }

@@ -16,6 +16,7 @@ import {ParkingCard} from '../../components/parking/ParkingCard';
 import {ArrivalTimeSelector} from '../../components/search/ArrivalTimeSelector';
 import type {ArrivalTime} from '../../components/search/ArrivalTimeSelector';
 import {SectionHeader} from '../../components/parking/SectionHeader';
+import {AppIcon} from '../../components/common/AppIcon';
 
 type NavProp = StackNavigationProp<SearchStackParamList, 'RecommendedParkingScreen'>;
 type RoutePropType = RouteProp<SearchStackParamList, 'RecommendedParkingScreen'>;
@@ -60,11 +61,6 @@ export function RecommendedParkingScreen(): React.JSX.Element {
   const sorted = sortLots(mockParkingLots, sortKey);
 
   const navigateToDetail = (parkingLotId: string) => {
-    navigation.navigate('RecommendedParkingScreen', {
-      destinationName,
-      destinationSub,
-    });
-    // Navigate to detail via parent navigator
     (navigation as any).navigate('ParkingTab', {
       screen: 'ParkingDetailScreen',
       params: {parkingLotId},
@@ -76,7 +72,7 @@ export function RecommendedParkingScreen(): React.JSX.Element {
       {/* ── Header ── */}
       <View style={[styles.header, {paddingTop: insets.top + 10}]}>
         <Pressable onPress={() => navigation.goBack()} style={styles.backBtn} hitSlop={8}>
-          <View style={styles.chevronLeft} />
+          <AppIcon name="chevronLeft" size={20} color="#222225" strokeWidth={2.2} />
         </Pressable>
         <Text style={styles.headerTitle} numberOfLines={1}>
           {destinationName}
@@ -193,14 +189,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     flexShrink: 0,
-  },
-  chevronLeft: {
-    width: 9,
-    height: 9,
-    borderLeftWidth: 2,
-    borderBottomWidth: 2,
-    borderColor: '#222225',
-    transform: [{rotate: '45deg'}],
   },
   headerTitle: {
     flex: 1,

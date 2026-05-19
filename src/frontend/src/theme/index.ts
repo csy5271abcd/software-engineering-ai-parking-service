@@ -3,12 +3,14 @@ export {spacing} from './spacing';
 export {radius} from './radius';
 export {typography} from './typography';
 export {shadow} from './shadow';
+export {tokens} from './tokens';
 
 export type {Colors} from './colors';
 export type {Spacing} from './spacing';
 export type {Radius} from './radius';
 export type {Typography} from './typography';
 export type {Shadow} from './shadow';
+export type {Tokens} from './tokens';
 
 import {colors} from './colors';
 import {spacing} from './spacing';

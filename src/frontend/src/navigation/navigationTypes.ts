@@ -23,6 +23,10 @@ export type ProviderStackParamList = {
   ProviderHomeScreen: undefined;
 };
 
+export type RecommendStackParamList = {
+  RecommendationScreen: undefined;
+};
+
 export type MyPageStackParamList = {
   MyPageScreen: undefined;
 };
@@ -31,7 +35,7 @@ export type MainTabParamList = {
   HomeTab: NavigatorScreenParams<HomeStackParamList>;
   SearchTab: NavigatorScreenParams<SearchStackParamList>;
   ParkingTab: NavigatorScreenParams<ParkingStackParamList>;
-  ProviderTab: NavigatorScreenParams<ProviderStackParamList>;
+  RecommendTab: NavigatorScreenParams<RecommendStackParamList>;
   MyPageTab: NavigatorScreenParams<MyPageStackParamList>;
 };
 

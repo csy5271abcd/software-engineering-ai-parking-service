@@ -1,21 +1,23 @@
 import React from 'react';
-import {View, Text, Pressable, StyleSheet} from 'react-native';
+import {View, Text, Pressable, StyleSheet, StyleProp, ViewStyle} from 'react-native';
 
-interface SectionHeaderProps {
+interface AppSectionHeaderProps {
   title: string;
   sub?: string;
   actionLabel?: string;
   onAction?: () => void;
+  style?: StyleProp<ViewStyle>;
 }
 
-export function SectionHeader({
+export function AppSectionHeader({
   title,
   sub,
   actionLabel,
   onAction,
-}: SectionHeaderProps): React.JSX.Element {
+  style,
+}: AppSectionHeaderProps): React.JSX.Element {
   return (
-    <View style={styles.row}>
+    <View style={[styles.row, style]}>
       <View style={styles.left}>
         <Text style={styles.title}>{title}</Text>
         {sub != null && <Text style={styles.sub}>{sub}</Text>}
@@ -36,7 +38,7 @@ const styles = StyleSheet.create({
     alignItems: 'baseline',
     justifyContent: 'space-between',
     paddingHorizontal: 4,
-    marginBottom: 12,
+    marginBottom: 10,
   },
   left: {
     flexDirection: 'row',
@@ -54,7 +56,7 @@ const styles = StyleSheet.create({
   sub: {
     fontSize: 12,
     fontWeight: '500',
-    color: '#6B7C92',
+    color: '#717182',
     includeFontPadding: false,
   },
   actionBtn: {
@@ -66,7 +68,7 @@ const styles = StyleSheet.create({
   actionText: {
     fontSize: 13,
     fontWeight: '500',
-    color: '#6B7C92',
+    color: '#717182',
     includeFontPadding: false,
   },
   chevron: {
@@ -74,7 +76,7 @@ const styles = StyleSheet.create({
     height: 0,
     borderTopWidth: 4,
     borderBottomWidth: 4,
-    borderLeftWidth: 6,
+    borderLeftWidth: 5,
     borderTopColor: 'transparent',
     borderBottomColor: 'transparent',
     borderLeftColor: '#8B99AC',

@@ -4,6 +4,7 @@ import {PARKING_STATUS} from '../../constants/status';
 import {QuickShortcuts} from './QuickShortcuts';
 import {SectionHeader} from './SectionHeader';
 import {ParkingCard} from './ParkingCard';
+import {AppIcon} from '../common/AppIcon';
 import type {ParkingLotDetail} from '../../types/parking';
 
 type SheetMode = 'default' | 'half' | 'full';
@@ -41,7 +42,7 @@ export function DefaultSheetContent({
       {soonLots.length > 0 && (
         <Pressable style={styles.soonBanner} onPress={onPressSoon}>
           <View style={styles.soonIconCircle}>
-            <Text style={styles.soonIconText}>⏱</Text>
+            <AppIcon name="clock" size={20} color="#FFFFFF" strokeWidth={2.2} />
           </View>
           <View style={styles.soonTextWrap}>
             <Text style={styles.soonTitle}>
@@ -137,7 +138,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flexShrink: 0,
   },
-  soonIconText: {fontSize: 18},
   soonTextWrap: {flex: 1},
   soonTitle: {
     fontSize: 14,

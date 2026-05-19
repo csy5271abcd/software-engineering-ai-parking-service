@@ -3,9 +3,7 @@ import {
   View,
   Text,
   Pressable,
-  ScrollView,
   StyleSheet,
-  Dimensions,
 } from 'react-native';
 import type {RouteProp} from '@react-navigation/native';
 import type {StackNavigationProp} from '@react-navigation/stack';
@@ -20,6 +18,8 @@ import {DetailCongestionTab} from '../../components/parking/detail/DetailCongest
 import {DetailAroundTab} from '../../components/parking/detail/DetailAroundTab';
 import {DetailReviewsTab} from '../../components/parking/detail/DetailReviewsTab';
 import {DetailActionBar} from '../../components/parking/detail/DetailActionBar';
+import {AppTabs} from '../../components/common/AppTabs';
+import {AppIcon} from '../../components/common/AppIcon';
 
 // ── Types ────────────────────────────────────────────────────────────────────
 
@@ -38,16 +38,15 @@ const TYPE_LABEL: Record<string, string> = {
 };
 
 type TabKey = 'home' | 'pricing' | 'congestion' | 'around' | 'reviews';
-const TABS: {k: TabKey; label: string}[] = [
-  {k: 'home', label: '홈'},
-  {k: 'pricing', label: '요금·시간'},
-  {k: 'congestion', label: '혼잡도'},
-  {k: 'around', label: '주변'},
-  {k: 'reviews', label: '리뷰'},
+const TABS: {key: TabKey; label: string}[] = [
+  {key: 'home', label: '홈'},
+  {key: 'pricing', label: '요금·시간'},
+  {key: 'congestion', label: '혼잡도'},
+  {key: 'around', label: '주변'},
+  {key: 'reviews', label: '리뷰'},
 ];
 
 const HERO_H = 200;
-const {width: SCREEN_W} = Dimensions.get('window');
 
 // ── Screen ────────────────────────────────────────────────────────────────────
 
@@ -96,30 +95,25 @@ export function ParkingDetailScreen({route, navigation}: Props): React.JSX.Eleme
             <View style={styles.mapPinTail} />
           </View>
         </MapPlaceholder>
-        {/* Gradient overlay */}
         <View style={styles.heroGradientTop} />
         <View style={styles.heroGradientBottom} />
 
-        {/* Floating back button */}
+        {/* Back button */}
         <Pressable
           onPress={() => navigation.goBack()}
           style={[styles.heroBackBtn, {top: insets.top + 10}]}
           hitSlop={8}
         >
-          <View style={styles.chevronLeft} />
+          <AppIcon name="chevronLeft" size={18} color="#222225" strokeWidth={2.2} />
         </Pressable>
 
-        {/* Floating right buttons */}
+        {/* Right buttons */}
         <View style={[styles.heroRightBtns, {top: insets.top + 10}]}>
           <Pressable style={styles.heroIconBtn} hitSlop={8}>
-            <View style={styles.shareIcon}>
-              <View style={styles.shareDot} />
-              <View style={[styles.shareDot, {position: 'absolute', bottom: 2, left: 0}]} />
-              <View style={[styles.shareDot, {position: 'absolute', bottom: 2, right: 0}]} />
-            </View>
+            <AppIcon name="share2" size={17} color="#4D5A6A" strokeWidth={2} />
           </Pressable>
           <Pressable style={styles.heroIconBtn} hitSlop={8}>
-            <Text style={styles.starIcon}>☆</Text>
+            <AppIcon name="heart" size={17} color="#4D5A6A" strokeWidth={2} />
           </Pressable>
         </View>
       </View>
@@ -139,8 +133,8 @@ export function ParkingDetailScreen({route, navigation}: Props): React.JSX.Eleme
               <Text style={[styles.badgeText, {color: '#006CFF'}]}>NFC 가능</Text>
             </View>
           )}
-          <View style={[styles.badge, {backgroundColor: '#F8F9FB'}]}>
-            <Text style={[styles.badgeText, {color: '#6B7C92'}]}>
+          <View style={[styles.badge, {backgroundColor: '#F3F3F5'}]}>
+            <Text style={[styles.badgeText, {color: '#717182'}]}>
               {TYPE_LABEL[lot.type] ?? lot.type}
             </Text>
           </View>
@@ -151,29 +145,14 @@ export function ParkingDetailScreen({route, navigation}: Props): React.JSX.Eleme
         </Text>
       </View>
 
-      {/* ── Sticky tabs ── */}
-      <View style={styles.tabBar}>
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={styles.tabBarContent}
-        >
-          {TABS.map(t => {
-            const active = activeTab === t.k;
-            return (
-              <Pressable
-                key={t.k}
-                onPress={() => setActiveTab(t.k)}
-                style={[styles.tab, active && styles.tabActive]}
-              >
-                <Text style={[styles.tabText, active && styles.tabTextActive]}>
-                  {t.label}
-                </Text>
-              </Pressable>
-            );
-          })}
-        </ScrollView>
-      </View>
+      {/* ── AppTabs (scrollable line variant) ── */}
+      <AppTabs
+        tabs={TABS}
+        active={activeTab}
+        onSelect={setActiveTab}
+        variant="line"
+        scrollable
+      />
 
       {/* ── Tab content ── */}
       <View style={styles.tabContent}>
@@ -205,7 +184,7 @@ const styles = StyleSheet.create({
   screen: {flex: 1, backgroundColor: '#FFFFFF'},
 
   errorWrap: {flex: 1, alignItems: 'center', justifyContent: 'center'},
-  errorText: {fontSize: 15, color: '#8B99AC', includeFontPadding: false},
+  errorText: {fontSize: 15, color: '#717182', includeFontPadding: false},
 
   // ── Hero
   hero: {
@@ -219,7 +198,7 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     height: 80,
-    backgroundColor: 'rgba(255,255,255,0.45)',
+    backgroundColor: 'rgba(255,255,255,0.40)',
   },
   heroGradientBottom: {
     position: 'absolute',
@@ -286,14 +265,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.08,
     shadowRadius: 6,
   },
-  chevronLeft: {
-    width: 9,
-    height: 9,
-    borderLeftWidth: 2,
-    borderBottomWidth: 2,
-    borderColor: '#222225',
-    transform: [{rotate: '45deg'}],
-  },
   heroRightBtns: {
     position: 'absolute',
     right: 12,
@@ -314,25 +285,6 @@ const styles = StyleSheet.create({
     shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.08,
     shadowRadius: 6,
-  },
-  shareIcon: {
-    width: 16,
-    height: 16,
-    position: 'relative',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  shareDot: {
-    width: 5,
-    height: 5,
-    borderRadius: 2.5,
-    borderWidth: 1.5,
-    borderColor: '#4D5A6A',
-  },
-  starIcon: {
-    fontSize: 18,
-    color: '#4D5A6A',
-    includeFontPadding: false,
   },
 
   // ── Title block
@@ -357,7 +309,7 @@ const styles = StyleSheet.create({
     gap: 4,
     paddingHorizontal: 7,
     paddingVertical: 3,
-    borderRadius: 4,
+    borderRadius: 6,
   },
   dot: {width: 5, height: 5, borderRadius: 2.5},
   badgeText: {
@@ -375,43 +327,10 @@ const styles = StyleSheet.create({
   },
   address: {
     fontSize: 13,
-    color: '#6B7C92',
+    color: '#717182',
     letterSpacing: -0.2,
     includeFontPadding: false,
-  },
-
-  // ── Tab bar
-  tabBar: {
-    borderBottomWidth: 1,
-    borderBottomColor: '#E5EAF1',
-    backgroundColor: '#FFFFFF',
-    zIndex: 10,
-  },
-  tabBarContent: {
-    paddingHorizontal: 8,
-  },
-  tab: {
-    paddingHorizontal: 12,
-    paddingVertical: 13,
-    borderBottomWidth: 2,
-    borderBottomColor: 'transparent',
-    marginBottom: -1,
-  },
-  tabActive: {borderBottomColor: '#006CFF'},
-  tabText: {
-    fontSize: 14,
-    fontWeight: '500',
-    color: '#8B99AC',
-    letterSpacing: -0.2,
-    includeFontPadding: false,
-  },
-  tabTextActive: {
-    fontWeight: '700',
-    color: '#006CFF',
   },
 
   tabContent: {flex: 1},
 });
-
-// Re-export scroll-based prop for SCREEN_W usage
-void SCREEN_W;

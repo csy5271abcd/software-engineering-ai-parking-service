@@ -339,6 +339,40 @@ React Navigation 구조를 NaverMapClone 기준으로 전환하였다.
 - Home BottomSheet 곧 비워짐 banner → SoonAvailableScreen 연결
 - 미적용: Naver Map SDK, 실제 길찾기 API, 결제, NFC, GPS 권한
 
+SmartParkReDesign imports/ 폴더 참조 기반 디자인 토큰 보정 및 주요 화면을 재정렬하였다 (v1.1.4).
+
+- `src/theme/tokens.ts` 보정 — brandOrange `#F5A623` → `#F5683C` (T.orange500), bgCool/bgCoolSecondary/bgCoolWeak/borderWeak/iconPrimary/iconTertiary/iconWeak/textPrimary~Quaternary 토큰 추가
+- `MainTabNavigator` 비활성 탭 아이콘 색상 `#8B99AC` → `#4D5A6A` (T.iconTertiary), 레이블 `#8B99AC` → `#6B7C92` (T.textTertiary)
+- `SearchBar` placeholder 색상 `#8B99AC` → `#222225`, fontWeight `'400'` → `'500'`, fontSize `14` → `15` (Chrome.jsx 기준)
+- `DefaultSheetContent` soon banner 이모지 ⏱ → `AppIcon name="clock"` 교체
+- `RecommendedParkingScreen` 백버튼 커스텀 View → `AppIcon name="chevronLeft"` 교체
+- `MyPageScreen` 전면 재설계 — mock 로그인 상태(김민준), 파란 avatar, 통계 그리드(저장한 곳/이용 횟수/신뢰도), 4개 메뉴 섹션(결제·차량/알림·설정/AI 투명성/고객 지원), AppSeparator 구분선, 빨간 badge
+
+SmartParkReDesign components/ui 48개를 분석하고 React Native 공통 컴포넌트 12종을 구축하며 주요 화면을 재보정하였다 (v1.1.3).
+
+- `src/theme/tokens.ts` 추가 — Figma Make 디자인 토큰(muted #ECECF0, surfaceMuted #F3F3F5, destructive #D4183D, radius 6/8/10/14px 등) React Native 변환
+- 공통 컴포넌트 12종 신규: AppButton(6 variant), AppCard, AppBadge(8 variant), AppChip, AppTextInput(focus border), AppTabs(line/pill), AppSeparator, AppProgress, AppSwitch(Animated), AppSectionHeader, AppSurface(6 variant), AppSheet
+- ParkingDetailScreen 탭바 → AppTabs(line/scrollable), 버튼 → AppIcon 교체
+- DestinationSearchScreen 검색창 → #F3F3F5 bg, AppIcon(search/slidersHorizontal)
+- SoonAvailableCard 링 차트 → AppProgress + urgency 색상 시스템
+- RecommendationScreen AppChip/AppBadge/AppSurface/AppCard/AppButton 통일
+- MyPageScreen 기본 구조 구현 (프로필카드, 메뉴 섹션, AppIcon 아이콘)
+- 모든 화면 paddingBottom: insets.bottom + 24 적용으로 하단 탭바 겹침 해소
+
+SmartParkReDesign 기준으로 주요 화면 디자인을 폴리시하고 추천 탭을 신규 구현하였다 (v1.1.2).
+
+- 하단 탭 구조 변경: 공급자 탭 제거 → 추천(RecommendTab, sparkles 아이콘) 탭 추가, 레이블 fontSize 10.5
+- `src/screens/recommend/RecommendationScreen.tsx` 추가 — 상황별 chip(지금/출근/쇼핑/외식/병원), AI 배너, AI 추천 주차장 Top 3, 추천 이유 chip, 곧 비워질 자리, 목적지 찾기 CTA
+- `SearchBar` pill 스타일로 개선: borderRadius 24, 좌측 파란 mapPin 아이콘, 그림자 강화
+- `SectionHeader` fontSize 17 → 18, fontWeight '700' → '600'
+- `CategoryChips` paddingVertical 7 → 8, borderColor/label 색상 정합
+
+`lucide-react-native` 아이콘 기반을 구축하고 `AppIcon` 공통 컴포넌트를 추가하였다 (v1.1.1).
+
+- `lucide-react-native@1.16.0` + `react-native-svg@15.15.5` 설치 — Figma Make 디자인과 동일한 lucide SVG 아이콘 세트, New Architecture 지원
+- `src/components/common/AppIcon.tsx` 추가 — `name` / `size` / `color` / `strokeWidth` props, `AppIconName` 유니온 타입으로 27종 아이콘 매핑
+- `src/navigation/MainTabNavigator.tsx` 수정 — 하단 탭 아이콘을 View/Text 커스텀 구현에서 AppIcon(mapPin/star/calendarDays/house/user)으로 교체, 활성 탭 strokeWidth 2.2 / 비활성 1.8
+
 `ParkingBottomSheet`를 4단계 스와이프 방식으로 재구현하였다 (v1.0.10).
 
 - BottomSheet 상태를 `hidden` / `default` / `half` / `full` 4단계로 재정의하였다.
