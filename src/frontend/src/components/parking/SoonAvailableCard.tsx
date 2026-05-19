@@ -1,8 +1,6 @@
 import React from 'react';
 import {View, Text, Pressable, StyleSheet} from 'react-native';
 import {CongestionBadge} from './ParkingStatusBadge';
-import {AppProgress} from '../common/AppProgress';
-import {AppButton} from '../common/AppButton';
 import type {ParkingLotDetail} from '../../types/parking';
 
 interface SoonAvailableCardProps {
@@ -18,24 +16,14 @@ export function SoonAvailableCard({
 }: SoonAvailableCardProps): React.JSX.Element {
   const walkMin = Math.max(1, Math.round(lot.distanceMeters / 80));
   const hasNfc = (lot.tags as string[]).includes('NFC');
-  // 0 = just exited, 1 = 30+ min away
-  const progress = Math.max(0, Math.min(100, ((30 - soonMin) / 30) * 100));
-  const urgency = soonMin <= 5 ? '#FB5852' : soonMin <= 10 ? '#F5A623' : '#006CFF';
+  const urgency = soonMin <= 5 ? '#FB5852' : soonMin <= 10 ? '#F5683C' : '#006CFF';
 
   return (
-    <Pressable onPress={onPress} style={styles.card}>
-      {/* Timer column */}
-      <View style={styles.timerCol}>
-        <View style={[styles.timerCircle, {borderColor: urgency}]}>
-          <Text style={[styles.timerNum, {color: urgency}]}>{soonMin}</Text>
-          <Text style={styles.timerUnit}>분</Text>
-        </View>
-        <AppProgress
-          value={progress}
-          color={urgency}
-          height={4}
-          style={styles.timerProgress}
-        />
+    <View style={styles.card}>
+      {/* Circular timer */}
+      <View style={[styles.timerCircle, {borderColor: urgency}]}>
+        <Text style={[styles.timerNum, {color: urgency}]}>{soonMin}</Text>
+        <Text style={[styles.timerUnit, {color: urgency}]}>분후</Text>
       </View>
 
       {/* Body */}
@@ -57,14 +45,10 @@ export function SoonAvailableCard({
       </View>
 
       {/* CTA */}
-      <AppButton
-        label="대기"
-        variant="primary"
-        size="sm"
-        onPress={onPress}
-        style={styles.waitBtn}
-      />
-    </Pressable>
+      <Pressable onPress={onPress} style={styles.waitBtn}>
+        <Text style={styles.waitBtnText}>대기</Text>
+      </Pressable>
+    </View>
   );
 }
 
@@ -73,61 +57,54 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 14,
-    padding: 14,
+    padding: 16,
     backgroundColor: '#FFFFFF',
-    borderRadius: 12,
+    borderRadius: 16,
     borderWidth: 1,
     borderColor: '#E5EAF1',
-    elevation: 1,
+    elevation: 2,
     shadowColor: '#000',
     shadowOffset: {width: 0, height: 1},
-    shadowOpacity: 0.04,
-    shadowRadius: 4,
+    shadowOpacity: 0.06,
+    shadowRadius: 6,
   },
 
   // ── Timer
-  timerCol: {
-    width: 56,
-    alignItems: 'center',
-    gap: 6,
-    flexShrink: 0,
-  },
   timerCircle: {
-    width: 52,
-    height: 52,
-    borderRadius: 26,
-    borderWidth: 3,
+    width: 64,
+    height: 64,
+    borderRadius: 32,
+    borderWidth: 3.5,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#FAFBFC',
+    backgroundColor: '#FFFFFF',
+    flexShrink: 0,
   },
   timerNum: {
-    fontSize: 18,
+    fontSize: 22,
     fontWeight: '800',
     includeFontPadding: false,
-    lineHeight: 21,
+    lineHeight: 26,
   },
   timerUnit: {
-    fontSize: 9,
-    color: '#8B99AC',
+    fontSize: 10,
+    fontWeight: '600',
     includeFontPadding: false,
-  },
-  timerProgress: {
-    width: 48,
+    lineHeight: 13,
   },
 
   // ── Body
-  body: {flex: 1, minWidth: 0, gap: 4},
+  body: {flex: 1, minWidth: 0, gap: 5},
   name: {
-    fontSize: 14.5,
+    fontSize: 15,
     fontWeight: '700',
     color: '#222225',
     letterSpacing: -0.3,
     includeFontPadding: false,
   },
-  badgeRow: {flexDirection: 'row', gap: 4, flexWrap: 'wrap'},
+  badgeRow: {flexDirection: 'row', gap: 5, flexWrap: 'wrap'},
   nfcBadge: {
-    paddingHorizontal: 6,
+    paddingHorizontal: 7,
     paddingVertical: 2,
     borderRadius: 4,
     backgroundColor: 'rgba(0,108,255,0.08)',
@@ -139,14 +116,31 @@ const styles = StyleSheet.create({
     includeFontPadding: false,
   },
   meta: {
-    fontSize: 11.5,
-    color: '#717182',
+    fontSize: 12,
+    color: '#6B7C92',
     letterSpacing: -0.2,
     includeFontPadding: false,
   },
 
+  // ── Wait button
   waitBtn: {
-    borderRadius: 20,
+    paddingHorizontal: 18,
+    paddingVertical: 12,
+    borderRadius: 24,
+    backgroundColor: '#006CFF',
+    alignItems: 'center',
+    justifyContent: 'center',
     flexShrink: 0,
+    elevation: 2,
+    shadowColor: '#006CFF',
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+  },
+  waitBtnText: {
+    fontSize: 14,
+    fontWeight: '700',
+    color: '#FFFFFF',
+    includeFontPadding: false,
   },
 });

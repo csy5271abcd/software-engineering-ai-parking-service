@@ -22,11 +22,10 @@ const MOCK_USER = {
 // ── Menu section types ────────────────────────────────────────────────────────
 
 interface MenuItem {
-  emoji: string;
+  icon: AppIconName;
   label: string;
   sub?: string;
   badge?: string;
-  icon?: AppIconName;
 }
 
 interface MenuSectionData {
@@ -38,33 +37,33 @@ const MENU_SECTIONS: MenuSectionData[] = [
   {
     title: '결제 · 차량',
     items: [
-      {emoji: '💳', label: '결제 수단 관리', sub: '카카오페이 · 1'},
-      {emoji: '🚗', label: '내 차량 정보', sub: '12가 3456 · 흰색 K5'},
-      {emoji: '🎟', label: '쿠폰함', sub: '0장'},
+      {icon: 'creditCard',     label: '결제 수단 관리',   sub: '카카오페이 · 1'},
+      {icon: 'car',            label: '내 차량 정보',     sub: '12가 3456 · 흰색 K5'},
+      {icon: 'walletCards',    label: '쿠폰함',           sub: '0장'},
     ],
   },
   {
     title: '알림 · 설정',
     items: [
-      {emoji: '🔔', label: '알림 설정', sub: '곧 비워질 자리 ON'},
-      {emoji: '📍', label: '위치 권한', sub: '항상 허용'},
-      {emoji: '🌐', label: '언어 / 지역', sub: '한국어'},
+      {icon: 'bell',     label: '알림 설정',   sub: '곧 비워질 자리 ON'},
+      {icon: 'mapPin',   label: '위치 권한',   sub: '항상 허용'},
+      {icon: 'settings', label: '언어 / 지역', sub: '한국어'},
     ],
   },
   {
     title: 'AI 투명성',
     items: [
-      {emoji: '📊', label: 'AI 추천 기준', sub: '추천이 어떻게 만들어졌나요?'},
-      {emoji: '🛡', label: '데이터 사용 내역', sub: '내 이용 데이터'},
-      {emoji: '📑', label: '개인정보 처리방침'},
+      {icon: 'sparkles',  label: 'AI 추천 기준',    sub: '추천이 어떻게 만들어졌나요?'},
+      {icon: 'shield',    label: '데이터 사용 내역', sub: '내 이용 데이터'},
+      {icon: 'fileText',  label: '개인정보 처리방침'},
     ],
   },
   {
     title: '고객 지원',
     items: [
-      {emoji: '💬', label: '문의하기'},
-      {emoji: '⚠', label: '신고 내역', badge: '1'},
-      {emoji: '📜', label: '이용 약관'},
+      {icon: 'menu',        label: '문의하기'},
+      {icon: 'alertCircle', label: '신고 내역', badge: '1'},
+      {icon: 'fileText',    label: '이용 약관'},
     ],
   },
 ];
@@ -79,7 +78,9 @@ function MenuSection({section}: {section: MenuSectionData}): React.JSX.Element {
         {section.items.map((item, i) => (
           <React.Fragment key={i}>
             <Pressable style={styles.menuRow}>
-              <Text style={styles.menuEmoji}>{item.emoji}</Text>
+              <View style={styles.menuIconWrap}>
+                <AppIcon name={item.icon} size={18} color="#4D5A6A" strokeWidth={1.8} />
+              </View>
               <View style={styles.menuBody}>
                 <Text style={styles.menuLabel}>{item.label}</Text>
                 {item.sub != null && (
@@ -91,9 +92,7 @@ function MenuSection({section}: {section: MenuSectionData}): React.JSX.Element {
                   <Text style={styles.menuBadgeText}>{item.badge}</Text>
                 </View>
               )}
-              <View style={styles.menuChevron}>
-                <AppIcon name="chevronLeft" size={14} color="#CAD1DB" strokeWidth={2.2} />
-              </View>
+              <AppIcon name="chevronRight" size={14} color="#CAD1DB" strokeWidth={2.2} />
             </Pressable>
             {i < section.items.length - 1 && (
               <AppSeparator style={styles.rowDivider} />
@@ -139,9 +138,7 @@ export function MyPageScreen(): React.JSX.Element {
               </View>
             </View>
           </View>
-          <View style={styles.profileChevron}>
-            <AppIcon name="chevronLeft" size={20} color="#8B99AC" strokeWidth={2} />
-          </View>
+          <AppIcon name="chevronRight" size={20} color="#8B99AC" strokeWidth={2} />
         </View>
       </AppCard>
 
@@ -165,7 +162,7 @@ export function MyPageScreen(): React.JSX.Element {
         <MenuSection key={section.title} section={section} />
       ))}
 
-      <Text style={styles.version}>SmartPark v1.1.4</Text>
+      <Text style={styles.version}>SmartPark v1.1.5</Text>
     </ScrollView>
   );
 }
@@ -258,10 +255,6 @@ const styles = StyleSheet.create({
     color: '#006CFF',
     includeFontPadding: false,
   },
-  profileChevron: {
-    transform: [{rotate: '180deg'}],
-    flexShrink: 0,
-  },
 
   // ── Stats
   statsCard: {marginHorizontal: 16},
@@ -311,13 +304,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 12,
     paddingHorizontal: 14,
-    paddingVertical: 14,
+    paddingVertical: 13,
   },
-  menuEmoji: {
-    fontSize: 16,
-    width: 22,
-    textAlign: 'center',
-    includeFontPadding: false,
+  menuIconWrap: {
+    width: 28,
+    height: 28,
+    borderRadius: 8,
+    backgroundColor: '#F8F9FB',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexShrink: 0,
   },
   menuBody: {flex: 1, gap: 1},
   menuLabel: {
@@ -349,12 +345,8 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     includeFontPadding: false,
   },
-  menuChevron: {
-    transform: [{rotate: '180deg'}],
-    flexShrink: 0,
-  },
   rowDivider: {
-    marginLeft: 50,
+    marginLeft: 54,
   },
 
   version: {

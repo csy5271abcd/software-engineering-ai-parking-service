@@ -4,6 +4,109 @@ SmartPark 프로젝트의 주요 변경 사항과 버전 tag 기록을 정리한
 
 ---
 
+## v1.1.6
+
+### Home 화면 figma-make-design 이미지 기준 전면 재보정
+
+#### 참고 이미지
+- `Home_Default.png` — 지도, 검색바, 카테고리 칩, 날씨 카드, FABStack, 탭바 초기 상태
+- `Home_BottomSheet_Swipe_0~3.png` — BottomSheet 4단계 각 상태 레이아웃
+- `Home_Click_Marker_ParkingSummary.png` — 마커 선택 시 요약 패널
+- `Home_Empty_Seat_Soon.png` — 곧 비워질 자리 화면 (SoonAvailableScreen)
+
+#### AppIcon 확장
+- `AppIcon.tsx` — `cloud`, `layers`, `cpu`, `flag` 4종 추가
+
+#### CategoryChips 재보정
+- `CategoryChips.tsx` — emoji 접두어(🚙/⚡/🪙), 초록 dot indicator(이용가능), 칩 높이/radius 증가 (paddingVertical 9)
+
+#### ParkingMarker 재보정
+- `ParkingMarker.tsx` — `isShared` prop 추가: PRIVATE 주차장은 초록 teardrop + house 아이콘으로 표시
+
+#### FABStack 아이콘 교체
+- `FABStack.tsx` — star/slidersHorizontal/mapPin → layers/star/navigation (이미지 기준)
+
+#### HomeMapScreen 개선
+- `HomeMapScreen.tsx` — `HomeWeatherBadge` 컴포넌트 추가 (cloud/20°/미세, 좌측 pill)
+- PRIVATE 주차장 마커에 `isShared={true}` 전달
+- 마커 탭 시 항상 `sheetMode = 'default'` 로 복귀
+- zIndex 레이어 재정의 (weather 32 추가)
+
+#### BottomSheet 모드별 콘텐츠 재보정
+- `DefaultSheetContent.tsx` — mode별 섹션 분리
+  - `default`: QuickShortcuts + SoonBanner만 표시
+  - `half`: QuickShortcuts + SoonBanner + 주변주차장 헤더 + 카드 2개
+  - `full`: QuickShortcuts + SoonBanner + 주변주차장 헤더 + 전체 카드
+- soonBanner chevron: 텍스트 "›" → `AppIcon name="chevronRight"` 교체
+- AI 추천 섹션 제거 (이미지 미포함)
+
+#### SoonAvailableCard 재보정
+- `SoonAvailableCard.tsx` — 원형 타이머 확대 (64px), "분후" 타이머 내 표시
+- AppButton → 자체 Pressable "대기" 버튼 (파란 oval, paddingHorizontal:18/paddingVertical:12/borderRadius:24)
+- AppProgress(수평 바) 제거
+
+#### SoonAvailableScreen 재보정
+- `SoonAvailableScreen.tsx` — 헤더 폰트 크기 증가, 배경색 #F8F9FB, 인포배너 blue 계열로 변경
+- AppSurface 의존성 제거, 직접 View 스타일 사용
+
+#### MainTabNavigator 업데이트
+- `MainTabNavigator.tsx` — '추천' → '스마트패스', `sparkles` → `cpu` 아이콘
+
+#### SelectedLotPreview 신고 아이콘
+- `SelectedLotPreview.tsx` — 신고 액션 아이콘 `alertCircle` → `flag`
+
+- `npx tsc --noEmit` 검증 통과
+- `npm run android` 빌드 성공 및 실기기 설치 확인
+
+---
+
+## v1.1.5
+
+### SmartParkReDesign imports/ 폴더 분석 기반 아이콘 전면 교체 및 레이아웃 재보정
+
+#### 분석 파일
+- `imports/tokens.jsx` — T 디자인 토큰, PSTATUS/CONGEST/CATEGORIES 상수
+- `imports/Chrome.jsx` — BottomNav 활성 탭 star fill, SearchBar right:68(FAB 여백), 파란 translucent FAB
+- `imports/HomeScreen.jsx` — ParkingCard clock/house SVG, SelectedLotPreview action buttons, BottomSheet STAGES
+- `imports/OtherScreens.jsx` — MyScreen 메뉴 섹션 구조, chevron SVG
+
+#### AppIcon 확장
+- `AppIcon.tsx` — `chevronRight`(ChevronRight), `plus`(Plus), `crosshair`(Crosshair), `shield`(Shield), `fileText`(FileText) 5종 추가
+- `fill?: string` prop 추가 (default `'none'`) — Star 아이콘 활성 시 채움 지원
+
+#### MainTabNavigator 탭바 보정
+- `MainTabNavigator.tsx` — 저장(Star) 탭 활성 시 `fill={color}` 적용 (채워진 별)
+- 탭 높이: `minHeight: 56`, `paddingVertical: 5`, `paddingBottom: Math.max(insets.bottom, 8)`
+
+#### HomeMapScreen 레이아웃 재보정
+- `HomeMapScreen.tsx` — SearchBar `right: 68` (파란 FAB 공간 확보)
+- 파란 네비게이션 FAB 추가: `FloatingButton variant="primary"`, `right: 12`, `zIndex 31`
+- `handleSearchPress` 핸들러 추가: SearchBar·FAB 탭 시 SearchTab의 DestinationSearchScreen으로 이동
+
+#### 공통 컴포넌트 아이콘 교체
+- `FABStack.tsx` — View 기반 커스텀 아이콘 전부 제거 → AppIcon(`star`/`slidersHorizontal`/`mapPin`) 교체
+- `CurrentLocationButton.tsx` — 커스텀 NavArrow View → `AppIcon name="crosshair"`, `variant="primary"` → `variant="default"` (흰 배경/파란 아이콘)
+- `SectionHeader.tsx` — 커스텀 View 삼각형 chevron → `AppIcon name="chevronRight"`
+
+#### 주차장 컴포넌트 아이콘 교체
+- `SelectedLotPreview.tsx` — 닫기 "✕" 텍스트 → `AppIcon name="x"`, 상세 링크 "›" → `AppIcon name="chevronRight"`, 액션 버튼 4개(출발/도착/공유/신고)에 AppIcon(navigation/mapPin/share2/alertCircle) 추가
+- `ParkingCard.tsx` — 공유 썸네일 🏠 이모지 → `AppIcon name="house"`, soonRow에 `AppIcon name="clock"` 추가, 상세 링크 "›" → `AppIcon name="chevronRight"`
+
+#### MyPageScreen 아이콘 전면 교체
+- `MyPageScreen.tsx` — 메뉴 항목 이모지 아이콘 전부 제거 → AppIcon 매핑
+  - 결제·차량: `creditCard` / `car` / `walletCards`
+  - 알림·설정: `bell` / `mapPin` / `settings`
+  - AI 투명성: `sparkles` / `shield` / `fileText`
+  - 고객 지원: `menu` / `alertCircle` / `fileText`
+- 프로필 행 rotated chevronLeft → `AppIcon name="chevronRight"`
+- 메뉴 행 `{transform: [{rotate:'180deg'}]}` + chevronLeft → `AppIcon name="chevronRight"`
+- 버전 표시: SmartPark v1.1.5
+
+- `npx tsc --noEmit` 검증 통과
+- `npm run android` 빌드 성공 및 실기기 설치 확인
+
+---
+
 ## v1.1.4
 
 ### imports/ 폴더 참조 기반 SmartParkReDesign 재보정

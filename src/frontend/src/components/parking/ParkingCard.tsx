@@ -3,6 +3,7 @@ import {View, Text, Pressable, StyleSheet} from 'react-native';
 import {PARKING_STATUS} from '../../constants/status';
 import {ParkingStatusBadge, CongestionBadge} from './ParkingStatusBadge';
 import type {ParkingLotDetail} from '../../types/parking';
+import {AppIcon} from '../common/AppIcon';
 
 interface ParkingCardProps {
   lot: ParkingLotDetail;
@@ -47,7 +48,7 @@ export function ParkingCard({
       {/* Thumbnail */}
       <View style={[styles.thumb, isShared && styles.thumbShared]}>
         {isShared ? (
-          <Text style={styles.thumbEmoji}>🏠</Text>
+          <AppIcon name="house" size={28} color="#006CFF" strokeWidth={1.8} />
         ) : (
           <Text style={styles.thumbP}>P</Text>
         )}
@@ -121,6 +122,7 @@ export function ParkingCard({
         {/* Soon row */}
         {soonLabel != null && (
           <View style={styles.soonRow}>
+            <AppIcon name="clock" size={11} color="#006CFF" strokeWidth={2.4} />
             <Text style={styles.soonText}>{soonLabel}</Text>
           </View>
         )}
@@ -128,7 +130,8 @@ export function ParkingCard({
         {/* Detail link */}
         {onPressDetail != null && (
           <Pressable onPress={onPressDetail} style={styles.detailLink} hitSlop={6}>
-            <Text style={styles.detailLinkText}>상세 정보 ›</Text>
+            <Text style={styles.detailLinkText}>상세 정보</Text>
+            <AppIcon name="chevronRight" size={12} color="#006CFF" strokeWidth={2.2} />
           </Pressable>
         )}
       </View>
@@ -173,9 +176,6 @@ const styles = StyleSheet.create({
     fontSize: 26,
     color: '#006CFF',
     includeFontPadding: false,
-  },
-  thumbEmoji: {
-    fontSize: 24,
   },
   rankBadge: {
     position: 'absolute',
@@ -276,7 +276,10 @@ const styles = StyleSheet.create({
 
   // ── Detail link ──────────────────────────────────────────────────────────
   detailLink: {
+    flexDirection: 'row',
+    alignItems: 'center',
     alignSelf: 'flex-start',
+    gap: 2,
     marginTop: 4,
   },
   detailLinkText: {
@@ -288,6 +291,9 @@ const styles = StyleSheet.create({
 
   // ── Soon row ──────────────────────────────────────────────────────────────
   soonRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 5,
     marginTop: 4,
     paddingHorizontal: 9,
     paddingVertical: 5,

@@ -1,5 +1,6 @@
 import React from 'react';
 import {View, Text, Pressable, StyleSheet} from 'react-native';
+import {AppIcon} from '../common/AppIcon';
 
 interface SectionHeaderProps {
   title: string;
@@ -23,7 +24,7 @@ export function SectionHeader({
       {onAction != null && actionLabel != null && (
         <Pressable onPress={onAction} style={styles.actionBtn} hitSlop={8}>
           <Text style={styles.actionText}>{actionLabel}</Text>
-          <View style={styles.chevron} />
+          <AppIcon name="chevronRight" size={12} color="#8B99AC" strokeWidth={2.4} />
         </Pressable>
       )}
     </View>
@@ -68,15 +69,5 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     color: '#6B7C92',
     includeFontPadding: false,
-  },
-  chevron: {
-    width: 0,
-    height: 0,
-    borderTopWidth: 4,
-    borderBottomWidth: 4,
-    borderLeftWidth: 6,
-    borderTopColor: 'transparent',
-    borderBottomColor: 'transparent',
-    borderLeftColor: '#8B99AC',
   },
 });

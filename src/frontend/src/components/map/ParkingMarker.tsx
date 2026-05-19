@@ -4,6 +4,7 @@ import type {DimensionValue} from 'react-native';
 import {PARKING_STATUS} from '../../constants/status';
 import {STATUS_DISPLAY} from '../../utils/parkingStatus';
 import type {ParkingStatus} from '../../constants/status';
+import {AppIcon} from '../common/AppIcon';
 
 interface ParkingMarkerProps {
   name: string;
@@ -13,7 +14,10 @@ interface ParkingMarkerProps {
   left: DimensionValue;
   onPress?: () => void;
   soonMin?: number | null;
+  isShared?: boolean;
 }
+
+const SHARED_COLOR = '#03AA5A';
 
 export function ParkingMarker({
   name,
@@ -23,11 +27,14 @@ export function ParkingMarker({
   left,
   onPress,
   soonMin,
+  isShared = false,
 }: ParkingMarkerProps): React.JSX.Element {
   const s = STATUS_DISPLAY[status];
-  const circleSize = selected ? 46 : 36;
-  const innerSize = selected ? 32 : 24;
-  const labelFontSize = selected ? 15 : 12;
+  const pinColor = isShared ? SHARED_COLOR : s.color;
+
+  const circleSize = selected ? 46 : 38;
+  const innerSize = selected ? 32 : 26;
+  const labelFontSize = selected ? 15 : 13;
   const tailBW = selected ? 10 : 8;
   const tailH = selected ? 12 : 10;
   const overlap = selected ? 6 : 5;
@@ -68,7 +75,7 @@ export function ParkingMarker({
             width: circleSize,
             height: circleSize,
             borderRadius: circleSize / 2,
-            backgroundColor: s.color,
+            backgroundColor: pinColor,
           },
         ]}
       >
@@ -78,11 +85,13 @@ export function ParkingMarker({
             {width: innerSize, height: innerSize, borderRadius: innerSize / 2},
           ]}
         >
-          <Text
-            style={[styles.pinLabel, {fontSize: labelFontSize, color: s.color}]}
-          >
-            P
-          </Text>
+          {isShared ? (
+            <AppIcon name="house" size={innerSize - 8} color={SHARED_COLOR} strokeWidth={2} />
+          ) : (
+            <Text style={[styles.pinLabel, {fontSize: labelFontSize, color: pinColor}]}>
+              P
+            </Text>
+          )}
         </View>
 
         {/* 곧/분 badge for SOON_AVAILABLE */}
@@ -101,7 +110,7 @@ export function ParkingMarker({
             borderLeftWidth: tailBW,
             borderRightWidth: tailBW,
             borderTopWidth: tailH,
-            borderTopColor: s.color,
+            borderTopColor: pinColor,
             marginTop: -overlap,
           },
         ]}
@@ -117,7 +126,7 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
     borderRadius: 100,
     marginBottom: 5,
-    maxWidth: 130,
+    maxWidth: 140,
     elevation: 4,
     shadowColor: '#000',
     shadowOffset: {width: 0, height: 3},
@@ -134,10 +143,10 @@ const styles = StyleSheet.create({
   pinOuter: {
     alignItems: 'center',
     justifyContent: 'center',
-    elevation: 5,
+    elevation: 6,
     shadowColor: '#000',
     shadowOffset: {width: 0, height: 3},
-    shadowOpacity: 0.22,
+    shadowOpacity: 0.25,
     shadowRadius: 6,
   },
   pinInner: {
@@ -158,14 +167,14 @@ const styles = StyleSheet.create({
   soonBadge: {
     position: 'absolute',
     top: -5,
-    right: -5,
+    right: -6,
     backgroundColor: '#006CFF',
-    borderRadius: 7,
+    borderRadius: 8,
     paddingHorizontal: 4,
-    paddingVertical: 1.5,
+    paddingVertical: 2,
     borderWidth: 1.5,
     borderColor: '#FFFFFF',
-    minWidth: 22,
+    minWidth: 24,
     alignItems: 'center',
   },
   soonBadgeText: {

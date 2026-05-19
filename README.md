@@ -339,6 +339,27 @@ React Navigation 구조를 NaverMapClone 기준으로 전환하였다.
 - Home BottomSheet 곧 비워짐 banner → SoonAvailableScreen 연결
 - 미적용: Naver Map SDK, 실제 길찾기 API, 결제, NFC, GPS 권한
 
+figma-make-design 이미지를 최우선 기준으로 Home 화면을 전면 재보정하였다 (v1.1.6).
+
+- `CategoryChips` — 이미지 기준 emoji 접두어(🚙/⚡/🪙) 및 이용가능 초록 dot indicator 추가, 칩 높이 조정
+- `ParkingMarker` — PRIVATE 주차장 isShared prop 추가, 초록 teardrop + house 아이콘으로 표시
+- `FABStack` — layers/star/navigation 아이콘으로 교체 (이미지 기준)
+- `HomeMapScreen` — HomeWeatherBadge (cloud/20°/미세) 좌측 pill 추가, isShared 마커 전달
+- `DefaultSheetContent` — mode별 섹션 분리: default(QuickShortcuts+SoonBanner), half(+2 카드), full(전체 카드)
+- `SoonAvailableCard` — 원형 타이머 64px, "분후" 내 표시, 파란 oval "대기" 버튼
+- `SoonAvailableScreen` — 헤더 개선, blue 계열 인포배너, 배경색 #F8F9FB
+- `MainTabNavigator` — '추천' → '스마트패스', sparkles → cpu 아이콘
+- `AppIcon` — cloud/layers/cpu/flag 4종 추가
+
+SmartParkReDesign imports/ 폴더 분석 기반 아이콘 전면 교체 및 레이아웃을 재보정하였다 (v1.1.5).
+
+- `AppIcon.tsx` — `chevronRight`, `plus`, `crosshair`, `shield`, `fileText` 5종 추가, `fill` prop 추가로 Star 활성 시 채워진 별 표시
+- `MainTabNavigator` — 저장 탭(Star) 활성 시 `fill={color}` 적용, 탭 높이 `minHeight: 56` 고정
+- `HomeMapScreen` — SearchBar `right: 68` (파란 FAB 공간 확보), 파란 네비게이션 FAB(`FloatingButton variant="primary"`) 추가, SearchBar·FAB 탭 시 SearchTab 이동
+- `FABStack`, `CurrentLocationButton`, `SectionHeader` — 커스텀 View 아이콘 전부 → AppIcon 교체
+- `SelectedLotPreview`, `ParkingCard` — 닫기/링크/썸네일 이모지/clock 아이콘 전부 AppIcon으로 교체
+- `MyPageScreen` — 메뉴 항목 이모지(결제·차량/알림·설정/AI 투명성/고객 지원) 전부 AppIcon으로 교체, rotated chevron 제거 후 `chevronRight` 통일, 버전 SmartPark v1.1.5
+
 SmartParkReDesign imports/ 폴더 참조 기반 디자인 토큰 보정 및 주요 화면을 재정렬하였다 (v1.1.4).
 
 - `src/theme/tokens.ts` 보정 — brandOrange `#F5A623` → `#F5683C` (T.orange500), bgCool/bgCoolSecondary/bgCoolWeak/borderWeak/iconPrimary/iconTertiary/iconWeak/textPrimary~Quaternary 토큰 추가

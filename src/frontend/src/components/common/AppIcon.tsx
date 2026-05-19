@@ -12,6 +12,7 @@ import {
   SlidersHorizontal,
   Mic,
   ChevronLeft,
+  ChevronRight,
   X,
   Share2,
   Heart,
@@ -27,6 +28,14 @@ import {
   Camera,
   ImagePlus,
   House,
+  Plus,
+  Crosshair,
+  Shield,
+  FileText,
+  Cloud,
+  Layers,
+  Cpu,
+  Flag,
 } from 'lucide-react-native';
 
 export type AppIconName =
@@ -42,6 +51,7 @@ export type AppIconName =
   | 'slidersHorizontal'
   | 'mic'
   | 'chevronLeft'
+  | 'chevronRight'
   | 'x'
   | 'share2'
   | 'heart'
@@ -56,13 +66,22 @@ export type AppIconName =
   | 'mapPinned'
   | 'camera'
   | 'imagePlus'
-  | 'house';
+  | 'house'
+  | 'plus'
+  | 'crosshair'
+  | 'shield'
+  | 'fileText'
+  | 'cloud'
+  | 'layers'
+  | 'cpu'
+  | 'flag';
 
 interface AppIconProps {
   name: AppIconName;
   size?: number;
   color?: string;
   strokeWidth?: number;
+  fill?: string;
 }
 
 const ICON_MAP: Record<AppIconName, React.ElementType> = {
@@ -78,6 +97,7 @@ const ICON_MAP: Record<AppIconName, React.ElementType> = {
   slidersHorizontal: SlidersHorizontal,
   mic: Mic,
   chevronLeft: ChevronLeft,
+  chevronRight: ChevronRight,
   x: X,
   share2: Share2,
   heart: Heart,
@@ -93,6 +113,14 @@ const ICON_MAP: Record<AppIconName, React.ElementType> = {
   camera: Camera,
   imagePlus: ImagePlus,
   house: House,
+  plus: Plus,
+  crosshair: Crosshair,
+  shield: Shield,
+  fileText: FileText,
+  cloud: Cloud,
+  layers: Layers,
+  cpu: Cpu,
+  flag: Flag,
 };
 
 export function AppIcon({
@@ -100,7 +128,15 @@ export function AppIcon({
   size = 24,
   color = '#222225',
   strokeWidth = 2,
+  fill = 'none',
 }: AppIconProps): React.JSX.Element {
   const IconComponent = ICON_MAP[name];
-  return <IconComponent size={size} color={color} strokeWidth={strokeWidth} />;
+  return (
+    <IconComponent
+      size={size}
+      color={color}
+      strokeWidth={strokeWidth}
+      fill={fill}
+    />
+  );
 }

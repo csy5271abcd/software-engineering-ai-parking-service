@@ -2,12 +2,21 @@ import React from 'react';
 import {View, Text, Pressable, StyleSheet} from 'react-native';
 import {STATUS_DISPLAY, CONGESTION_DISPLAY} from '../../utils/parkingStatus';
 import type {ParkingLotDetail} from '../../types/parking';
+import {AppIcon} from '../common/AppIcon';
+import type {AppIconName} from '../common/AppIcon';
 
 interface SelectedLotPreviewProps {
   lot: ParkingLotDetail;
   onClose: () => void;
   onOpenDetail?: () => void;
 }
+
+const ACTION_BTNS: {label: string; icon: AppIconName; primary: boolean}[] = [
+  {label: '출발', icon: 'navigation', primary: false},
+  {label: '도착', icon: 'mapPin',     primary: true},
+  {label: '공유', icon: 'share2',     primary: false},
+  {label: '신고', icon: 'flag',       primary: false},
+];
 
 export function SelectedLotPreview({
   lot,
@@ -51,7 +60,7 @@ export function SelectedLotPreview({
           </Text>
         </View>
         <Pressable onPress={onClose} style={styles.closeBtn} hitSlop={8}>
-          <Text style={styles.closeBtnText}>✕</Text>
+          <AppIcon name="x" size={12} color="#6B7C92" strokeWidth={2.2} />
         </Pressable>
       </View>
 
@@ -74,17 +83,18 @@ export function SelectedLotPreview({
 
       {/* Action buttons row */}
       <View style={styles.actionRow}>
-        {[
-          {label: '출발', primary: false},
-          {label: '도착', primary: true},
-          {label: '공유', primary: false},
-          {label: '신고', primary: false},
-        ].map(btn => (
+        {ACTION_BTNS.map(btn => (
           <Pressable
             key={btn.label}
             onPress={btn.primary ? onOpenDetail : undefined}
             style={[styles.actionBtn, btn.primary && styles.actionBtnPrimary]}
           >
+            <AppIcon
+              name={btn.icon}
+              size={16}
+              color={btn.primary ? '#FFFFFF' : '#4D5A6A'}
+              strokeWidth={2}
+            />
             <Text
               style={[
                 styles.actionBtnText,
@@ -100,7 +110,7 @@ export function SelectedLotPreview({
       {/* Detail button */}
       <Pressable onPress={onOpenDetail} style={styles.detailBtn}>
         <Text style={styles.detailBtnText}>상세 정보 열기</Text>
-        <Text style={styles.detailBtnChevron}>›</Text>
+        <AppIcon name="chevronRight" size={13} color="#8B99AC" strokeWidth={2.4} />
       </Pressable>
     </View>
   );
@@ -156,12 +166,6 @@ const styles = StyleSheet.create({
     flexShrink: 0,
     marginTop: 4,
   },
-  closeBtnText: {
-    fontSize: 13,
-    color: '#6B7C92',
-    fontWeight: '600',
-    includeFontPadding: false,
-  },
 
   // ── Stat grid ────────────────────────────────────────────────────────────────
   statsGrid: {
@@ -200,11 +204,12 @@ const styles = StyleSheet.create({
   actionRow: {flexDirection: 'row', gap: 6},
   actionBtn: {
     flex: 1,
-    paddingVertical: 11,
+    paddingVertical: 10,
     borderRadius: 12,
     borderWidth: 1,
     borderColor: '#E5EAF1',
     alignItems: 'center',
+    gap: 4,
     backgroundColor: '#FFFFFF',
     elevation: 1,
     shadowColor: '#000',
@@ -219,7 +224,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.12,
   },
   actionBtnText: {
-    fontSize: 12.5,
+    fontSize: 11,
     fontWeight: '600',
     color: '#4D5A6A',
     includeFontPadding: false,
@@ -248,10 +253,5 @@ const styles = StyleSheet.create({
     color: '#4D5A6A',
     includeFontPadding: false,
     letterSpacing: -0.2,
-  },
-  detailBtnChevron: {
-    fontSize: 16,
-    color: '#8B99AC',
-    includeFontPadding: false,
   },
 });

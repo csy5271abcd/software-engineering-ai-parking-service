@@ -15,7 +15,6 @@ import {MapPlaceholder} from '../../components/map/MapPlaceholder';
 import {ParkingMarker} from '../../components/map/ParkingMarker';
 import {SoonAvailableCard} from '../../components/parking/SoonAvailableCard';
 import {AppIcon} from '../../components/common/AppIcon';
-import {AppSurface} from '../../components/common/AppSurface';
 import type {ParkingStackParamList} from '../../navigation/navigationTypes';
 
 type NavProp = StackNavigationProp<ParkingStackParamList, 'SoonAvailableScreen'>;
@@ -45,11 +44,11 @@ export function SoonAvailableScreen(): React.JSX.Element {
   };
 
   return (
-    <View style={styles.screen}>
+    <View style={[styles.screen, {paddingTop: insets.top}]}>
       {/* ── Header ── */}
-      <View style={[styles.header, {paddingTop: insets.top + 10}]}>
+      <View style={styles.header}>
         <Pressable onPress={() => navigation.goBack()} style={styles.backBtn} hitSlop={8}>
-          <AppIcon name="chevronLeft" size={20} color="#222225" strokeWidth={2.2} />
+          <AppIcon name="chevronLeft" size={22} color="#222225" strokeWidth={2.2} />
         </Pressable>
         <View style={styles.headerCenter}>
           <Text style={styles.headerTitle}>곧 비워질 자리</Text>
@@ -63,13 +62,14 @@ export function SoonAvailableScreen(): React.JSX.Element {
       {/* ── Mini map ── */}
       <View style={styles.mapWrap}>
         <MapPlaceholder>
-          {soonLots.map(({lot}) => {
+          {soonLots.map(({lot, soonMin}) => {
             const pos = toMapPos(lot.coordinates.latitude, lot.coordinates.longitude);
             return (
               <ParkingMarker
                 key={lot.id}
                 name={lot.name}
                 status={lot.status}
+                soonMin={soonMin}
                 top={pos.top}
                 left={pos.left}
                 onPress={() => handleOpenDetail(lot.id)}
@@ -77,16 +77,17 @@ export function SoonAvailableScreen(): React.JSX.Element {
             );
           })}
         </MapPlaceholder>
-        <View style={styles.mapGradient} />
+        {/* Bottom fade */}
+        <View style={styles.mapFade} />
       </View>
 
       {/* ── Info banner ── */}
-      <AppSurface variant="info" style={styles.infoBanner}>
-        <AppIcon name="alertCircle" size={14} color="#006CFF" strokeWidth={2} />
+      <View style={styles.infoBanner}>
+        <AppIcon name="clock" size={14} color="#006CFF" strokeWidth={2} />
         <Text style={styles.infoText}>
           출차 예정 정보는 사용자가 입력한 값이에요. 변동 가능성을 고려해 주세요.
         </Text>
-      </AppSurface>
+      </View>
 
       {/* ── List ── */}
       <ScrollView
@@ -117,13 +118,14 @@ export function SoonAvailableScreen(): React.JSX.Element {
 }
 
 const styles = StyleSheet.create({
-  screen: {flex: 1, backgroundColor: '#FFFFFF'},
+  screen: {flex: 1, backgroundColor: '#F8F9FB'},
 
   // ── Header
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 12,
+    paddingTop: 8,
     paddingBottom: 12,
     borderBottomWidth: 1,
     borderBottomColor: '#E5EAF1',
@@ -131,40 +133,42 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   backBtn: {
-    width: 36,
-    height: 36,
+    width: 40,
+    height: 40,
     alignItems: 'center',
     justifyContent: 'center',
     flexShrink: 0,
   },
   headerCenter: {flex: 1, alignItems: 'center'},
   headerTitle: {
-    fontSize: 16,
+    fontSize: 17,
     fontWeight: '700',
     color: '#222225',
-    letterSpacing: -0.3,
+    letterSpacing: -0.4,
     includeFontPadding: false,
   },
   headerSub: {
-    fontSize: 11,
-    color: '#717182',
+    fontSize: 12,
+    color: '#6B7C92',
+    marginTop: 2,
     includeFontPadding: false,
   },
-  headerRight: {width: 36},
+  headerRight: {width: 40},
 
   // ── Mini map
   mapWrap: {
-    height: 170,
+    height: 180,
     position: 'relative',
     overflow: 'hidden',
+    backgroundColor: '#F5F5EF',
   },
-  mapGradient: {
+  mapFade: {
     position: 'absolute',
     bottom: 0,
     left: 0,
     right: 0,
-    height: 70,
-    backgroundColor: 'rgba(255,255,255,0.92)',
+    height: 60,
+    backgroundColor: 'rgba(255,255,255,0.88)',
   },
 
   // ── Info banner
@@ -173,25 +177,24 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 8,
     paddingHorizontal: 16,
-    paddingVertical: 10,
-    borderRadius: 0,
-    borderLeftWidth: 0,
-    borderRightWidth: 0,
+    paddingVertical: 11,
+    backgroundColor: 'rgba(0,108,255,0.06)',
     borderTopWidth: 1,
     borderBottomWidth: 1,
+    borderColor: 'rgba(0,108,255,0.14)',
   },
   infoText: {
     flex: 1,
-    fontSize: 11.5,
+    fontSize: 12,
     color: '#4D5A6A',
-    lineHeight: 16,
+    lineHeight: 17,
     letterSpacing: -0.2,
     includeFontPadding: false,
   },
 
   scroll: {flex: 1},
-  scrollContent: {padding: 16, gap: 8},
+  scrollContent: {padding: 16, gap: 10},
 
   empty: {paddingVertical: 48, alignItems: 'center'},
-  emptyText: {fontSize: 14, color: '#717182', includeFontPadding: false},
+  emptyText: {fontSize: 14, color: '#8B99AC', includeFontPadding: false},
 });

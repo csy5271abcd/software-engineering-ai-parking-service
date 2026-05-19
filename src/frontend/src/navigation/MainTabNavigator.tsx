@@ -15,11 +15,11 @@ import {AppIcon} from '../components/common/AppIcon';
 const Tab = createBottomTabNavigator<MainTabParamList>();
 
 const TAB_CONFIG = [
-  {label: '주변',  badge: false},
-  {label: '저장',  badge: false},
-  {label: '이용',  badge: false},
-  {label: '추천',  badge: false},
-  {label: 'MY',    badge: false},
+  {label: '주변',      badge: false},
+  {label: '저장',      badge: false},
+  {label: '이용',      badge: false},
+  {label: '스마트패스', badge: false},
+  {label: 'MY',        badge: false},
 ] as const;
 
 // ── AppIcon-based tab icon ────────────────────────────────────────────────────
@@ -35,15 +35,32 @@ function TabIcon({
   const strokeWidth = active ? 2.2 : 1.8;
   switch (routeName) {
     case 'HomeTab':
-      return <AppIcon name="mapPin" size={22} color={color} strokeWidth={strokeWidth} />;
+      return (
+        <AppIcon name="mapPin" size={22} color={color} strokeWidth={strokeWidth} />
+      );
     case 'SearchTab':
-      return <AppIcon name="star" size={22} color={color} strokeWidth={strokeWidth} />;
+      // Star fills when active (Naver-style)
+      return (
+        <AppIcon
+          name="star"
+          size={22}
+          color={color}
+          strokeWidth={strokeWidth}
+          fill={active ? color : 'none'}
+        />
+      );
     case 'ParkingTab':
-      return <AppIcon name="calendarDays" size={22} color={color} strokeWidth={strokeWidth} />;
+      return (
+        <AppIcon name="calendarDays" size={22} color={color} strokeWidth={strokeWidth} />
+      );
     case 'RecommendTab':
-      return <AppIcon name="sparkles" size={22} color={color} strokeWidth={strokeWidth} />;
+      return (
+        <AppIcon name="cpu" size={22} color={color} strokeWidth={strokeWidth} />
+      );
     case 'MyPageTab':
-      return <AppIcon name="user" size={22} color={color} strokeWidth={strokeWidth} />;
+      return (
+        <AppIcon name="user" size={22} color={color} strokeWidth={strokeWidth} />
+      );
     default:
       return <View style={{width: 22, height: 22}} />;
   }
@@ -57,7 +74,7 @@ function SmartParkTabBar({
 }: BottomTabBarProps): React.JSX.Element {
   const insets = useSafeAreaInsets();
   return (
-    <View style={[styles.bar, {paddingBottom: Math.max(insets.bottom, 6)}]}>
+    <View style={[styles.bar, {paddingBottom: Math.max(insets.bottom, 8)}]}>
       {state.routes.map((route, idx) => {
         const active = state.index === idx;
         const cfg = TAB_CONFIG[idx as 0 | 1 | 2 | 3 | 4];
@@ -119,20 +136,24 @@ const styles = StyleSheet.create({
   },
   tab: {
     flex: 1,
+    minHeight: 56,
     alignItems: 'center',
-    paddingVertical: 7,
+    justifyContent: 'center',
+    paddingVertical: 5,
+    paddingHorizontal: 2,
     borderRadius: 10,
     borderWidth: 1.5,
     borderColor: 'transparent',
+    gap: 2,
   },
   tabActive: {borderColor: '#006CFF'},
   label: {
     fontSize: 10.5,
     fontWeight: '500',
     color: '#6B7C92',
-    marginTop: 2,
     includeFontPadding: false,
     letterSpacing: -0.4,
+    lineHeight: 14,
   },
   labelActive: {color: '#006CFF', fontWeight: '700'},
 });
