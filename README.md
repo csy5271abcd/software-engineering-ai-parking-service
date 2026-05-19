@@ -304,6 +304,18 @@ React Navigation 구조를 NaverMapClone 기준으로 전환하였다.
 - `HomeMapScreen`: CategoryChips(전체/이용가능/곧 비워짐/저렴/NFC/개인공유/공영/24시간) 추가, 카테고리별 필터링 적용, safe area 기준 레이아웃 정렬
 - `HomeParkingSummary`: 기본 뷰를 QuickShortcuts(집/회사/병원) + 곧 비워짐 배너로 변경, 주차장 카드 목록 제거
 
+`ParkingBottomSheet`를 4단계 스와이프 방식으로 재구현하였다 (v1.0.10).
+
+- BottomSheet 상태를 `hidden` / `default` / `half` / `full` 4단계로 재정의하였다.
+- `SHEET_SNAP`: hidden=0, default=화면 30%, half=화면 50%, full=화면 100% 기준으로 스냅 포인트를 계산한다.
+- 시트 전체 높이를 `SCREEN_H`로 고정 렌더링한 후 `Animated.Value(translateY)`로 위치를 제어하여 자연스러운 슬라이딩 효과를 구현하였다.
+- `PanResponder`를 handle bar 영역에만 적용하여 내부 `ScrollView` 스크롤과 gesture 충돌을 방지하였다.
+- 드래그 방향(dy)과 threshold(50px) 기반으로 단계를 결정하고, 저속 드래그 시 `nearestMode`로 자동 스냅한다.
+- `Animated.spring`으로 단계 전환 시 부드러운 애니메이션을 적용하였다.
+- `full` 모드에서만 내부 `ScrollView` 스크롤이 활성화되며, 다른 모드에서는 sheet drag가 우선한다.
+- `hidden` 상태에서는 "주변 주차장 N곳 ▲" 재오픈 탭바가 화면 하단에 표시된다.
+- 마커 탭 시 `hidden`이면 `default`로, 카테고리 칩 변경 시 `default`로 자동 복귀한다.
+
 `ParkingBottomSheet`와 `ParkingCard` 컴포넌트를 추가하고 `HomeMapScreen`에 연결하였다 (v1.0.9 Phase 2).
 
 - `ParkingStatusBadge` / `CongestionBadge`: 주차 상태와 혼잡도를 컬러 뱃지로 표시하는 공통 컴포넌트 추가

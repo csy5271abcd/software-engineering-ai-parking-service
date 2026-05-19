@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import {View, Text, ScrollView, Pressable, StyleSheet} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {View, Text, ScrollView, Pressable, StyleSheet, DeviceEventEmitter} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {MapPlaceholder} from '../../components/map/MapPlaceholder';
 import {ParkingMarker} from '../../components/map/ParkingMarker';
@@ -7,7 +7,7 @@ import {SearchBar} from '../../components/common/SearchBar';
 import {FloatingButton} from '../../components/common/FloatingButton';
 import {
   ParkingBottomSheet,
-  SHEET_HEIGHTS,
+  SHEET_SNAP,
 } from '../../components/parking/ParkingBottomSheet';
 import type {SheetMode} from '../../components/parking/ParkingBottomSheet';
 import {mockParkingLots} from '../../mocks';
@@ -160,7 +160,14 @@ export function HomeMapScreen(): React.JSX.Element {
   const insets = useSafeAreaInsets();
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [category, setCategory] = useState<CategoryId>('all');
-  const [sheetMode, setSheetMode] = useState<SheetMode>('half');
+  const [sheetMode, setSheetMode] = useState<SheetMode>('default');
+
+  useEffect(() => {
+    const sub = DeviceEventEmitter.addListener('HOME_TAB_PRESS', () => {
+      setSheetMode('default');
+    });
+    return () => sub.remove();
+  }, []);
 
   const filteredLots = filterLots(mockParkingLots, category);
   const selectedLot = mockParkingLots.find(l => l.id === selectedId) ?? null;
@@ -168,22 +175,23 @@ export function HomeMapScreen(): React.JSX.Element {
   const handleMarkerPress = (id: string) => {
     const newId = selectedId === id ? null : id;
     setSelectedId(newId);
-    if (newId && sheetMode === 'collapsed') {
-      setSheetMode('half');
+    if (newId && sheetMode === 'hidden') {
+      setSheetMode('default');
     }
   };
 
   const handleCategorySelect = (id: CategoryId) => {
     setCategory(id);
     setSelectedId(null);
+    setSheetMode('default');
   };
 
   // zIndex ladder: map(0) → markers(10/20) → chips(34) → search(35) → fabs(35/30) → sheet(40)
   const searchBarTop = insets.top + 8;
   const chipsTop = insets.top + 60;
   const fabStackTop = insets.top + 108;
-  // locFab stays above the bottom sheet
-  const locFabBottom = SHEET_HEIGHTS[sheetMode] + 12;
+  // locFab floats above the sheet; in hidden mode use a small offset
+  const locFabBottom = SHEET_SNAP[sheetMode] + 12;
 
   return (
     <View style={styles.container}>

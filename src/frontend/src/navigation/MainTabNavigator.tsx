@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, Pressable, StyleSheet} from 'react-native';
+import {View, Text, Pressable, StyleSheet, DeviceEventEmitter} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {CommonActions} from '@react-navigation/native';
@@ -187,6 +187,9 @@ function SmartParkTabBar({
             key={route.key}
             style={[styles.tab, active && styles.tabActive]}
             onPress={() => {
+              if (idx === 0) {
+                DeviceEventEmitter.emit('HOME_TAB_PRESS');
+              }
               if (!active) {
                 navigation.dispatch(
                   CommonActions.navigate({name: route.name}),

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useRef, useCallback, useEffect, useMemo} from 'react';
 import {
   View,
   Text,
@@ -6,29 +6,56 @@ import {
   ScrollView,
   StyleSheet,
   Dimensions,
+  Animated,
+  PanResponder,
 } from 'react-native';
 import {PARKING_STATUS} from '../../constants/status';
 import {STATUS_DISPLAY, CONGESTION_DISPLAY} from '../../utils/parkingStatus';
-import {ParkingStatusBadge, CongestionBadge} from './ParkingStatusBadge';
 import {ParkingCard} from './ParkingCard';
 import type {ParkingLotDetail} from '../../types/parking';
 
-// ── Sheet mode ────────────────────────────────────────────────────────────────
+// ── Sheet levels ──────────────────────────────────────────────────────────────
 
-export type SheetMode = 'collapsed' | 'half' | 'expanded';
+export type SheetMode = 'hidden' | 'default' | 'half' | 'full';
 
 const {height: SCREEN_H} = Dimensions.get('window');
 
-export const SHEET_HEIGHTS: Record<SheetMode, number> = {
-  collapsed: 52,
-  half: 300,
-  expanded: Math.round(Math.min(SCREEN_H * 0.72, 560)),
+// visibleHeight for each mode (how much of the sheet is visible above bottom)
+export const SHEET_SNAP: Record<SheetMode, number> = {
+  hidden:  0,
+  default: Math.round(SCREEN_H * 0.30),
+  half:    Math.round(SCREEN_H * 0.50),
+  full:    SCREEN_H,
 };
 
+// The sheet's rendered height is always SCREEN_H; we move it via translateY
+const SHEET_RENDER_H = SCREEN_H;
+
+// translateY value for each mode: positive = shifted down = less visible
+function snapToTranslateY(mode: SheetMode): number {
+  return SHEET_RENDER_H - SHEET_SNAP[mode];
+}
+
+const MODES: SheetMode[] = ['hidden', 'default', 'half', 'full'];
+
 function nextMode(mode: SheetMode): SheetMode {
-  if (mode === 'collapsed') return 'half';
-  if (mode === 'half') return 'expanded';
-  return 'collapsed';
+  const idx = MODES.indexOf(mode);
+  return MODES[Math.min(idx + 1, MODES.length - 1)];
+}
+
+// ── Helpers ───────────────────────────────────────────────────────────────────
+
+function nearestMode(translateY: number): SheetMode {
+  let best: SheetMode = 'hidden';
+  let bestDist = Infinity;
+  for (const m of MODES) {
+    const d = Math.abs(translateY - snapToTranslateY(m));
+    if (d < bestDist) {
+      bestDist = d;
+      best = m;
+    }
+  }
+  return best;
 }
 
 // ── Quick shortcuts ───────────────────────────────────────────────────────────
@@ -36,7 +63,7 @@ function nextMode(mode: SheetMode): SheetMode {
 const QUICK_SHORTCUTS = [
   {id: 'home',     label: '집',   icon: '🏠', sub: '12분 · 여유', color: '#03AA5A'},
   {id: 'work',     label: '회사', icon: '🏢', sub: '24분 · 혼잡', color: '#FB5852'},
-  {id: 'hospital', label: '병원', icon: '🏥', sub: '한양대 9분', color: '#006CFF'},
+  {id: 'hospital', label: '병원', icon: '🏥', sub: '한양대 9분',  color: '#006CFF'},
 ] as const;
 
 function QuickShortcuts(): React.JSX.Element {
@@ -48,9 +75,7 @@ function QuickShortcuts(): React.JSX.Element {
             <Text style={styles.shortcutEmoji}>{s.icon}</Text>
           </View>
           <Text style={styles.shortcutLabel}>{s.label}</Text>
-          <Text style={styles.shortcutSub} numberOfLines={1}>
-            {s.sub}
-          </Text>
+          <Text style={styles.shortcutSub} numberOfLines={1}>{s.sub}</Text>
         </Pressable>
       ))}
     </View>
@@ -79,25 +104,18 @@ function SelectedPreview({
 
   return (
     <View style={styles.selectedWrap}>
-      {/* Header */}
       <View style={styles.selectedTop}>
         <View style={styles.selectedInfo}>
           <View style={styles.selectedBadgeRow}>
             <View style={[styles.statusBadge, {backgroundColor: s.bg}]}>
               <View style={[styles.statusDot, {backgroundColor: s.color}]} />
-              <Text style={[styles.statusLabel, {color: s.color}]}>
-                {s.label}
-              </Text>
+              <Text style={[styles.statusLabel, {color: s.color}]}>{s.label}</Text>
             </View>
             <View style={[styles.statusBadge, {backgroundColor: c.bg}]}>
-              <Text style={[styles.statusLabel, {color: c.color}]}>
-                {c.label}
-              </Text>
+              <Text style={[styles.statusLabel, {color: c.color}]}>{c.label}</Text>
             </View>
           </View>
-          <Text style={styles.selectedName} numberOfLines={2}>
-            {lot.name}
-          </Text>
+          <Text style={styles.selectedName} numberOfLines={2}>{lot.name}</Text>
           <Text style={styles.selectedAddr} numberOfLines={1}>
             {lot.address.roadAddress} · 도보 {walkMin}분
           </Text>
@@ -107,12 +125,11 @@ function SelectedPreview({
         </Pressable>
       </View>
 
-      {/* Stats grid */}
       <View style={styles.statsGrid}>
         {[
           {label: '시간당', value: `₩${lot.pricePerHour.toLocaleString()}`},
-          {label: '거리', value: dist},
-          {label: '운영', value: opHours},
+          {label: '거리',   value: dist},
+          {label: '운영',   value: opHours},
         ].map((stat, idx) => (
           <View key={stat.label} style={[styles.statCell, idx > 0 && styles.statCellBorder]}>
             <Text style={styles.statLabel}>{stat.label}</Text>
@@ -121,7 +138,6 @@ function SelectedPreview({
         ))}
       </View>
 
-      {/* Action row */}
       <View style={styles.actionRow}>
         {[
           {label: '출발', primary: false},
@@ -133,19 +149,13 @@ function SelectedPreview({
             key={btn.label}
             style={[styles.actionBtn, btn.primary && styles.actionBtnPrimary]}
           >
-            <Text
-              style={[
-                styles.actionBtnText,
-                btn.primary && styles.actionBtnTextPrimary,
-              ]}
-            >
+            <Text style={[styles.actionBtnText, btn.primary && styles.actionBtnTextPrimary]}>
               {btn.label}
             </Text>
           </Pressable>
         ))}
       </View>
 
-      {/* Detail link */}
       <Pressable style={styles.detailBtn}>
         <Text style={styles.detailBtnText}>상세 정보 열기</Text>
         <Text style={styles.detailBtnChevron}>›</Text>
@@ -172,7 +182,7 @@ function SectionHeader({
       <View style={styles.sectionSpacer} />
       <View style={styles.sortBtn}>
         <Text style={styles.sortBtnText}>
-          {mode === 'expanded' ? '목록 ▲' : '목록 ▼'}
+          {mode === 'full' ? '목록 ▲' : '목록 ▼'}
         </Text>
       </View>
     </View>
@@ -196,103 +206,163 @@ export function ParkingBottomSheet({
   mode,
   onModeChange,
 }: ParkingBottomSheetProps): React.JSX.Element {
-  const soonLots = lots.filter(l => l.status === PARKING_STATUS.SOON_AVAILABLE);
-  const sheetHeight = SHEET_HEIGHTS[mode];
+  const translateY = useRef(new Animated.Value(snapToTranslateY(mode))).current;
+  // track the current snapped translateY so PanResponder can offset from it
+  const baseY = useRef(snapToTranslateY(mode));
 
-  const handlePress = () => {
-    onModeChange(nextMode(mode));
-  };
+  // Animate to new mode whenever prop changes
+  useEffect(() => {
+    const target = snapToTranslateY(mode);
+    baseY.current = target;
+    Animated.spring(translateY, {
+      toValue: target,
+      useNativeDriver: true,
+      bounciness: 4,
+      speed: 14,
+    }).start();
+  }, [mode, translateY]);
 
-  // Sort lots by recommendationScore descending for display
-  const sortedLots = [...lots].sort(
-    (a, b) => b.recommendationScore - a.recommendationScore,
+  const DRAG_THRESHOLD = 50;
+
+  // PanResponder for handle drag — only the handle bar triggers sheet movement
+  const panResponder = useMemo(
+    () =>
+      PanResponder.create({
+        onStartShouldSetPanResponder: () => true,
+        onMoveShouldSetPanResponder: (_e, gs) => Math.abs(gs.dy) > 4,
+        onPanResponderGrant: () => {
+          // capture the current animated value so drag starts from current position
+          translateY.stopAnimation(val => {
+            baseY.current = val;
+          });
+        },
+        onPanResponderMove: (_e, gs) => {
+          const next = baseY.current + gs.dy;
+          // clamp: cannot drag above full snap or below hidden snap
+          const minY = snapToTranslateY('full');
+          const maxY = snapToTranslateY('hidden');
+          translateY.setValue(Math.max(minY, Math.min(maxY, next)));
+        },
+        onPanResponderRelease: (_e, gs) => {
+          const currentY = baseY.current + gs.dy;
+          let targetMode: SheetMode;
+
+          if (Math.abs(gs.dy) < DRAG_THRESHOLD) {
+            // Small movement — tap-like: advance one level on handle tap
+            targetMode = nextMode(mode);
+          } else if (gs.dy < 0) {
+            // Dragged up — expand
+            const idx = MODES.indexOf(mode);
+            targetMode = MODES[Math.min(idx + 1, MODES.length - 1)];
+          } else {
+            // Dragged down — collapse
+            const idx = MODES.indexOf(mode);
+            targetMode = MODES[Math.max(idx - 1, 0)];
+          }
+
+          // Also snap to nearest if velocity is low — prevents overshooting
+          if (Math.abs(gs.vy) < 0.3) {
+            targetMode = nearestMode(currentY);
+          }
+
+          onModeChange(targetMode);
+          // Animation driven by useEffect above
+        },
+      }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [mode, onModeChange],
   );
 
+  const soonLots = lots.filter(l => l.status === PARKING_STATUS.SOON_AVAILABLE);
+
+  const sortedLots = useMemo(
+    () => [...lots].sort((a, b) => b.recommendationScore - a.recommendationScore),
+    [lots],
+  );
+
+  const isScrollable = mode === 'full';
+
+  const handleTap = useCallback(() => {
+    onModeChange(nextMode(mode));
+  }, [mode, onModeChange]);
+
   return (
-    <View style={[styles.sheet, {height: sheetHeight}]}>
-      {/* Handle + title — always visible, pressing cycles mode */}
-      <Pressable onPress={handlePress} style={styles.handleArea}>
+    <Animated.View
+      style={[styles.sheet, {transform: [{translateY}]}]}
+    >
+      {/* ── Handle bar — drag target ── */}
+      <View {...panResponder.panHandlers} style={styles.handleArea}>
         <View style={styles.handleRow}>
           <View style={styles.handle} />
         </View>
-        {mode !== 'collapsed' && (
+        {mode !== 'hidden' && (
           <SectionHeader
             title={selectedLot ? '선택된 주차장' : '주변 주차장'}
             count={lots.length}
             mode={mode}
           />
         )}
-        {mode === 'collapsed' && (
-          <View style={styles.collapsedHint}>
-            <Text style={styles.collapsedHintText}>
-              주변 주차장 {lots.length}곳
-            </Text>
-            <Text style={styles.collapsedHintChevron}>▲</Text>
+      </View>
+
+      {/* ── Scrollable content ── */}
+      <ScrollView
+        scrollEnabled={isScrollable}
+        showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps="handled"
+        contentContainerStyle={styles.scrollContent}
+      >
+        {selectedLot ? (
+          <SelectedPreview lot={selectedLot} onClose={() => onSelectLot(null)} />
+        ) : (
+          <>
+            <QuickShortcuts />
+            {soonLots.length > 0 && (
+              <View style={styles.soonBanner}>
+                <View style={styles.soonIconCircle}>
+                  <Text style={styles.soonIconText}>⏱</Text>
+                </View>
+                <View style={styles.soonTextWrap}>
+                  <Text style={styles.soonTitle}>
+                    {'근처에 곧 비워질 자리 '}
+                    <Text style={styles.soonCount}>{soonLots.length}곳</Text>
+                  </Text>
+                  <Text style={styles.soonSub}>
+                    평균 10분 내 이용 가능 · AI 예측 기반
+                  </Text>
+                </View>
+                <Text style={styles.soonChevron}>›</Text>
+              </View>
+            )}
+          </>
+        )}
+
+        {lots.length === 0 ? (
+          <View style={styles.emptyState}>
+            <Text style={styles.emptyStateText}>조건에 맞는 주차장이 없습니다</Text>
+          </View>
+        ) : (
+          <View style={styles.cardList}>
+            {sortedLots.map((lot, idx) => (
+              <ParkingCard
+                key={lot.id}
+                lot={lot}
+                rank={idx < 3 ? idx + 1 : undefined}
+                selected={selectedLot ? selectedLot.id === lot.id : false}
+                onPress={() => onSelectLot(lot.id)}
+              />
+            ))}
           </View>
         )}
-      </Pressable>
+      </ScrollView>
 
-      {/* Content — visible when not collapsed */}
-      {mode !== 'collapsed' && (
-        <ScrollView
-          scrollEnabled={mode === 'expanded'}
-          showsVerticalScrollIndicator={false}
-          keyboardShouldPersistTaps="handled"
-          contentContainerStyle={styles.scrollContent}
-        >
-          {/* Selected preview OR shortcuts+banner */}
-          {selectedLot ? (
-            <SelectedPreview
-              lot={selectedLot}
-              onClose={() => onSelectLot(null)}
-            />
-          ) : (
-            <>
-              <QuickShortcuts />
-              {soonLots.length > 0 && (
-                <View style={styles.soonBanner}>
-                  <View style={styles.soonIconCircle}>
-                    <Text style={styles.soonIconText}>⏱</Text>
-                  </View>
-                  <View style={styles.soonTextWrap}>
-                    <Text style={styles.soonTitle}>
-                      {'근처에 곧 비워질 자리 '}
-                      <Text style={styles.soonCount}>{soonLots.length}곳</Text>
-                    </Text>
-                    <Text style={styles.soonSub}>
-                      평균 10분 내 이용 가능 · AI 예측 기반
-                    </Text>
-                  </View>
-                  <Text style={styles.soonChevron}>›</Text>
-                </View>
-              )}
-            </>
-          )}
-
-          {/* Card list — always shown below (outside the ternary to avoid
-              TypeScript narrowing selectedLot to null|undefined) */}
-          {lots.length === 0 ? (
-            <View style={styles.emptyState}>
-              <Text style={styles.emptyStateText}>
-                조건에 맞는 주차장이 없습니다
-              </Text>
-            </View>
-          ) : (
-            <View style={styles.cardList}>
-              {sortedLots.map((lot, idx) => (
-                <ParkingCard
-                  key={lot.id}
-                  lot={lot}
-                  rank={idx < 3 ? idx + 1 : undefined}
-                  selected={selectedLot ? selectedLot.id === lot.id : false}
-                  onPress={() => onSelectLot(lot.id)}
-                />
-              ))}
-            </View>
-          )}
-        </ScrollView>
+      {/* ── Hidden-state tap-to-open bar ── */}
+      {mode === 'hidden' && (
+        <Pressable onPress={handleTap} style={styles.hiddenTapBar}>
+          <View style={styles.handle} />
+          <Text style={styles.hiddenHintText}>주변 주차장 {lots.length}곳 ▲</Text>
+        </Pressable>
       )}
-    </View>
+    </Animated.View>
   );
 }
 
@@ -303,7 +373,9 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: 0,
     right: 0,
-    bottom: 0,
+    // sheet top edge starts at y=0; translateY shifts it down
+    top: 0,
+    height: SHEET_RENDER_H,
     backgroundColor: '#FFFFFF',
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
@@ -315,7 +387,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.10,
     shadowRadius: 12,
     zIndex: 40,
-    overflow: 'hidden',
   },
 
   // ── Handle area ────────────────────────────────────────────────────────────
@@ -332,26 +403,6 @@ const styles = StyleSheet.create({
     height: 4,
     borderRadius: 2,
     backgroundColor: '#CAD1DB',
-  },
-
-  // Collapsed hint
-  collapsedHint: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingBottom: 10,
-    gap: 6,
-  },
-  collapsedHintText: {
-    fontSize: 13,
-    fontWeight: '600',
-    color: '#4D5A6A',
-    includeFontPadding: false,
-  },
-  collapsedHintChevron: {
-    fontSize: 11,
-    color: '#8B99AC',
-    includeFontPadding: false,
   },
 
   // ── Section header ─────────────────────────────────────────────────────────
@@ -394,7 +445,7 @@ const styles = StyleSheet.create({
   // ── Scroll content ─────────────────────────────────────────────────────────
   scrollContent: {
     paddingHorizontal: 16,
-    paddingBottom: 16,
+    paddingBottom: 32,
     gap: 10,
   },
 
@@ -485,6 +536,34 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#8B99AC',
     fontWeight: '500',
+    includeFontPadding: false,
+  },
+
+  // ── Hidden tap bar (shown only in hidden mode) ─────────────────────────────
+  hiddenTapBar: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    alignItems: 'center',
+    paddingTop: 10,
+    paddingBottom: 12,
+    backgroundColor: '#FFFFFF',
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    borderTopWidth: 1,
+    borderColor: '#E5EAF1',
+    gap: 6,
+    elevation: 12,
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: -4},
+    shadowOpacity: 0.10,
+    shadowRadius: 12,
+  },
+  hiddenHintText: {
+    fontSize: 13,
+    fontWeight: '600',
+    color: '#4D5A6A',
     includeFontPadding: false,
   },
 

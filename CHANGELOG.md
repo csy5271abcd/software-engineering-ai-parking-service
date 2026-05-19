@@ -356,6 +356,32 @@ SmartPark 프로젝트의 주요 변경 사항과 버전 tag 기록을 정리한
 
 ---
 
+## v1.0.10
+
+### ParkingBottomSheet 4단계 Swipe 전환 (Animated + PanResponder)
+
+- `ParkingBottomSheet` 완전 재구성
+  - SheetMode: `hidden` / `default` / `half` / `full` 4단계
+  - SHEET_SNAP: `hidden`=0, `default`=화면 30%, `half`=화면 50%, `full`=화면 100%
+  - 시트 높이를 고정(SCREEN_H)으로 렌더링 후 translateY로 위치 제어 (Animated.Value)
+  - PanResponder를 handle 영역에만 적용 — 리스트 영역과 gesture 충돌 없음
+  - `onPanResponderMove`: translateY 실시간 반영, min/max 클램프
+  - `onPanResponderRelease`: dy 방향 + threshold(50px) 기반 단계 결정, 저속 시 nearestMode 스냅
+  - `Animated.spring` (bounciness:4, speed:14)으로 단계 전환 애니메이션
+  - handle 영역 짧게 탭 → 다음 단계로 순환 (nextMode)
+  - `full` 모드에서만 내부 ScrollView 스크롤 활성화
+  - `hidden` 상태: "주변 주차장 N곳 ▲" 재오픈 탭바 표시 (absolute 오버레이)
+- `HomeMapScreen` 연결 업데이트
+  - `SHEET_HEIGHTS` → `SHEET_SNAP` import 변경
+  - 초기 sheetMode: `'half'` → `'default'`
+  - 마커 탭 시 `hidden` 상태이면 `default`로 자동 전환
+  - 카테고리 칩 변경 시 selectedLot 초기화 + sheetMode → `'default'` 리셋
+  - locFabBottom = `SHEET_SNAP[sheetMode] + 12` 동적 계산
+- `npx tsc --noEmit` 검증 통과
+- `npm run android` BUILD SUCCESSFUL, SM-S911N 실기기 설치 완료
+
+---
+
 ## v1.0.9
 
 ### Phase 2 — ParkingBottomSheet + ParkingCard + HomeMapScreen 연결
