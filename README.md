@@ -287,6 +287,32 @@ React Navigation 구조를 NaverMapClone 기준으로 전환하였다.
 - Windows + NDK 27.1 + CMake 3.18.1 환경에서 발생하는 `c++_shared` 링킹 누락 문제를 각 네이티브 모듈 CMakeLists.txt에 `target_link_libraries(..., c++_shared)` 를 추가하여 해결하였다.
 - `npm run android` 실행 결과 Android 실기기에서 하단 탭 5개가 정상 표시됨을 확인하였다.
 
+`HomeMapScreen` 1차 UI를 SmartParkDesign 참고 디자인 기반으로 구현하였다.
+
+- Naver Map 스타일 지도 placeholder (`MapPlaceholder.tsx`): View 레이어로 토지/수계/공원/건물/도로 표현
+- 주차장 핀 마커 (`ParkingMarker.tsx`): ParkingStatus별 색상 원형 핀, 선택 시 이름 버블 표시
+- 검색바 (`SearchBar.tsx`): 절대 배치 흰색 카드, 메뉴 아이콘/플레이스홀더/마이크 아이콘
+- FAB 버튼 (`FloatingButton.tsx`): default(흰색)/primary(파란색) 변형 지원 재사용 컴포넌트
+- 하단 요약 패널 (`HomeParkingSummary.tsx`): 추천순 상위 3곳 카드, 곧 비워짐 배너, 선택 미리보기
+- `mockParkingLots` 좌표를 선형 투영으로 지도 퍼센트 위치 변환 적용
+- `useSafeAreaInsets`로 노치/상태바 영역 처리, 하단 탭바와 겹치지 않는 레이아웃 구성
+
+`HomeMapScreen` UI를 Claude Design 기준으로 개선하였다 (v1.0.9).
+
+- `MainTabNavigator`: SmartParkTabBar 커스텀 탭바로 전환 — 탭 레이블(주변/저장/이용/공급자/MY), View 기반 아이콘 5종, 활성 탭 파란 테두리, 공급자 탭 빨간 뱃지
+- `ParkingMarker`: CSS 삼각형 꼬리 방식으로 진짜 눈물방울 핀 형태 구현, SOON_AVAILABLE "곧" 뱃지 추가
+- `HomeMapScreen`: CategoryChips(전체/이용가능/곧 비워짐/저렴/NFC/개인공유/공영/24시간) 추가, 카테고리별 필터링 적용, safe area 기준 레이아웃 정렬
+- `HomeParkingSummary`: 기본 뷰를 QuickShortcuts(집/회사/병원) + 곧 비워짐 배너로 변경, 주차장 카드 목록 제거
+
+`v1.0.8`에서는 Claude Design 결과물을 기준으로 Home 화면의 하단바, 카테고리 칩, 주차장 마커, 하단 요약 패널의 UI와 인터랙션을 개선하였다.
+
+- 하단바를 주변, 저장, 이용, 공급자, MY 구조로 커스터마이징하였다.
+- View/Text 기반 아이콘을 적용해 Claude Design과 유사한 하단 탭 UI를 구현하였다.
+- HomeMapScreen에 카테고리 칩을 추가하여 주차장 상태와 조건별 필터링 흐름을 준비하였다.
+- ParkingMarker는 teardrop 형태로 수정하고, 곧 비워짐 상태에는 별도 badge를 표시하였다.
+- HomeParkingSummary는 QuickShortcuts와 곧 비워짐 banner 중심의 고정형 하단 패널로 정리하였다.
+- 검색바, 카테고리 칩, FAB, 하단 패널, 하단 탭바가 서로 겹치지 않도록 배치를 보정하였다.
+
 ---
 
 ## 12.1 구현 진행 방향

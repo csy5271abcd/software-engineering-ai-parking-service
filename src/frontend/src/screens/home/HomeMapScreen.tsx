@@ -1,60 +1,264 @@
-import React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
-import {colors, spacing, typography} from '../../theme';
+import React, {useState} from 'react';
+import {View, Text, ScrollView, Pressable, StyleSheet} from 'react-native';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {MapPlaceholder} from '../../components/map/MapPlaceholder';
+import {ParkingMarker} from '../../components/map/ParkingMarker';
+import {SearchBar} from '../../components/common/SearchBar';
+import {FloatingButton} from '../../components/common/FloatingButton';
+import {HomeParkingSummary} from '../../components/parking/HomeParkingSummary';
+import {mockParkingLots} from '../../mocks';
+import {PARKING_STATUS} from '../../constants/status';
+import type {ParkingLotDetail} from '../../types/parking';
 
-// U-01: 현재 위치 기반 주변 주차장 지도 표시
-// 지도 영역과 ParkingBottomSheet는 이후 단계에서 구현한다.
+// ── Coordinate projection ─────────────────────────────────────────────────────
+const LAT_MAX = 37.57;
+const LAT_MIN = 37.45;
+const LON_MIN = 126.90;
+const LON_MAX = 127.12;
+
+function toMapPos(
+  lat: number,
+  lon: number,
+): {top: `${number}%`; left: `${number}%`} {
+  const t = Math.round(
+    Math.max(5, Math.min(85, ((LAT_MAX - lat) / (LAT_MAX - LAT_MIN)) * 80 + 5)),
+  );
+  const l = Math.round(
+    Math.max(5, Math.min(90, ((lon - LON_MIN) / (LON_MAX - LON_MIN)) * 85 + 5)),
+  );
+  return {top: `${t}%`, left: `${l}%`};
+}
+
+// ── Category chips ────────────────────────────────────────────────────────────
+
+const CATEGORIES = [
+  {id: 'all',       label: '전체'},
+  {id: 'available', label: '이용가능'},
+  {id: 'soon',      label: '곧 비워짐'},
+  {id: 'cheap',     label: '저렴'},
+  {id: 'nfc',       label: 'NFC'},
+  {id: 'shared',    label: '개인공유'},
+  {id: 'public',    label: '공영'},
+  {id: '24h',       label: '24시간'},
+] as const;
+
+type CategoryId = (typeof CATEGORIES)[number]['id'];
+
+function filterLots(
+  lots: readonly ParkingLotDetail[],
+  category: CategoryId,
+): readonly ParkingLotDetail[] {
+  switch (category) {
+    case 'available':
+      return lots.filter(l => l.status === PARKING_STATUS.AVAILABLE);
+    case 'soon':
+      return lots.filter(l => l.status === PARKING_STATUS.SOON_AVAILABLE);
+    case 'cheap':
+      return lots.filter(l => l.pricePerHour <= 2500);
+    case 'nfc':
+      return lots.filter(l => (l.tags as string[]).includes('NFC'));
+    case 'shared':
+      return lots.filter(l => l.type === 'PRIVATE');
+    case 'public':
+      return lots.filter(l => l.type === 'PUBLIC');
+    case '24h':
+      return lots.filter(
+        l => l.operationHours.isAllDay || (l.tags as string[]).includes('24시간'),
+      );
+    default:
+      return lots;
+  }
+}
+
+interface CategoryChipsProps {
+  active: CategoryId;
+  onSelect: (id: CategoryId) => void;
+  style?: object;
+}
+
+function CategoryChips({
+  active,
+  onSelect,
+  style,
+}: CategoryChipsProps): React.JSX.Element {
+  return (
+    <ScrollView
+      horizontal
+      showsHorizontalScrollIndicator={false}
+      contentContainerStyle={styles.chipsContent}
+      style={[styles.chipsScroll, style]}
+    >
+      {CATEGORIES.map(cat => {
+        const isActive = cat.id === active;
+        return (
+          <Pressable
+            key={cat.id}
+            onPress={() => onSelect(cat.id)}
+            style={[styles.chip, isActive && styles.chipActive]}
+          >
+            <Text style={[styles.chipLabel, isActive && styles.chipLabelActive]}>
+              {cat.label}
+            </Text>
+          </Pressable>
+        );
+      })}
+    </ScrollView>
+  );
+}
+
+// ── Screen ────────────────────────────────────────────────────────────────────
+
 export function HomeMapScreen(): React.JSX.Element {
+  const insets = useSafeAreaInsets();
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [category, setCategory] = useState<CategoryId>('all');
+
+  const filteredLots = filterLots(mockParkingLots, category);
+  const selectedLot = mockParkingLots.find(l => l.id === selectedId) ?? null;
+
+  const handleMarkerPress = (id: string) => {
+    setSelectedId(prev => (prev === id ? null : id));
+  };
+
+  const handleCategorySelect = (id: CategoryId) => {
+    setCategory(id);
+    setSelectedId(null);
+  };
+
+  // Layout positions relative to safe area
+  const searchBarTop = insets.top + 8;
+  const chipsTop = insets.top + 60;  // below search bar (44px) + 8px gap
+  const fabStackTop = insets.top + 108; // below chips (40px) + 8px gap
+
   return (
     <View style={styles.container}>
-      <View style={styles.mapPlaceholder}>
-        <Text style={styles.mapLabel}>지도 영역 (구현 예정)</Text>
-        <Text style={styles.mapSub}>Naver Maps SDK 연동 후 교체</Text>
+      {/* Full-screen map */}
+      <MapPlaceholder>
+        {filteredLots.map(lot => {
+          const pos = toMapPos(
+            lot.coordinates.latitude,
+            lot.coordinates.longitude,
+          );
+          return (
+            <ParkingMarker
+              key={lot.id}
+              name={lot.name}
+              status={lot.status}
+              selected={selectedId === lot.id}
+              top={pos.top}
+              left={pos.left}
+              onPress={() => handleMarkerPress(lot.id)}
+            />
+          );
+        })}
+      </MapPlaceholder>
+
+      {/* Search bar */}
+      <SearchBar style={[styles.searchBar, {top: searchBarTop}]} />
+
+      {/* Category chips */}
+      <CategoryChips
+        active={category}
+        onSelect={handleCategorySelect}
+        style={{top: chipsTop}}
+      />
+
+      {/* FAB stack — right side */}
+      <View style={[styles.fabStack, {top: fabStackTop}]}>
+        <FloatingButton onPress={() => {}}>
+          <Text style={styles.fabIcon}>★</Text>
+        </FloatingButton>
+        <FloatingButton onPress={() => {}}>
+          <Text style={styles.fabIcon}>⊞</Text>
+        </FloatingButton>
+        <FloatingButton onPress={() => {}}>
+          <Text style={styles.fabIcon}>≡</Text>
+        </FloatingButton>
       </View>
-      <View style={styles.bottomSheetPlaceholder}>
-        <Text style={styles.sheetLabel}>ParkingBottomSheet (구현 예정)</Text>
-      </View>
+
+      {/* Location FAB — blue, above summary panel */}
+      <FloatingButton
+        variant="primary"
+        onPress={() => {}}
+        style={styles.locFab}
+      >
+        <Text style={styles.locFabIcon}>◎</Text>
+      </FloatingButton>
+
+      {/* Bottom summary panel */}
+      <HomeParkingSummary
+        lots={filteredLots}
+        selectedLot={selectedLot}
+        onSelectLot={id => setSelectedId(id)}
+      />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.background.default,
+  container: {flex: 1},
+  searchBar: {
+    position: 'absolute',
+    left: 12,
+    right: 12,
+    zIndex: 35,
   },
-  mapPlaceholder: {
-    flex: 1,
+  chipsScroll: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    zIndex: 34,
+    maxHeight: 40,
+  },
+  chipsContent: {
+    paddingHorizontal: 12,
+    gap: 8,
     alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: colors.border.default,
   },
-  mapLabel: {
-    fontSize: typography.title.sm.fontSize,
-    fontWeight: typography.title.sm.fontWeight,
-    lineHeight: typography.title.sm.lineHeight,
-    color: colors.text.secondary,
+  chip: {
+    paddingHorizontal: 14,
+    paddingVertical: 6,
+    borderRadius: 20,
+    backgroundColor: '#FFFFFF',
+    borderWidth: 1,
+    borderColor: '#E5EAF1',
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 1},
+    shadowOpacity: 0.06,
+    shadowRadius: 3,
   },
-  mapSub: {
-    fontSize: typography.caption.md.fontSize,
-    fontWeight: typography.caption.md.fontWeight,
-    lineHeight: typography.caption.md.lineHeight,
-    color: colors.text.disabled,
-    marginTop: spacing.xs,
+  chipActive: {
+    backgroundColor: '#222225',
+    borderColor: '#222225',
   },
-  bottomSheetPlaceholder: {
-    height: 200,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: colors.background.surface,
-    borderTopWidth: 1,
-    borderTopColor: colors.border.default,
-    padding: spacing.screen,
+  chipLabel: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: '#444447',
+    includeFontPadding: false,
   },
-  sheetLabel: {
-    fontSize: typography.body.md.fontSize,
-    fontWeight: typography.body.md.fontWeight,
-    lineHeight: typography.body.md.lineHeight,
-    color: colors.text.secondary,
+  chipLabelActive: {
+    color: '#FFFFFF',
+  },
+  fabStack: {
+    position: 'absolute',
+    right: 12,
+    zIndex: 30,
+    gap: 8,
+  },
+  fabIcon: {
+    fontSize: 18,
+    color: '#444447',
+  },
+  locFab: {
+    position: 'absolute',
+    right: 12,
+    bottom: 200,
+    zIndex: 35,
+  },
+  locFabIcon: {
+    fontSize: 18,
+    color: '#FFFFFF',
   },
 });
