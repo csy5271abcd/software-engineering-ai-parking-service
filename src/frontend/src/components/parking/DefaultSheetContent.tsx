@@ -13,6 +13,7 @@ interface DefaultSheetContentProps {
   mode: SheetMode;
   onSelectLot: (id: string) => void;
   onOpenDetail?: (id: string) => void;
+  onPressSoon?: () => void;
 }
 
 export function DefaultSheetContent({
@@ -20,6 +21,7 @@ export function DefaultSheetContent({
   mode,
   onSelectLot,
   onOpenDetail,
+  onPressSoon,
 }: DefaultSheetContentProps): React.JSX.Element {
   const soonLots = lots.filter(l => l.status === PARKING_STATUS.SOON_AVAILABLE);
 
@@ -37,7 +39,7 @@ export function DefaultSheetContent({
 
       {/* Soon-available banner */}
       {soonLots.length > 0 && (
-        <Pressable style={styles.soonBanner}>
+        <Pressable style={styles.soonBanner} onPress={onPressSoon}>
           <View style={styles.soonIconCircle}>
             <Text style={styles.soonIconText}>⏱</Text>
           </View>

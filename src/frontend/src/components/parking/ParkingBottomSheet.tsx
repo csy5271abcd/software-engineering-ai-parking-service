@@ -59,6 +59,7 @@ interface ParkingBottomSheetProps {
   selectedLot?: ParkingLotDetail | null;
   onSelectLot: (id: string | null) => void;
   onOpenDetail?: (id: string) => void;
+  onPressSoon?: () => void;
   mode: SheetMode;
   onModeChange: (mode: SheetMode) => void;
 }
@@ -68,6 +69,7 @@ export function ParkingBottomSheet({
   selectedLot,
   onSelectLot,
   onOpenDetail,
+  onPressSoon,
   mode,
   onModeChange,
 }: ParkingBottomSheetProps): React.JSX.Element {
@@ -168,6 +170,7 @@ export function ParkingBottomSheet({
             mode={contentMode}
             onSelectLot={(id: string) => onSelectLot(id)}
             onOpenDetail={onOpenDetail}
+            onPressSoon={onPressSoon}
           />
         )}
       </ScrollView>

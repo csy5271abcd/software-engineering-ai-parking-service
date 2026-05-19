@@ -394,44 +394,84 @@ SmartPark 프로젝트의 주요 변경 사항과 버전 tag 기록을 정리한
 
 ## v1.1.0
 
-### ParkingDetailScreen 기본 UI 구현
+### SearchDetail.jsx 기준 검색/상세 화면 구현 및 디자인 정합성 개선
 
-- `src/components/parking/ParkingDetailHeader.tsx` 추가
-  - 뒤로가기(‹) + 중앙 타이틀 + 즐겨찾기(♡) 버튼
-  - `useSafeAreaInsets` 기반 상단 safe area 처리
-- `src/components/parking/ParkingInfoSection.tsx` 추가
-  - 주차장 유형, 운영시간, 운영요일, 출입방식, 결제 안내 행 목록
-  - 태그 칩 표시
-- `src/components/parking/ParkingFeeSection.tsx` 추가
-  - 기본 요금, 추가 요금, 시간당 환산(파란색 강조), 일 최대 요금
-  - NFC 지원 배너
-- `src/components/parking/ParkingActionBar.tsx` 추가
-  - 길찾기(outline) + 이용 시작(primary) CTA
-  - 만차 시 "만차 — 목록 보기" 대체 표시
-  - `useSafeAreaInsets` 기반 하단 safe area 처리
-- `src/screens/parking/ParkingDetailScreen.tsx` 추가
-  - Header + ScrollView(미니맵 + 요약카드 + AI배너 + 곧비워짐배너 + InfoSection + FeeSection + 사진placeholder) + ActionBar 레이아웃
-  - `MapPlaceholder` 재사용, 중앙 파란 P 마커 오버레이
-  - 상태/혼잡도/NFC/유형 뱃지, 2×2 stats grid (시간당/거리/이용가능/운영)
-  - AI 추천 배너: recommendationScore 기반 색상·문구 (85+녹색/70+파랑/else주황)
-  - SOON_AVAILABLE 출차 예정 배너
-  - `getMockParkingLotById` 기반 데이터 연결, 없을 시 fallback 표시
+#### 검색 화면 (SearchDetail.jsx → SearchScreen)
+- `src/screens/search/DestinationSearchScreen.tsx` 전면 재작성
+  - embedded search header(뒤로가기 + TextInput + 검색아이콘 + clear 버튼 + 필터 버튼)
+  - `KeyboardAvoidingView`로 키보드/화면 겹침 방지
+  - query 있을 때 실시간 검색 결과, 없을 때 초기 상태 표시
+- `src/components/search/SearchResultItem.tsx` 추가
+  - 검색 결과 행 — Text 중첩 방식 query highlight
+- `src/components/search/SearchInitialState.tsx` 추가
+  - 최근 검색 목록(장소/주차장 아이콘), 주차 수요 급증 지역 LIVE 순위
+- `src/components/search/SearchLiveResults.tsx` 추가
+  - 실시간 검색 결과 목록, 결과 없을 때 empty state
+- `src/components/search/ArrivalTimeSelector.tsx` 추가
+  - 지금/15분 후/30분 후/1시간 후 pill chip 선택
+- `src/components/search/SearchFilterModal.tsx` 추가
+  - 하단 Modal — 정렬 기준/요금 범위/주차장 유형/추가 옵션 + 초기화/적용 버튼
+  - View 기반 decorative 슬라이더, Toggle 스위치
+
+#### 추천 주차장 화면 (SearchDetail.jsx → RecommendedParking)
+- `src/screens/search/RecommendedParkingScreen.tsx` 추가
+  - 목적지 카드(도착 표시/주소/닫기), ArrivalTimeSelector 내장
+  - AI 분석 banner, 정렬 chip(AI추천/거리순/요금순/여유순)
+  - `mockParkingLots` recommendationScore 기반 정렬, ParkingCard 재사용
+- `src/navigation/SearchStackNavigator.tsx` 업데이트
+  - `RecommendedParkingScreen` 등록, `headerShown: false` 전환
+
+#### 주차장 상세 화면 (SearchDetail.jsx → DetailScreen)
+- `src/screens/parking/ParkingDetailScreen.tsx` 전면 재작성
+  - 상단 map hero(200h) + floating 뒤로가기/공유/즐겨찾기 버튼
+  - 상태/혼잡도/NFC/유형 뱃지 + 이름 + 주소 title block
+  - 가로 스크롤 tab bar: 홈/요금·시간/혼잡도/주변/리뷰 5탭
+  - `DetailActionBar` 하단 고정 CTA(경로 안내 + NFC 이용 시작/만차 처리)
+- `src/components/parking/detail/StatBlock.tsx` 추가
+  - label + value + sub 3행 통계 셀
+- `src/components/parking/detail/DetailActionBar.tsx` 추가
+  - safe area bottom 반영, 만차/곧비워짐/이용가능 상태별 CTA 분기
+- `src/components/parking/detail/DetailHomeTab.tsx` 추가
+  - 2×2 stat grid(시간당/운영시간/거리/이용가능), 곧비워짐 banner
+  - 사진 placeholder 가로 스크롤, 이용 안내 row 카드
+- `src/components/parking/detail/DetailPricingTab.tsx` 추가
+  - +/- 스테퍼 기반 이용 시간 선택, 예상 결제 금액 강조 표시
+  - 요금 정책 리스트(기본/추가/일최대/정기권)
+- `src/components/parking/detail/DetailCongestionTab.tsx` 추가
+  - View 기반 시간대별 bar chart(6시~22시), AI 분석 banner
+  - 요일별 패턴 bar chart(월~일), 오늘/현재 시간대 강조
+- `src/components/parking/detail/DetailAroundTab.tsx` 추가
+  - 현재 lot 제외 주변 4곳 ParkingCard 목록
+- `src/components/parking/detail/DetailReviewsTab.tsx` 추가
+  - 평점 요약 카드(4.6 / 124개 / 별점), 사용자 마스킹 리뷰 3개 mock
+
+#### 곧 비워질 자리 화면 (SearchDetail.jsx → SoonAvailableScreen)
+- `src/screens/parking/SoonAvailableScreen.tsx` 추가
+  - SPHeader 스타일 header(타이틀 + 부제목), 미니맵 preview(180h)
+  - 출차 예정 정보 안내 banner, SOON_AVAILABLE 주차장 카드 목록
+- `src/components/parking/SoonAvailableCard.tsx` 추가
+  - View 기반 원형 progress ring(테두리 색상/불투명도로 진행도 표현)
+  - 분 후 카운트다운, 혼잡도/NFC 뱃지, 도보/요금, 대기 버튼
+
+#### Navigation 연결
 - `src/navigation/navigationTypes.ts` 업데이트
-  - `HomeStackParamList`에 `ParkingDetailScreen: {parkingLotId: string}` 추가
-  - `ParkingStackParamList`에 동일 추가
-- `src/navigation/HomeStackNavigator.tsx` 업데이트 — ParkingDetailScreen 등록
-- `src/navigation/ParkingStackNavigator.tsx` 업데이트 — ParkingDetailScreen 등록
-- `src/components/parking/ParkingCard.tsx` 업데이트
-  - `onPressDetail?: () => void` prop 추가 → "상세 정보 ›" 링크 표시
-- `src/components/parking/ParkingBottomSheet.tsx` 업데이트
-  - `onOpenDetail?: (id: string) => void` prop 추가
-  - SelectedPreview "상세 정보 열기" 버튼, 카드 목록 "상세 정보 ›" 링크 연결
+  - `SearchStackParamList`에 `RecommendedParkingScreen` 추가
+  - `ParkingStackParamList`에 `SoonAvailableScreen` 추가
+- `src/navigation/ParkingStackNavigator.tsx` 업데이트 — SoonAvailableScreen 등록
+- `src/components/parking/DefaultSheetContent.tsx` 업데이트 — `onPressSoon` prop 추가
+- `src/components/parking/ParkingBottomSheet.tsx` 업데이트 — `onPressSoon` 전달
 - `src/screens/home/HomeMapScreen.tsx` 업데이트
-  - `useNavigation<HomeNavProp>()` 추가
-  - `onOpenDetail={(id) => navigation.navigate('ParkingDetailScreen', {parkingLotId: id})}` 연결
-- 화면 겹침 보정: Header/ScrollView/ActionBar flex:1 레이아웃, overlap 없음
+  - 곧 비워짐 banner 클릭 시 `CommonActions.navigate`로 SoonAvailableScreen 이동
+
+#### 화면 겹침 및 interaction 보정
+- 검색 화면: `KeyboardAvoidingView`로 키보드와 화면 겹침 방지
+- 상세 화면: Hero → TitleBlock → TabBar → TabContent(flex:1) → ActionBar 순 배치로 CTA 겹침 없음
+- 탭 전환: 탭마다 독립 ScrollView를 가져 스크롤 위치 꼬임 없음
+- 추천 주차장: paddingBottom으로 tab bar와 카드 목록 겹침 방지
+- 필터 모달: `Modal` + `animationType="slide"` + overlay onPress 닫기
+
 - `npx tsc --noEmit` 검증 통과
-- `npm run android` BUILD SUCCESSFUL, SM-S911N 실기기 설치 완료
+- `npm run android` BUILD SUCCESSFUL, Android 실기기 설치 완료
 - 미적용: Naver Map SDK, 실제 길찾기 API, 결제, NFC, GPS 권한
 
 ---

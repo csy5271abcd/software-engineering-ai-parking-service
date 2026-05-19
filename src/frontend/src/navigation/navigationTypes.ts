@@ -7,11 +7,16 @@ export type HomeStackParamList = {
 
 export type SearchStackParamList = {
   DestinationSearchScreen: undefined;
+  RecommendedParkingScreen: {
+    destinationName: string;
+    destinationSub?: string;
+  };
 };
 
 export type ParkingStackParamList = {
   ParkingListScreen: undefined;
   ParkingDetailScreen: {parkingLotId: string};
+  SoonAvailableScreen: undefined;
 };
 
 export type ProviderStackParamList = {

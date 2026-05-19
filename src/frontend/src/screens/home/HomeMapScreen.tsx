@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {View, StyleSheet, DeviceEventEmitter} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, CommonActions} from '@react-navigation/native';
 import type {StackNavigationProp} from '@react-navigation/stack';
 import type {HomeStackParamList} from '../../navigation/navigationTypes';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
@@ -106,6 +106,15 @@ export function HomeMapScreen(): React.JSX.Element {
     setSheetMode('default');
   };
 
+  const handlePressSoon = () => {
+    navigation.dispatch(
+      CommonActions.navigate({
+        name: 'ParkingTab',
+        params: {screen: 'SoonAvailableScreen'},
+      }),
+    );
+  };
+
   // ── Layout constants ──────────────────────────────────────────────────────
   // zIndex: map(0) → markers(10/20) → chips(29) → search(30) → fabStack(35) → locFab(36) → sheet(40) → tabBar(50)
   const searchBarTop = insets.top + 8;
@@ -173,6 +182,7 @@ export function HomeMapScreen(): React.JSX.Element {
         onOpenDetail={id =>
           navigation.navigate('ParkingDetailScreen', {parkingLotId: id})
         }
+        onPressSoon={handlePressSoon}
         mode={sheetMode}
         onModeChange={setSheetMode}
       />

@@ -1,32 +1,34 @@
-import React from 'react';
-import {View, Text, ScrollView, StyleSheet} from 'react-native';
+import React, {useState} from 'react';
+import {
+  View,
+  Text,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Dimensions,
+} from 'react-native';
 import type {RouteProp} from '@react-navigation/native';
 import type {StackNavigationProp} from '@react-navigation/stack';
-import {PARKING_STATUS, CONGESTION_STATUS} from '../../constants/status';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {PARKING_STATUS} from '../../constants/status';
 import {STATUS_DISPLAY, CONGESTION_DISPLAY} from '../../utils/parkingStatus';
 import {getMockParkingLotById} from '../../mocks';
-import {ParkingDetailHeader} from '../../components/parking/ParkingDetailHeader';
-import {ParkingInfoSection} from '../../components/parking/ParkingInfoSection';
-import {ParkingFeeSection} from '../../components/parking/ParkingFeeSection';
-import {ParkingActionBar} from '../../components/parking/ParkingActionBar';
 import {MapPlaceholder} from '../../components/map/MapPlaceholder';
+import {DetailHomeTab} from '../../components/parking/detail/DetailHomeTab';
+import {DetailPricingTab} from '../../components/parking/detail/DetailPricingTab';
+import {DetailCongestionTab} from '../../components/parking/detail/DetailCongestionTab';
+import {DetailAroundTab} from '../../components/parking/detail/DetailAroundTab';
+import {DetailReviewsTab} from '../../components/parking/detail/DetailReviewsTab';
+import {DetailActionBar} from '../../components/parking/detail/DetailActionBar';
 
-// ── Navigation types ──────────────────────────────────────────────────────────
+// ── Types ────────────────────────────────────────────────────────────────────
 
-type DetailRoute = RouteProp<
-  {ParkingDetailScreen: {parkingLotId: string}},
-  'ParkingDetailScreen'
->;
-
+type NavParam = {ParkingDetailScreen: {parkingLotId: string}};
+type DetailRoute = RouteProp<NavParam, 'ParkingDetailScreen'>;
 interface Props {
   route: DetailRoute;
-  navigation: StackNavigationProp<
-    {ParkingDetailScreen: {parkingLotId: string}},
-    'ParkingDetailScreen'
-  >;
+  navigation: StackNavigationProp<NavParam, 'ParkingDetailScreen'>;
 }
-
-// ── Helpers ───────────────────────────────────────────────────────────────────
 
 const TYPE_LABEL: Record<string, string> = {
   PUBLIC: '공영',
@@ -35,22 +37,25 @@ const TYPE_LABEL: Record<string, string> = {
   BUILDING: '건물',
 };
 
-function aiMessage(score: number): string {
-  if (score >= 85) return '주차 가능성이 높아요';
-  if (score >= 70) return '주차 가능할 것으로 예상돼요';
-  return '주차 상황을 미리 확인하세요';
-}
+type TabKey = 'home' | 'pricing' | 'congestion' | 'around' | 'reviews';
+const TABS: {k: TabKey; label: string}[] = [
+  {k: 'home', label: '홈'},
+  {k: 'pricing', label: '요금·시간'},
+  {k: 'congestion', label: '혼잡도'},
+  {k: 'around', label: '주변'},
+  {k: 'reviews', label: '리뷰'},
+];
 
-function aiColor(score: number): string {
-  if (score >= 85) return '#03AA5A';
-  if (score >= 70) return '#006CFF';
-  return '#F5683C';
-}
+const HERO_H = 200;
+const {width: SCREEN_W} = Dimensions.get('window');
 
 // ── Screen ────────────────────────────────────────────────────────────────────
 
 export function ParkingDetailScreen({route, navigation}: Props): React.JSX.Element {
   const {parkingLotId} = route.params;
+  const insets = useSafeAreaInsets();
+  const [activeTab, setActiveTab] = useState<TabKey>('home');
+
   const lot = getMockParkingLotById(parkingLotId);
 
   if (!lot) {
@@ -63,14 +68,6 @@ export function ParkingDetailScreen({route, navigation}: Props): React.JSX.Eleme
 
   const s = STATUS_DISPLAY[lot.status];
   const c = CONGESTION_DISPLAY[lot.congestionLevel];
-  const dist =
-    lot.distanceMeters >= 1000
-      ? `${(lot.distanceMeters / 1000).toFixed(1)}km`
-      : `${lot.distanceMeters}m`;
-  const walkMin = Math.max(1, Math.round(lot.distanceMeters / 80));
-  const opHours = lot.operationHours.isAllDay
-    ? '24시간'
-    : `${lot.operationHours.open}–${lot.operationHours.close}`;
   const hasNfc = (lot.tags as string[]).includes('NFC');
   const isSoon =
     lot.status === PARKING_STATUS.SOON_AVAILABLE && lot.expectedExitAt != null;
@@ -83,156 +80,120 @@ export function ParkingDetailScreen({route, navigation}: Props): React.JSX.Eleme
       )
     : null;
 
-  const score = lot.recommendationScore;
-  const accColor = aiColor(score);
+  const handleOpenDetail = (id: string) => {
+    navigation.push('ParkingDetailScreen', {parkingLotId: id});
+  };
 
   return (
     <View style={styles.screen}>
-      {/* ── Header ── */}
-      <ParkingDetailHeader title={lot.name} onBack={() => navigation.goBack()} />
-
-      {/* ── Scrollable body ── */}
-      <ScrollView
-        style={styles.scroll}
-        contentContainerStyle={styles.scrollContent}
-        showsVerticalScrollIndicator={false}
-      >
-        {/* Mini map */}
-        <View style={styles.mapWrap}>
-          <MapPlaceholder>
-            {/* Centered parking pin */}
-            <View style={styles.mapPinWrap}>
-              <View style={styles.mapPin}>
-                <Text style={styles.mapPinText}>P</Text>
-              </View>
-              <View style={styles.mapPinTail} />
+      {/* ── Hero map ── */}
+      <View style={[styles.hero, {height: HERO_H}]}>
+        <MapPlaceholder>
+          <View style={[styles.mapPinWrap, {marginTop: -44, marginLeft: -18}]}>
+            <View style={styles.mapPin}>
+              <Text style={styles.mapPinText}>P</Text>
             </View>
-          </MapPlaceholder>
-          <View style={styles.mapGradient} />
+            <View style={styles.mapPinTail} />
+          </View>
+        </MapPlaceholder>
+        {/* Gradient overlay */}
+        <View style={styles.heroGradientTop} />
+        <View style={styles.heroGradientBottom} />
+
+        {/* Floating back button */}
+        <Pressable
+          onPress={() => navigation.goBack()}
+          style={[styles.heroBackBtn, {top: insets.top + 10}]}
+          hitSlop={8}
+        >
+          <View style={styles.chevronLeft} />
+        </Pressable>
+
+        {/* Floating right buttons */}
+        <View style={[styles.heroRightBtns, {top: insets.top + 10}]}>
+          <Pressable style={styles.heroIconBtn} hitSlop={8}>
+            <View style={styles.shareIcon}>
+              <View style={styles.shareDot} />
+              <View style={[styles.shareDot, {position: 'absolute', bottom: 2, left: 0}]} />
+              <View style={[styles.shareDot, {position: 'absolute', bottom: 2, right: 0}]} />
+            </View>
+          </Pressable>
+          <Pressable style={styles.heroIconBtn} hitSlop={8}>
+            <Text style={styles.starIcon}>☆</Text>
+          </Pressable>
         </View>
+      </View>
 
-        {/* Summary card — overlaps map bottom edge */}
-        <View style={styles.summaryCard}>
-          {/* Badges */}
-          <View style={styles.badgeRow}>
-            <View style={[styles.badge, {backgroundColor: s.bg}]}>
-              <View style={[styles.dot, {backgroundColor: s.color}]} />
-              <Text style={[styles.badgeText, {color: s.color}]}>{s.label}</Text>
-            </View>
-            <View style={[styles.badge, {backgroundColor: c.bg}]}>
-              <Text style={[styles.badgeText, {color: c.color}]}>{c.label}</Text>
-            </View>
-            {hasNfc && (
-              <View style={[styles.badge, {backgroundColor: 'rgba(0,108,255,0.08)'}]}>
-                <Text style={[styles.badgeText, {color: '#006CFF'}]}>NFC</Text>
-              </View>
-            )}
-            <View style={[styles.badge, {backgroundColor: '#F8F9FB'}]}>
-              <Text style={[styles.badgeText, {color: '#6B7C92'}]}>
-                {TYPE_LABEL[lot.type] ?? lot.type}
-              </Text>
-            </View>
+      {/* ── Title block ── */}
+      <View style={styles.titleBlock}>
+        <View style={styles.badgeRow}>
+          <View style={[styles.badge, {backgroundColor: s.bg}]}>
+            <View style={[styles.dot, {backgroundColor: s.color}]} />
+            <Text style={[styles.badgeText, {color: s.color}]}>{s.label}</Text>
           </View>
-
-          {/* Name + address */}
-          <Text style={styles.name}>{lot.name}</Text>
-          <Text style={styles.address} numberOfLines={1}>
-            {lot.address.roadAddress}
-          </Text>
-
-          {/* Stats grid */}
-          <View style={styles.statsGrid}>
-            {[
-              {label: '시간당', value: `₩${lot.pricePerHour.toLocaleString()}`},
-              {label: '거리',   value: `${dist} · 도보 ${walkMin}분`},
-              {label: '이용가능', value: `${lot.availableCount} / ${lot.totalCount}`},
-              {label: '운영',   value: opHours},
-            ].map((stat, idx) => (
-              <View
-                key={stat.label}
-                style={[
-                  styles.statCell,
-                  idx % 2 !== 0 && styles.statCellLeft,
-                  idx >= 2 && styles.statCellTop,
-                ]}
-              >
-                <Text style={styles.statLabel}>{stat.label}</Text>
-                <Text style={styles.statValue} numberOfLines={1}>
-                  {stat.value}
-                </Text>
-              </View>
-            ))}
+          <View style={[styles.badge, {backgroundColor: c.bg}]}>
+            <Text style={[styles.badgeText, {color: c.color}]}>{c.label}</Text>
           </View>
-        </View>
-
-        {/* AI/congestion banner */}
-        <View style={[styles.aiBanner, {borderColor: accColor + '33', backgroundColor: accColor + '0D'}]}>
-          <View style={[styles.aiChip, {backgroundColor: accColor}]}>
-            <Text style={styles.aiChipText}>AI</Text>
-          </View>
-          <View style={styles.aiTextWrap}>
-            <Text style={[styles.aiTitle, {color: accColor}]}>{aiMessage(score)}</Text>
-            <Text style={styles.aiSub}>
-              추천 점수 {score}점 · {c.label} · {
-                lot.congestionLevel === CONGESTION_STATUS.LOW
-                  ? '현재 한산해요'
-                  : lot.congestionLevel === CONGESTION_STATUS.MEDIUM
-                  ? '보통 수준이에요'
-                  : '다소 혼잡해요'
-              }
+          {hasNfc && (
+            <View style={[styles.badge, {backgroundColor: 'rgba(0,108,255,0.08)'}]}>
+              <Text style={[styles.badgeText, {color: '#006CFF'}]}>NFC 가능</Text>
+            </View>
+          )}
+          <View style={[styles.badge, {backgroundColor: '#F8F9FB'}]}>
+            <Text style={[styles.badgeText, {color: '#6B7C92'}]}>
+              {TYPE_LABEL[lot.type] ?? lot.type}
             </Text>
           </View>
-          <View style={[styles.scoreCircle, {borderColor: accColor}]}>
-            <Text style={[styles.scoreNum, {color: accColor}]}>{score}</Text>
-          </View>
         </View>
+        <Text style={styles.name}>{lot.name}</Text>
+        <Text style={styles.address} numberOfLines={1}>
+          {lot.address.roadAddress}
+        </Text>
+      </View>
 
-        {/* Soon available banner */}
-        {isSoon && soonMin != null && (
-          <View style={styles.soonBanner}>
-            <View style={styles.soonIconCircle}>
-              <Text style={styles.soonIcon}>⏱</Text>
-            </View>
-            <View style={styles.soonTextWrap}>
-              <Text style={styles.soonTitle}>
-                {soonMin}분 후 출차 예정
-              </Text>
-              <Text style={styles.soonSub}>
-                이용 중인 차량의 예정 출차 시간 기준이에요
-              </Text>
-            </View>
-          </View>
+      {/* ── Sticky tabs ── */}
+      <View style={styles.tabBar}>
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.tabBarContent}
+        >
+          {TABS.map(t => {
+            const active = activeTab === t.k;
+            return (
+              <Pressable
+                key={t.k}
+                onPress={() => setActiveTab(t.k)}
+                style={[styles.tab, active && styles.tabActive]}
+              >
+                <Text style={[styles.tabText, active && styles.tabTextActive]}>
+                  {t.label}
+                </Text>
+              </Pressable>
+            );
+          })}
+        </ScrollView>
+      </View>
+
+      {/* ── Tab content ── */}
+      <View style={styles.tabContent}>
+        {activeTab === 'home' && (
+          <DetailHomeTab lot={lot} soonMin={soonMin} />
         )}
+        {activeTab === 'pricing' && <DetailPricingTab lot={lot} />}
+        {activeTab === 'congestion' && <DetailCongestionTab lot={lot} />}
+        {activeTab === 'around' && (
+          <DetailAroundTab lot={lot} onOpenDetail={handleOpenDetail} />
+        )}
+        {activeTab === 'reviews' && <DetailReviewsTab />}
+      </View>
 
-        {/* Info section */}
-        <ParkingInfoSection lot={lot} />
-
-        {/* Fee section */}
-        <ParkingFeeSection lot={lot} />
-
-        {/* Photo placeholder */}
-        <View style={styles.photoSection}>
-          <Text style={styles.sectionTitle}>주차장 사진</Text>
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.photoList}
-          >
-            {[1, 2, 3].map(i => (
-              <View key={i} style={styles.photoThumb}>
-                <Text style={styles.photoIcon}>🅿</Text>
-              </View>
-            ))}
-          </ScrollView>
-        </View>
-      </ScrollView>
-
-      {/* ── Fixed CTA ── */}
-      <ParkingActionBar
+      {/* ── Bottom CTA ── */}
+      <DetailActionBar
         status={lot.status}
+        soonMin={soonMin}
         onRoute={() => {}}
         onStart={() => {}}
-        onBack={() => navigation.goBack()}
       />
     </View>
   );
@@ -241,50 +202,38 @@ export function ParkingDetailScreen({route, navigation}: Props): React.JSX.Eleme
 // ── Styles ────────────────────────────────────────────────────────────────────
 
 const styles = StyleSheet.create({
-  screen: {
-    flex: 1,
-    backgroundColor: '#FFFFFF',
-  },
+  screen: {flex: 1, backgroundColor: '#FFFFFF'},
 
-  errorWrap: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  errorText: {
-    fontSize: 15,
-    color: '#8B99AC',
-    includeFontPadding: false,
-  },
+  errorWrap: {flex: 1, alignItems: 'center', justifyContent: 'center'},
+  errorText: {fontSize: 15, color: '#8B99AC', includeFontPadding: false},
 
-  // ── Map ──────────────────────────────────────────────────────────────────────
-  scroll: {flex: 1},
-  scrollContent: {
-    paddingHorizontal: 16,
-    paddingBottom: 16,
-    gap: 16,
-  },
-  mapWrap: {
-    marginHorizontal: -16,
-    height: 160,
+  // ── Hero
+  hero: {
     position: 'relative',
     overflow: 'hidden',
+    backgroundColor: '#E5EAF1',
   },
-  mapGradient: {
+  heroGradientTop: {
     position: 'absolute',
+    top: 0,
     left: 0,
     right: 0,
+    height: 80,
+    backgroundColor: 'rgba(255,255,255,0.45)',
+  },
+  heroGradientBottom: {
+    position: 'absolute',
     bottom: 0,
-    height: 60,
-    backgroundColor: 'rgba(255,255,255,0.85)',
+    left: 0,
+    right: 0,
+    height: 80,
+    backgroundColor: 'rgba(255,255,255,0.95)',
   },
   mapPinWrap: {
     position: 'absolute',
     top: '50%',
     left: '50%',
     alignItems: 'center',
-    marginLeft: -18,
-    marginTop: -44,
   },
   mapPin: {
     width: 36,
@@ -319,25 +268,88 @@ const styles = StyleSheet.create({
     marginTop: -1,
   },
 
-  // ── Summary card ──────────────────────────────────────────────────────────
-  summaryCard: {
-    marginTop: -8,
+  // Floating buttons
+  heroBackBtn: {
+    position: 'absolute',
+    left: 12,
+    width: 38,
+    height: 38,
+    borderRadius: 19,
     backgroundColor: '#FFFFFF',
-    borderRadius: 16,
     borderWidth: 1,
     borderColor: '#E5EAF1',
-    padding: 16,
-    gap: 8,
-    elevation: 2,
+    alignItems: 'center',
+    justifyContent: 'center',
+    elevation: 3,
     shadowColor: '#000',
-    shadowOffset: {width: 0, height: 1},
-    shadowOpacity: 0.06,
-    shadowRadius: 4,
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.08,
+    shadowRadius: 6,
+  },
+  chevronLeft: {
+    width: 9,
+    height: 9,
+    borderLeftWidth: 2,
+    borderBottomWidth: 2,
+    borderColor: '#222225',
+    transform: [{rotate: '45deg'}],
+  },
+  heroRightBtns: {
+    position: 'absolute',
+    right: 12,
+    flexDirection: 'row',
+    gap: 8,
+  },
+  heroIconBtn: {
+    width: 38,
+    height: 38,
+    borderRadius: 19,
+    backgroundColor: '#FFFFFF',
+    borderWidth: 1,
+    borderColor: '#E5EAF1',
+    alignItems: 'center',
+    justifyContent: 'center',
+    elevation: 3,
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.08,
+    shadowRadius: 6,
+  },
+  shareIcon: {
+    width: 16,
+    height: 16,
+    position: 'relative',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  shareDot: {
+    width: 5,
+    height: 5,
+    borderRadius: 2.5,
+    borderWidth: 1.5,
+    borderColor: '#4D5A6A',
+  },
+  starIcon: {
+    fontSize: 18,
+    color: '#4D5A6A',
+    includeFontPadding: false,
+  },
+
+  // ── Title block
+  titleBlock: {
+    paddingHorizontal: 16,
+    paddingTop: 12,
+    paddingBottom: 14,
+    gap: 4,
+    backgroundColor: '#FFFFFF',
+    marginTop: -28,
+    zIndex: 5,
   },
   badgeRow: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: 4,
+    marginBottom: 4,
   },
   badge: {
     flexDirection: 'row',
@@ -349,7 +361,7 @@ const styles = StyleSheet.create({
   },
   dot: {width: 5, height: 5, borderRadius: 2.5},
   badgeText: {
-    fontSize: 11,
+    fontSize: 10.5,
     fontWeight: '700',
     includeFontPadding: false,
   },
@@ -359,6 +371,7 @@ const styles = StyleSheet.create({
     color: '#222225',
     letterSpacing: -0.4,
     includeFontPadding: false,
+    lineHeight: 28,
   },
   address: {
     fontSize: 13,
@@ -366,144 +379,39 @@ const styles = StyleSheet.create({
     letterSpacing: -0.2,
     includeFontPadding: false,
   },
-  statsGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    borderRadius: 10,
-    borderWidth: 1,
-    borderColor: '#E5EAF1',
-    overflow: 'hidden',
-    marginTop: 4,
-  },
-  statCell: {
-    width: '50%',
-    padding: 12,
-    backgroundColor: '#FFFFFF',
-  },
-  statCellLeft: {
-    borderLeftWidth: 1,
-    borderLeftColor: '#E5EAF1',
-  },
-  statCellTop: {
-    borderTopWidth: 1,
-    borderTopColor: '#E5EAF1',
-  },
-  statLabel: {
-    fontSize: 10.5,
-    color: '#6B7C92',
-    fontWeight: '500',
-    marginBottom: 4,
-    includeFontPadding: false,
-  },
-  statValue: {
-    fontSize: 13.5,
-    fontWeight: '700',
-    color: '#222225',
-    includeFontPadding: false,
-  },
 
-  // ── AI banner ──────────────────────────────────────────────────────────────
-  aiBanner: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 12,
-    padding: 14,
-    borderRadius: 12,
-    borderWidth: 1,
+  // ── Tab bar
+  tabBar: {
+    borderBottomWidth: 1,
+    borderBottomColor: '#E5EAF1',
+    backgroundColor: '#FFFFFF',
+    zIndex: 10,
   },
-  aiChip: {
-    paddingHorizontal: 7,
-    paddingVertical: 3,
-    borderRadius: 4,
-    flexShrink: 0,
+  tabBarContent: {
+    paddingHorizontal: 8,
   },
-  aiChipText: {
-    fontSize: 10,
-    fontWeight: '800',
-    color: '#FFFFFF',
-    includeFontPadding: false,
+  tab: {
+    paddingHorizontal: 12,
+    paddingVertical: 13,
+    borderBottomWidth: 2,
+    borderBottomColor: 'transparent',
+    marginBottom: -1,
   },
-  aiTextWrap: {flex: 1, gap: 2},
-  aiTitle: {
-    fontSize: 13.5,
-    fontWeight: '700',
+  tabActive: {borderBottomColor: '#006CFF'},
+  tabText: {
+    fontSize: 14,
+    fontWeight: '500',
+    color: '#8B99AC',
     letterSpacing: -0.2,
     includeFontPadding: false,
   },
-  aiSub: {
-    fontSize: 11.5,
-    color: '#6B7C92',
-    includeFontPadding: false,
-  },
-  scoreCircle: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    borderWidth: 2,
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexShrink: 0,
-  },
-  scoreNum: {
-    fontSize: 13,
-    fontWeight: '800',
-    includeFontPadding: false,
-  },
-
-  // ── Soon banner ────────────────────────────────────────────────────────────
-  soonBanner: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 12,
-    padding: 14,
-    borderRadius: 12,
-    borderWidth: 1.5,
-    borderColor: '#006CFF',
-    backgroundColor: 'rgba(0,108,255,0.05)',
-  },
-  soonIconCircle: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    backgroundColor: '#006CFF',
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexShrink: 0,
-  },
-  soonIcon: {fontSize: 18},
-  soonTextWrap: {flex: 1},
-  soonTitle: {
-    fontSize: 14,
+  tabTextActive: {
     fontWeight: '700',
     color: '#006CFF',
-    marginBottom: 2,
-    includeFontPadding: false,
-  },
-  soonSub: {
-    fontSize: 11.5,
-    color: '#6B7C92',
-    includeFontPadding: false,
   },
 
-  // ── Photo placeholder ──────────────────────────────────────────────────────
-  photoSection: {gap: 10},
-  sectionTitle: {
-    fontSize: 15,
-    fontWeight: '700',
-    color: '#222225',
-    letterSpacing: -0.3,
-    includeFontPadding: false,
-  },
-  photoList: {gap: 8},
-  photoThumb: {
-    width: 120,
-    height: 88,
-    borderRadius: 10,
-    backgroundColor: '#F0F4FF',
-    borderWidth: 1,
-    borderColor: '#E5EAF1',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  photoIcon: {fontSize: 28},
+  tabContent: {flex: 1},
 });
+
+// Re-export scroll-based prop for SCREEN_W usage
+void SCREEN_W;

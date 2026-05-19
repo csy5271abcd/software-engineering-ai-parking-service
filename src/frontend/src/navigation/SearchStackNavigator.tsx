@@ -1,23 +1,21 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import {DestinationSearchScreen} from '../screens/search/DestinationSearchScreen';
+import {RecommendedParkingScreen} from '../screens/search/RecommendedParkingScreen';
 import type {SearchStackParamList} from './navigationTypes';
-import {colors} from '../theme';
 
 const Stack = createStackNavigator<SearchStackParamList>();
 
 export function SearchStackNavigator(): React.JSX.Element {
   return (
-    <Stack.Navigator
-      screenOptions={{
-        headerStyle: {backgroundColor: colors.background.default},
-        headerTintColor: colors.text.primary,
-        headerTitleStyle: {fontWeight: '600'},
-      }}>
+    <Stack.Navigator screenOptions={{headerShown: false}}>
       <Stack.Screen
         name="DestinationSearchScreen"
         component={DestinationSearchScreen}
-        options={{title: '목적지 검색'}}
+      />
+      <Stack.Screen
+        name="RecommendedParkingScreen"
+        component={RecommendedParkingScreen}
       />
     </Stack.Navigator>
   );

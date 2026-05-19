@@ -313,17 +313,31 @@ React Navigation 구조를 NaverMapClone 기준으로 전환하였다.
 - `ParkingMarker` SOON_AVAILABLE 상태 뱃지에 "N분" 또는 "곧" 표시 개선
 - `ParkingBottomSheet` borderRadius 24 적용, SelectedLotPreview/DefaultSheetContent 분리
 
-`ParkingDetailScreen` 기본 UI를 구현하고 HomeMapScreen에서 이동할 수 있도록 연결하였다 (v1.1.0).
+`ParkingDetailScreen` 기본 UI를 구현하고 HomeMapScreen에서 이동할 수 있도록 연결하였다 (이전 v1.1.0 준비 단계).
 
 - `ParkingDetailHeader`: 뒤로가기·타이틀·즐겨찾기 헤더, safe area top 처리
 - `ParkingInfoSection`: 운영시간·유형·출입방식·결제 안내 rows + 태그 chips
 - `ParkingFeeSection`: 요금 테이블(기본/추가/시간당/일최대) + NFC 배너
 - `ParkingActionBar`: 길찾기 + 이용 시작 CTA, safe area bottom 처리, 만차 시 대체 표시
-- `ParkingDetailScreen`: Header + ScrollView(미니맵·요약카드·AI배너·info·fee·사진) + ActionBar flex 레이아웃, 세 영역이 겹치지 않음
-- `ParkingCard`에 "상세 정보 ›" 링크 추가, `ParkingBottomSheet` SelectedPreview "상세 정보 열기" 버튼 연결
-- `HomeStackNavigator` / `ParkingStackNavigator` 양쪽에 `ParkingDetailScreen` 등록
-- `HomeMapScreen`에 `useNavigation` 추가 → `navigation.navigate('ParkingDetailScreen', {parkingLotId})` 연결
-- 미적용: 실제 지도 SDK, 길찾기 API, 결제, NFC, GPS 권한
+
+`SearchDetail.jsx` 기준 검색·추천·상세·곧비워짐 화면을 구현하고 내비게이션을 연결하였다 (v1.1.0).
+
+- `DestinationSearchScreen`: embedded search header, 실시간 검색/초기 상태 전환, 필터 모달, KeyboardAvoidingView
+- `SearchInitialState`: 최근 검색 + 주차 수요 급증 지역 LIVE 순위
+- `SearchLiveResults`: query 기반 실시간 필터링, Text 중첩 highlight
+- `ArrivalTimeSelector`: 지금/15분 후/30분 후/1시간 후 pill 선택
+- `SearchFilterModal`: 하단 슬라이드 Modal, 정렬·요금·유형·추가 옵션 필터
+- `RecommendedParkingScreen`: 목적지 카드 + AI banner + 정렬 chip + ParkingCard 목록
+- `ParkingDetailScreen`: Hero 맵 + floating 버튼 + 5탭(홈/요금·시간/혼잡도/주변/리뷰) + DetailActionBar CTA
+- `DetailHomeTab`: 2×2 stat grid, 곧비워짐 banner, 사진 placeholder, 이용 안내
+- `DetailPricingTab`: +/- 스테퍼, 예상 결제 금액, 요금 정책 리스트
+- `DetailCongestionTab`: View 기반 bar chart(시간대별/요일별), AI 분석 banner
+- `DetailAroundTab`: 주변 4곳 ParkingCard
+- `DetailReviewsTab`: 평점 요약, 마스킹 사용자 리뷰 3개
+- `SoonAvailableScreen`: 미니맵 + 안내 banner + SoonAvailableCard 목록
+- `SoonAvailableCard`: View 기반 원형 progress ring, 대기 버튼
+- Home BottomSheet 곧 비워짐 banner → SoonAvailableScreen 연결
+- 미적용: Naver Map SDK, 실제 길찾기 API, 결제, NFC, GPS 권한
 
 `ParkingBottomSheet`를 4단계 스와이프 방식으로 재구현하였다 (v1.0.10).
 
