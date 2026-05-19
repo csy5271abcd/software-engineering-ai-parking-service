@@ -6,6 +6,7 @@ interface StatBlockProps {
   value: string;
   sub?: string;
   accentColor?: string;
+  iconNode?: React.ReactNode;
 }
 
 export function StatBlock({
@@ -13,10 +14,14 @@ export function StatBlock({
   value,
   sub,
   accentColor,
+  iconNode,
 }: StatBlockProps): React.JSX.Element {
   return (
     <View style={styles.cell}>
-      <Text style={styles.label}>{label}</Text>
+      <View style={styles.labelRow}>
+        {iconNode != null && <View style={styles.iconWrap}>{iconNode}</View>}
+        <Text style={styles.label}>{label}</Text>
+      </View>
       <Text
         style={[styles.value, accentColor ? {color: accentColor} : undefined]}
         numberOfLines={1}
@@ -33,13 +38,21 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 13,
   },
+  labelRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    marginBottom: 5,
+  },
+  iconWrap: {
+    flexShrink: 0,
+  },
   label: {
     fontSize: 11,
     color: '#8B99AC',
     fontWeight: '500',
     letterSpacing: -0.2,
     includeFontPadding: false,
-    marginBottom: 5,
   },
   value: {
     fontSize: 15.5,

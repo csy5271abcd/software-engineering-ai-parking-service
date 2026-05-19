@@ -339,6 +339,19 @@ React Navigation 구조를 NaverMapClone 기준으로 전환하였다.
 - Home BottomSheet 곧 비워짐 banner → SoonAvailableScreen 연결
 - 미적용: Naver Map SDK, 실제 길찾기 API, 결제, NFC, GPS 권한
 
+figma-make-design 이미지를 최우선 기준으로 곧 비워질 자리 화면, 마커 클릭 ParkingSummary, 주차장 상세 5탭 화면을 구현하였다 (v1.1.7).
+
+- `SoonAvailableCard.tsx` — 카드 전체 Pressable로 변경 (기존: 대기 버튼만 탭 가능)
+- `ParkingDetailScreen.tsx` — 파란 원형 핀 → `ParkingMarker` 컴포넌트(초록 teardrop) 교체, 우측 버튼 `heart` → `star` (저장 토글), marginTop 보정
+- `DetailActionBar.tsx` — 커스텀 navArrow View → `AppIcon name="navigation"` 교체
+- `StatBlock.tsx` — `iconNode?: React.ReactNode` prop 추가, 레이블 좌측 아이콘 표시
+- `DetailHomeTab.tsx` — 사진 플레이스홀더 🅿 → AppIcon imagePlus, 배너 ⏱ → AppIcon clock, StatBlock 아이콘(circleDollarSign/clock/mapPin/circleParking) 연결
+- `DetailPricingTab.tsx` — +/− stepper → View 기반 시각적 슬라이더 (track/fill/handle + 탭 위치 계산)
+- `DetailCongestionTab.tsx` — 시간대 범위 6~22시 → 14~02시, x축 14시/18시/22시/02시 4개 레이블
+- `DetailAroundTab.tsx` — 카드 수 4→5, detailLink 제거, paddingBottom 100
+- `DetailReviewsTab.tsx` — 리뷰 외곽 카드 border 제거, 아바타 크기 개선, paddingBottom 100
+- 모든 탭 ScrollView paddingBottom: 100 (DetailActionBar CTA 가림 방지)
+
 figma-make-design 이미지를 최우선 기준으로 Home 화면을 전면 재보정하였다 (v1.1.6).
 
 - `CategoryChips` — 이미지 기준 emoji 접두어(🚙/⚡/🪙) 및 이용가능 초록 dot indicator 추가, 칩 높이 조정

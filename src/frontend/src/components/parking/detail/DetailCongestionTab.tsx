@@ -7,9 +7,13 @@ interface DetailCongestionTabProps {
   lot: ParkingLotDetail;
 }
 
-const HOURS = ['6', '8', '10', '12', '14', '16', '18', '20', '22'];
-const HOUR_VALS = [20, 35, 55, 80, 65, 72, 88, 76, 40];
-const DAYS = ['월', '화', '수', '목', '금', '토', '일'];
+// Evening timeframe: 14시 ~ 02시 (13 bars)
+const EVE_HOURS = [14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 0, 1, 2];
+const EVE_VALS  = [42, 55, 68, 80, 92, 88, 76, 65, 52, 44, 36, 28, 22];
+// X-axis labels shown only at 14시(idx 0), 18시(idx 4), 22시(idx 8), 02시(idx 12)
+const EVE_AXIS_IDX = new Set([0, 4, 8, 12]);
+
+const DAYS    = ['월', '화', '수', '목', '금', '토', '일'];
 const DAY_VALS = [55, 50, 58, 62, 78, 88, 72];
 
 function barColor(val: number): string {
@@ -19,17 +23,62 @@ function barColor(val: number): string {
   return '#03AA5A';
 }
 
-interface BarChartProps {
-  labels: string[];
-  values: number[];
-  highlightIdx: number;
+interface EveBarChartProps {
+  highlightHour: number; // 0-23
 }
 
-function BarChart({labels, values, highlightIdx}: BarChartProps): React.JSX.Element {
+function EveBarChart({highlightHour}: EveBarChartProps): React.JSX.Element {
+  const highlightIdx = EVE_HOURS.indexOf(highlightHour);
+  const safeIdx = Math.max(0, highlightIdx);
+
   return (
     <View style={chartStyles.wrap}>
       <View style={chartStyles.bars}>
-        {values.map((v, i) => (
+        {EVE_VALS.map((v, i) => (
+          <View key={i} style={chartStyles.barCol}>
+            <View style={chartStyles.barTrack}>
+              <View
+                style={[
+                  chartStyles.bar,
+                  {
+                    height: `${v}%` as `${number}%`,
+                    backgroundColor: barColor(v),
+                    opacity: i === safeIdx ? 1 : 0.45,
+                  },
+                  i === safeIdx && chartStyles.barHighlight,
+                ]}
+              />
+            </View>
+          </View>
+        ))}
+      </View>
+      <View style={chartStyles.labelRow}>
+        {EVE_HOURS.map((h, i) => (
+          <Text
+            key={i}
+            style={[
+              chartStyles.label,
+              EVE_AXIS_IDX.has(i) && chartStyles.labelVisible,
+              i === safeIdx && chartStyles.labelActive,
+            ]}
+          >
+            {EVE_AXIS_IDX.has(i) ? `${h < 10 ? h : h}시` : ''}
+          </Text>
+        ))}
+      </View>
+    </View>
+  );
+}
+
+interface WeekBarChartProps {
+  highlightIdx: number;
+}
+
+function WeekBarChart({highlightIdx}: WeekBarChartProps): React.JSX.Element {
+  return (
+    <View style={chartStyles.wrap}>
+      <View style={chartStyles.bars}>
+        {DAY_VALS.map((v, i) => (
           <View key={i} style={chartStyles.barCol}>
             <View style={chartStyles.barTrack}>
               <View
@@ -48,15 +97,16 @@ function BarChart({labels, values, highlightIdx}: BarChartProps): React.JSX.Elem
         ))}
       </View>
       <View style={chartStyles.labelRow}>
-        {labels.map((l, i) => (
+        {DAYS.map((d, i) => (
           <Text
             key={i}
             style={[
               chartStyles.label,
+              chartStyles.labelVisible,
               i === highlightIdx && chartStyles.labelActive,
             ]}
           >
-            {l}
+            {d}
           </Text>
         ))}
       </View>
@@ -76,7 +126,7 @@ const chartStyles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'flex-end',
     height: 80,
-    gap: 4,
+    gap: 3,
     marginBottom: 8,
   },
   barCol: {flex: 1, height: '100%', justifyContent: 'flex-end'},
@@ -96,22 +146,21 @@ const chartStyles = StyleSheet.create({
     flex: 1,
     textAlign: 'center',
     fontSize: 10,
-    color: '#8B99AC',
+    color: 'transparent',
     includeFontPadding: false,
     fontWeight: '500',
   },
+  labelVisible: {color: '#8B99AC'},
   labelActive: {color: '#006CFF', fontWeight: '700'},
 });
 
 export function DetailCongestionTab({lot}: DetailCongestionTabProps): React.JSX.Element {
-  const todayIdx = new Date().getDay(); // 0=Sun
-  const dayIdx = todayIdx === 0 ? 6 : todayIdx - 1; // Mon=0
+  const todayIdx = new Date().getDay();
+  const dayIdx = todayIdx === 0 ? 6 : todayIdx - 1;
   const nowHour = new Date().getHours();
-  const hourIdx = Math.min(
-    Math.floor((nowHour - 6) / 2),
-    HOURS.length - 1,
-  );
-  const safeHourIdx = Math.max(0, hourIdx);
+
+  // If current hour is in 14-23 range or 0-2, highlight that bar
+  const highlightHour = EVE_HOURS.includes(nowHour) ? nowHour : 18;
 
   return (
     <ScrollView
@@ -119,11 +168,7 @@ export function DetailCongestionTab({lot}: DetailCongestionTabProps): React.JSX.
       contentContainerStyle={styles.content}
     >
       <SectionHeader title="시간대별 혼잡도 예측" />
-      <BarChart
-        labels={HOURS.map(h => `${h}시`)}
-        values={HOUR_VALS}
-        highlightIdx={safeHourIdx}
-      />
+      <EveBarChart highlightHour={highlightHour} />
 
       <View style={styles.aiBanner}>
         <View style={styles.aiChip}>
@@ -141,17 +186,13 @@ export function DetailCongestionTab({lot}: DetailCongestionTabProps): React.JSX.
       </View>
 
       <SectionHeader title="요일별 패턴" />
-      <BarChart
-        labels={DAYS}
-        values={DAY_VALS}
-        highlightIdx={dayIdx}
-      />
+      <WeekBarChart highlightIdx={dayIdx} />
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  content: {padding: 16, paddingBottom: 32, gap: 16},
+  content: {padding: 16, paddingBottom: 100, gap: 16},
 
   aiBanner: {
     padding: 14,

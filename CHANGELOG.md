@@ -4,6 +4,62 @@ SmartPark 프로젝트의 주요 변경 사항과 버전 tag 기록을 정리한
 
 ---
 
+## v1.1.7
+
+### 곧 비워질 자리 / ParkingSummary BottomSheet / 주차장 상세 5탭 figma-make-design 기준 구현
+
+#### 참고 이미지
+- `Home_Empty_Seat_Soon.png` — SoonAvailableScreen
+- `Home_Click_Marker_ParkingSummary.png` — 마커 클릭 BottomSheet 요약
+- `ParkingDetail1~5.png` — 주차장 상세 5탭 화면
+
+#### SoonAvailableScreen 개선
+- `SoonAvailableCard.tsx` — 카드 전체 영역을 Pressable로 변경 (기존: 대기 버튼만 탭 가능)
+- `SoonAvailableScreen.tsx` — scroll 배경색 #F8F9FB 명시, paddingBottom 보정
+
+#### ParkingDetailScreen Hero 재구현
+- `ParkingDetailScreen.tsx` — 파란 원형 핀 → `ParkingMarker` 컴포넌트(초록 teardrop, 상태 기반 색상)로 교체
+- 우측 버튼: `heart` → `star` (저장 토글 상태 반영)
+
+#### DetailActionBar 아이콘 교체
+- `DetailActionBar.tsx` — 커스텀 View 삼각형 navArrow → `AppIcon name="navigation"` 교체
+
+#### DetailHomeTab 개선
+- `DetailHomeTab.tsx` — 사진 플레이스홀더 🅿 emoji → `AppIcon name="imagePlus"` 그레이 사각형으로 교체
+- 곧 비워짐 배너 ⏱ emoji → `AppIcon name="clock"` 교체
+- StatBlock 아이콘 추가: 시간당(circleDollarSign/blue), 운영시간(clock/green), 거리(mapPin/red), 이용가능(circleParking/blue)
+- `paddingBottom: 32` → `100` (CTA 가림 방지)
+
+#### StatBlock 확장
+- `StatBlock.tsx` — `iconNode?: React.ReactNode` prop 추가, labelRow flex 구조로 아이콘+레이블 인라인 표시
+
+#### DetailPricingTab 슬라이더 재구현
+- `DetailPricingTab.tsx` — +/− stepper → View 기반 시각적 슬라이더 (track/fill/handle) + onPress 위치 계산으로 시간 조정
+
+#### DetailCongestionTab 차트 보정
+- `DetailCongestionTab.tsx` — 시간대 범위 변경: 6~22시 → 14~02시(저녁~새벽, 13개 막대)
+- x축 레이블: 매 시간 → 14시/18시/22시/02시 4개만 표시 (이미지 기준)
+- AI 분석 배너 및 요일별 패턴 차트 유지
+
+#### DetailAroundTab 개선
+- `DetailAroundTab.tsx` — 표시 카드 수 4→5, `onPressDetail` 제거(카드 탭이 바로 detail 이동), paddingBottom 100
+
+#### DetailReviewsTab 레이아웃 개선
+- `DetailReviewsTab.tsx` — 리뷰 외곽 카드 border 제거, 개별 divider 유지, 아바타 크기 28→32, 별점 gap 추가, paddingBottom 100
+
+#### 화면 이동 연결
+- BottomSheet 곧 비워질 자리 배너 탭 → SoonAvailableScreen
+- 마커 탭 → SelectedLotPreview BottomSheet
+- SelectedLotPreview "상세 정보 열기" → ParkingDetailScreen
+- SoonAvailableCard 탭(카드 전체) → ParkingDetailScreen
+- ParkingCard 탭 → ParkingDetailScreen
+
+#### TypeScript / 빌드
+- `npx tsc --noEmit` 통과
+- `npm run android` 성공
+
+---
+
 ## v1.1.6
 
 ### Home 화면 figma-make-design 이미지 기준 전면 재보정

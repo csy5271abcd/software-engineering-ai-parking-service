@@ -192,7 +192,7 @@ const styles = StyleSheet.create({
     includeFontPadding: false,
   },
 
-  scroll: {flex: 1},
+  scroll: {flex: 1, backgroundColor: '#F8F9FB'},
   scrollContent: {padding: 16, gap: 10},
 
   empty: {paddingVertical: 48, alignItems: 'center'},

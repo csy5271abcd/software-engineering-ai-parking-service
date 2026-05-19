@@ -12,6 +12,7 @@ import {PARKING_STATUS} from '../../constants/status';
 import {STATUS_DISPLAY, CONGESTION_DISPLAY} from '../../utils/parkingStatus';
 import {getMockParkingLotById} from '../../mocks';
 import {MapPlaceholder} from '../../components/map/MapPlaceholder';
+import {ParkingMarker} from '../../components/map/ParkingMarker';
 import {DetailHomeTab} from '../../components/parking/detail/DetailHomeTab';
 import {DetailPricingTab} from '../../components/parking/detail/DetailPricingTab';
 import {DetailCongestionTab} from '../../components/parking/detail/DetailCongestionTab';
@@ -54,6 +55,7 @@ export function ParkingDetailScreen({route, navigation}: Props): React.JSX.Eleme
   const {parkingLotId} = route.params;
   const insets = useSafeAreaInsets();
   const [activeTab, setActiveTab] = useState<TabKey>('home');
+  const [saved, setSaved] = useState(false);
 
   const lot = getMockParkingLotById(parkingLotId);
 
@@ -88,12 +90,15 @@ export function ParkingDetailScreen({route, navigation}: Props): React.JSX.Eleme
       {/* ── Hero map ── */}
       <View style={[styles.hero, {height: HERO_H}]}>
         <MapPlaceholder>
-          <View style={[styles.mapPinWrap, {marginTop: -44, marginLeft: -18}]}>
-            <View style={styles.mapPin}>
-              <Text style={styles.mapPinText}>P</Text>
-            </View>
-            <View style={styles.mapPinTail} />
-          </View>
+          {/* Green teardrop marker for this lot */}
+          <ParkingMarker
+            name={lot.name}
+            status={lot.status}
+            selected
+            top="28%"
+            left="48%"
+            isShared={lot.type === 'PRIVATE'}
+          />
         </MapPlaceholder>
         <View style={styles.heroGradientTop} />
         <View style={styles.heroGradientBottom} />
@@ -112,8 +117,18 @@ export function ParkingDetailScreen({route, navigation}: Props): React.JSX.Eleme
           <Pressable style={styles.heroIconBtn} hitSlop={8}>
             <AppIcon name="share2" size={17} color="#4D5A6A" strokeWidth={2} />
           </Pressable>
-          <Pressable style={styles.heroIconBtn} hitSlop={8}>
-            <AppIcon name="heart" size={17} color="#4D5A6A" strokeWidth={2} />
+          <Pressable
+            style={styles.heroIconBtn}
+            hitSlop={8}
+            onPress={() => setSaved(v => !v)}
+          >
+            <AppIcon
+              name="star"
+              size={17}
+              color={saved ? '#FFB800' : '#4D5A6A'}
+              strokeWidth={2}
+              fill={saved ? '#FFB800' : 'none'}
+            />
           </Pressable>
         </View>
       </View>
@@ -198,53 +213,15 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     height: 80,
-    backgroundColor: 'rgba(255,255,255,0.40)',
+    backgroundColor: 'rgba(255,255,255,0.35)',
   },
   heroGradientBottom: {
     position: 'absolute',
     bottom: 0,
     left: 0,
     right: 0,
-    height: 80,
-    backgroundColor: 'rgba(255,255,255,0.95)',
-  },
-  mapPinWrap: {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    alignItems: 'center',
-  },
-  mapPin: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    backgroundColor: '#006CFF',
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderWidth: 2.5,
-    borderColor: '#FFFFFF',
-    elevation: 4,
-    shadowColor: '#000',
-    shadowOffset: {width: 0, height: 2},
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-  },
-  mapPinText: {
-    fontSize: 16,
-    fontWeight: '800',
-    color: '#FFFFFF',
-    includeFontPadding: false,
-  },
-  mapPinTail: {
-    width: 0,
-    height: 0,
-    borderLeftWidth: 6,
-    borderRightWidth: 6,
-    borderTopWidth: 8,
-    borderTopColor: '#006CFF',
-    borderLeftColor: 'transparent',
-    borderRightColor: 'transparent',
-    marginTop: -1,
+    height: 70,
+    backgroundColor: 'rgba(255,255,255,0.92)',
   },
 
   // Floating buttons
@@ -294,7 +271,7 @@ const styles = StyleSheet.create({
     paddingBottom: 14,
     gap: 4,
     backgroundColor: '#FFFFFF',
-    marginTop: -28,
+    marginTop: -24,
     zIndex: 5,
   },
   badgeRow: {

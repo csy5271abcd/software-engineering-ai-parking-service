@@ -10,7 +10,7 @@ interface DetailAroundTabProps {
 }
 
 export function DetailAroundTab({lot, onOpenDetail}: DetailAroundTabProps): React.JSX.Element {
-  const nearby = mockParkingLots.filter(l => l.id !== lot.id).slice(0, 4);
+  const nearby = mockParkingLots.filter(l => l.id !== lot.id).slice(0, 5);
 
   return (
     <ScrollView
@@ -27,7 +27,6 @@ export function DetailAroundTab({lot, onOpenDetail}: DetailAroundTabProps): Reac
             key={l.id}
             lot={l}
             onPress={() => onOpenDetail?.(l.id)}
-            onPressDetail={onOpenDetail ? () => onOpenDetail(l.id) : undefined}
           />
         ))}
       </View>
@@ -36,7 +35,7 @@ export function DetailAroundTab({lot, onOpenDetail}: DetailAroundTabProps): Reac
 }
 
 const styles = StyleSheet.create({
-  content: {padding: 16, paddingBottom: 32},
+  content: {padding: 16, paddingBottom: 100},
   intro: {
     fontSize: 12,
     color: '#8B99AC',

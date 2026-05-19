@@ -3,6 +3,7 @@ import {View, Text, Pressable, StyleSheet} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {PARKING_STATUS} from '../../../constants/status';
 import type {ParkingStatus} from '../../../constants/status';
+import {AppIcon} from '../../common/AppIcon';
 
 interface DetailActionBarProps {
   status: ParkingStatus;
@@ -35,7 +36,7 @@ export function DetailActionBar({
       ]}
     >
       <Pressable onPress={onRoute} style={styles.routeBtn}>
-        <View style={styles.navArrow} />
+        <AppIcon name="navigation" size={15} color="#006CFF" strokeWidth={2} />
         <Text style={styles.routeBtnText}>경로 안내</Text>
       </Pressable>
       <Pressable
@@ -71,18 +72,6 @@ const styles = StyleSheet.create({
     borderWidth: 1.5,
     borderColor: '#006CFF',
     backgroundColor: '#FFFFFF',
-  },
-  navArrow: {
-    width: 0,
-    height: 0,
-    borderLeftWidth: 0,
-    borderRightWidth: 8,
-    borderTopWidth: 6,
-    borderBottomWidth: 6,
-    borderTopColor: 'transparent',
-    borderBottomColor: 'transparent',
-    borderRightColor: '#006CFF',
-    borderLeftColor: 'transparent',
   },
   routeBtnText: {
     fontSize: 14,

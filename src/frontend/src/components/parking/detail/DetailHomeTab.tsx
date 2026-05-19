@@ -3,6 +3,7 @@ import {View, Text, ScrollView, StyleSheet} from 'react-native';
 import {PARKING_STATUS} from '../../../constants/status';
 import {StatBlock} from './StatBlock';
 import {SectionHeader} from '../SectionHeader';
+import {AppIcon} from '../../common/AppIcon';
 import type {ParkingLotDetail} from '../../../types/parking';
 
 interface DetailHomeTabProps {
@@ -42,6 +43,9 @@ export function DetailHomeTab({lot, soonMin}: DetailHomeTabProps): React.JSX.Ele
             value={`₩${lot.pricePerHour.toLocaleString()}`}
             sub={dailyMax ? `일 최대 ₩${dailyMax.toLocaleString()}` : undefined}
             accentColor="#006CFF"
+            iconNode={
+              <AppIcon name="circleDollarSign" size={13} color="#006CFF" strokeWidth={2} />
+            }
           />
           <View style={styles.gridDivV} />
           <StatBlock
@@ -49,6 +53,9 @@ export function DetailHomeTab({lot, soonMin}: DetailHomeTabProps): React.JSX.Ele
             value={opHours}
             sub={lot.operationHours.isAllDay ? '24시간 운영' : undefined}
             accentColor="#03AA5A"
+            iconNode={
+              <AppIcon name="clock" size={13} color="#03AA5A" strokeWidth={2} />
+            }
           />
         </View>
         <View style={styles.gridDivH} />
@@ -58,6 +65,9 @@ export function DetailHomeTab({lot, soonMin}: DetailHomeTabProps): React.JSX.Ele
             value={dist}
             sub={`도보 ${walkMin}분`}
             accentColor="#FB5852"
+            iconNode={
+              <AppIcon name="mapPin" size={13} color="#FB5852" strokeWidth={2} />
+            }
           />
           <View style={styles.gridDivV} />
           <StatBlock
@@ -69,6 +79,9 @@ export function DetailHomeTab({lot, soonMin}: DetailHomeTabProps): React.JSX.Ele
                 : '실시간 갱신'
             }
             accentColor="#006CFF"
+            iconNode={
+              <AppIcon name="circleParking" size={13} color="#006CFF" strokeWidth={2} />
+            }
           />
         </View>
       </View>
@@ -77,7 +90,7 @@ export function DetailHomeTab({lot, soonMin}: DetailHomeTabProps): React.JSX.Ele
       {lot.status === PARKING_STATUS.SOON_AVAILABLE && soonMin != null && (
         <View style={styles.soonBanner}>
           <View style={styles.soonCircle}>
-            <Text style={styles.soonCircleIcon}>⏱</Text>
+            <AppIcon name="clock" size={18} color="#FFFFFF" strokeWidth={2.2} />
           </View>
           <View style={styles.soonBody}>
             <Text style={styles.soonTitle}>{soonMin}분 후 출차 예정</Text>
@@ -97,7 +110,7 @@ export function DetailHomeTab({lot, soonMin}: DetailHomeTabProps): React.JSX.Ele
       >
         {[1, 2, 3, 4].map(i => (
           <View key={i} style={styles.photoThumb}>
-            <Text style={styles.photoIcon}>🅿</Text>
+            <AppIcon name="imagePlus" size={32} color="#CAD1DB" strokeWidth={1.5} />
           </View>
         ))}
       </ScrollView>
@@ -122,7 +135,7 @@ export function DetailHomeTab({lot, soonMin}: DetailHomeTabProps): React.JSX.Ele
 }
 
 const styles = StyleSheet.create({
-  content: {padding: 16, paddingBottom: 32, gap: 16},
+  content: {padding: 16, paddingBottom: 100, gap: 16},
 
   // ── Grid
   grid: {
@@ -157,7 +170,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flexShrink: 0,
   },
-  soonCircleIcon: {fontSize: 16},
   soonBody: {flex: 1, gap: 3},
   soonTitle: {
     fontSize: 14,
@@ -186,7 +198,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  photoIcon: {fontSize: 28},
 
   // ── Info card
   infoCard: {

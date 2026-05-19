@@ -19,7 +19,10 @@ export function SoonAvailableCard({
   const urgency = soonMin <= 5 ? '#FB5852' : soonMin <= 10 ? '#F5683C' : '#006CFF';
 
   return (
-    <View style={styles.card}>
+    <Pressable
+      onPress={onPress}
+      style={({pressed}) => [styles.card, pressed && styles.cardPressed]}
+    >
       {/* Circular timer */}
       <View style={[styles.timerCircle, {borderColor: urgency}]}>
         <Text style={[styles.timerNum, {color: urgency}]}>{soonMin}</Text>
@@ -45,10 +48,14 @@ export function SoonAvailableCard({
       </View>
 
       {/* CTA */}
-      <Pressable onPress={onPress} style={styles.waitBtn}>
+      <Pressable
+        onPress={onPress}
+        style={styles.waitBtn}
+        hitSlop={4}
+      >
         <Text style={styles.waitBtnText}>대기</Text>
       </Pressable>
-    </View>
+    </Pressable>
   );
 }
 
@@ -67,6 +74,9 @@ const styles = StyleSheet.create({
     shadowOffset: {width: 0, height: 1},
     shadowOpacity: 0.06,
     shadowRadius: 6,
+  },
+  cardPressed: {
+    backgroundColor: '#F8F9FB',
   },
 
   // ── Timer

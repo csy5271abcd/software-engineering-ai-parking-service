@@ -108,11 +108,8 @@ export function HomeMapScreen(): React.JSX.Element {
   const handleMarkerPress = (id: string) => {
     const newId = selectedId === id ? null : id;
     setSelectedId(newId);
-    if (newId && sheetMode === 'hidden') {
-      setSheetMode('default');
-    }
     if (newId) {
-      setSheetMode('default');
+      setSheetMode('half');
     }
   };
 

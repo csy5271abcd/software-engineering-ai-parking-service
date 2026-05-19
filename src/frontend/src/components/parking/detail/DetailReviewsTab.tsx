@@ -20,8 +20,8 @@ function Stars({count}: {count: number}): React.JSX.Element {
 }
 
 const starStyles = StyleSheet.create({
-  row: {flexDirection: 'row'},
-  star: {fontSize: 14, color: '#E5EAF1', includeFontPadding: false},
+  row: {flexDirection: 'row', gap: 1},
+  star: {fontSize: 13, color: '#E5EAF1', includeFontPadding: false},
   starOn: {color: '#FFB800'},
 });
 
@@ -41,32 +41,28 @@ export function DetailReviewsTab(): React.JSX.Element {
       </View>
 
       {/* Review list */}
-      <View style={styles.reviewList}>
-        {MOCK_REVIEWS.map((r, i) => (
-          <View
-            key={i}
-            style={[styles.reviewItem, i < MOCK_REVIEWS.length - 1 && styles.reviewBorder]}
-          >
-            <View style={styles.reviewHeader}>
-              <View style={styles.avatar}>
-                <Text style={styles.avatarText}>{r.user[0]}</Text>
-              </View>
-              <Text style={styles.reviewUser}>{r.user}</Text>
-              <Text style={styles.reviewDate}>{r.date}</Text>
-              <View style={styles.reviewStars}>
-                <Stars count={r.rating} />
-              </View>
+      {MOCK_REVIEWS.map((r, i) => (
+        <View
+          key={i}
+          style={[styles.reviewItem, i < MOCK_REVIEWS.length - 1 && styles.reviewBorder]}
+        >
+          <View style={styles.reviewHeader}>
+            <View style={styles.avatar}>
+              <Text style={styles.avatarText}>{r.user[0]}</Text>
             </View>
-            <Text style={styles.reviewText}>{r.text}</Text>
+            <Text style={styles.reviewUser}>{r.user}</Text>
+            <Text style={styles.reviewDate}>{r.date}</Text>
+            <Stars count={r.rating} />
           </View>
-        ))}
-      </View>
+          <Text style={styles.reviewText}>{r.text}</Text>
+        </View>
+      ))}
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  content: {padding: 16, paddingBottom: 32, gap: 16},
+  content: {padding: 16, paddingBottom: 100, gap: 0},
 
   ratingCard: {
     borderRadius: 12,
@@ -75,6 +71,7 @@ const styles = StyleSheet.create({
     padding: 16,
     gap: 8,
     backgroundColor: '#FFFFFF',
+    marginBottom: 8,
   },
   ratingRow: {
     flexDirection: 'row',
@@ -93,50 +90,46 @@ const styles = StyleSheet.create({
     includeFontPadding: false,
   },
 
-  reviewList: {
-    borderRadius: 12,
-    borderWidth: 1,
-    borderColor: '#E5EAF1',
-    overflow: 'hidden',
+  reviewItem: {
+    paddingVertical: 16,
+    gap: 8,
     backgroundColor: '#FFFFFF',
   },
-  reviewItem: {
-    padding: 14,
-    gap: 8,
+  reviewBorder: {
+    borderBottomWidth: 1,
+    borderBottomColor: '#F2F4F7',
   },
-  reviewBorder: {borderBottomWidth: 1, borderBottomColor: '#F2F4F7'},
   reviewHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
   },
   avatar: {
-    width: 28,
-    height: 28,
-    borderRadius: 14,
-    backgroundColor: '#F8F9FB',
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: '#F0F2F5',
     alignItems: 'center',
     justifyContent: 'center',
   },
   avatarText: {
-    fontSize: 11,
-    fontWeight: '600',
+    fontSize: 13,
+    fontWeight: '700',
     color: '#4D5A6A',
     includeFontPadding: false,
   },
   reviewUser: {
-    fontSize: 12.5,
-    fontWeight: '600',
+    fontSize: 13,
+    fontWeight: '700',
     color: '#222225',
     includeFontPadding: false,
   },
   reviewDate: {
-    fontSize: 11,
+    fontSize: 12,
     color: '#8B99AC',
     includeFontPadding: false,
     flex: 1,
   },
-  reviewStars: {},
   reviewText: {
     fontSize: 13,
     color: '#4D5A6A',

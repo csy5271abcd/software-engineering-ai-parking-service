@@ -1,5 +1,12 @@
 import React, {useState} from 'react';
-import {View, Text, Pressable, ScrollView, StyleSheet} from 'react-native';
+import {
+  View,
+  Text,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  GestureResponderEvent,
+} from 'react-native';
 import {SectionHeader} from '../SectionHeader';
 import type {ParkingLotDetail} from '../../../types/parking';
 
@@ -7,14 +14,24 @@ interface DetailPricingTabProps {
   lot: ParkingLotDetail;
 }
 
+const MAX_HOURS = 24;
+
 export function DetailPricingTab({lot}: DetailPricingTabProps): React.JSX.Element {
   const [hours, setHours] = useState(2);
+  const [trackWidth, setTrackWidth] = useState(0);
   const fee = lot.fee;
   const estimated = lot.pricePerHour * hours;
   const daily = fee?.maxDailyFee ?? lot.pricePerHour * 10;
 
-  const increment = () => setHours(h => Math.min(h + 1, 24));
-  const decrement = () => setHours(h => Math.max(h - 1, 1));
+  const handleTrackPress = (e: GestureResponderEvent) => {
+    if (trackWidth === 0) {return;}
+    const x = e.nativeEvent.locationX;
+    const pct = Math.max(0, Math.min(1, x / trackWidth));
+    const newHours = Math.max(1, Math.min(MAX_HOURS, Math.round(pct * MAX_HOURS)));
+    setHours(newHours);
+  };
+
+  const fillPct = (hours / MAX_HOURS) * 100;
 
   return (
     <ScrollView
@@ -26,16 +43,34 @@ export function DetailPricingTab({lot}: DetailPricingTabProps): React.JSX.Elemen
       <View style={styles.calcCard}>
         <View style={styles.calcRow}>
           <Text style={styles.calcLabel}>예상 이용 시간</Text>
-          <View style={styles.stepper}>
-            <Pressable onPress={decrement} style={styles.stepBtn} hitSlop={8}>
-              <Text style={styles.stepBtnText}>−</Text>
-            </Pressable>
-            <Text style={styles.stepValue}>{hours}시간</Text>
-            <Pressable onPress={increment} style={styles.stepBtn} hitSlop={8}>
-              <Text style={styles.stepBtnText}>+</Text>
-            </Pressable>
-          </View>
+          <Text style={styles.hoursValue}>{hours}시간</Text>
         </View>
+
+        {/* Visual slider */}
+        <Pressable
+          onLayout={e => setTrackWidth(e.nativeEvent.layout.width)}
+          onPress={handleTrackPress}
+          style={styles.sliderTrack}
+        >
+          <View style={[styles.sliderFill, {width: `${fillPct}%` as `${number}%`}]} />
+          <View
+            style={[
+              styles.sliderHandle,
+              {left: `${fillPct}%` as `${number}%`, marginLeft: -10},
+            ]}
+          />
+        </Pressable>
+
+        <View style={styles.sliderStepRow}>
+          <Pressable onPress={() => setHours(h => Math.max(1, h - 1))} style={styles.stepBtn} hitSlop={8}>
+            <Text style={styles.stepBtnText}>−</Text>
+          </Pressable>
+          <Text style={styles.stepHint}>탭하여 조정</Text>
+          <Pressable onPress={() => setHours(h => Math.min(MAX_HOURS, h + 1))} style={styles.stepBtn} hitSlop={8}>
+            <Text style={styles.stepBtnText}>+</Text>
+          </Pressable>
+        </View>
+
         <View style={styles.estimateBox}>
           <Text style={styles.estimateLabel}>예상 결제 금액</Text>
           <Text style={styles.estimateValue}>
@@ -85,7 +120,7 @@ export function DetailPricingTab({lot}: DetailPricingTabProps): React.JSX.Elemen
 }
 
 const styles = StyleSheet.create({
-  content: {padding: 16, paddingBottom: 32, gap: 16},
+  content: {padding: 16, paddingBottom: 100, gap: 16},
 
   // ── Calc card
   calcCard: {
@@ -107,10 +142,49 @@ const styles = StyleSheet.create({
     letterSpacing: -0.2,
     includeFontPadding: false,
   },
-  stepper: {
+  hoursValue: {
+    fontSize: 13.5,
+    fontWeight: '600',
+    color: '#222225',
+    includeFontPadding: false,
+  },
+
+  // ── Slider
+  sliderTrack: {
+    height: 6,
+    borderRadius: 3,
+    backgroundColor: '#E5EAF1',
+    position: 'relative',
+    overflow: 'visible',
+  },
+  sliderFill: {
+    position: 'absolute',
+    left: 0,
+    top: 0,
+    bottom: 0,
+    borderRadius: 3,
+    backgroundColor: '#006CFF',
+  },
+  sliderHandle: {
+    position: 'absolute',
+    top: -7,
+    width: 20,
+    height: 20,
+    borderRadius: 10,
+    backgroundColor: '#006CFF',
+    borderWidth: 3,
+    borderColor: '#FFFFFF',
+    elevation: 3,
+    shadowColor: '#006CFF',
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+  },
+  sliderStepRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 12,
+    justifyContent: 'space-between',
+    marginTop: 4,
   },
   stepBtn: {
     width: 32,
@@ -128,13 +202,11 @@ const styles = StyleSheet.create({
     includeFontPadding: false,
     fontWeight: '600',
   },
-  stepValue: {
-    fontSize: 16,
-    fontWeight: '700',
-    color: '#222225',
-    minWidth: 60,
-    textAlign: 'center',
+  stepHint: {
+    fontSize: 11,
+    color: '#8B99AC',
     includeFontPadding: false,
+    letterSpacing: -0.2,
   },
   estimateBox: {
     flexDirection: 'row',
