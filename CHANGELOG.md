@@ -4,6 +4,43 @@ SmartPark 프로젝트의 주요 변경 사항과 버전 tag 기록을 정리한
 
 ---
 
+## v1.2.0
+
+### figma-make-design 3개 화면 재정합 (SoonAvailable / ParkingSummary / ParkingDetail)
+
+#### 참고 이미지
+- `Home_Empty_Seat_Soon.png` — SoonAvailableScreen
+- `Home_Click_Marker_ParkingSummary.png` — 마커 클릭 ParkingSummary BottomSheet
+- `ParkingDetail1~5.png` — 주차장 상세 5탭 화면
+
+#### SoonAvailableCard — SVG arc progress ring
+- `SoonAvailableCard.tsx` — 단순 border 원 → `react-native-svg` Svg/Circle 기반 arc 진행률 링으로 교체
+- urgency 색상: ≤5분=빨강, 그 외=파랑(`#006CFF`) — 참고 이미지 기준
+- "분후" → "분 후" (공백 추가)
+
+#### SoonAvailableScreen — 배경 흰색
+- `SoonAvailableScreen.tsx` — 카드 리스트 영역 배경 `#F8F9FB` → `#FFFFFF`
+
+#### DetailHomeTab — 사진 3개
+- `DetailHomeTab.tsx` — 주차장 사진 플레이스홀더 4개 → 3개 (ParkingDetail1.png 기준)
+
+#### ParkingDetailScreen — Hero 상단 lot 이름 pill
+- `ParkingDetailScreen.tsx` — hero 상단 중앙에 lot 이름 dark pill 추가 (`#222225` 배경 둥근 레이블)
+- ParkingMarker 위치 `top: '28%'` → `'55%'` (bubble이 hero 내부에 표시되도록 조정)
+
+#### HomeMapScreen — 카드 선택 시 half mode 자동 전환
+- `HomeMapScreen.tsx` — `onSelectLot` 콜백에서 lot 선택 시 `setSheetMode('half')` 추가
+- 마커 탭뿐 아니라 DefaultSheetContent 카드 탭 시에도 BottomSheet가 50%로 열려 SelectedLotPreview 전체 표시
+
+#### SelectedLotPreview — 상단 padding 추가
+- `SelectedLotPreview.tsx` — wrap에 `paddingTop: 4` 추가 (handle bar와의 여백)
+
+#### TypeScript / 빌드
+- `npx tsc --noEmit` 통과
+- `npm run android` 성공
+
+---
+
 ## v1.1.7
 
 ### 곧 비워질 자리 / ParkingSummary BottomSheet / 주차장 상세 5탭 figma-make-design 기준 구현

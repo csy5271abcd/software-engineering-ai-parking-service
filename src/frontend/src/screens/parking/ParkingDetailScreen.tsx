@@ -85,6 +85,8 @@ export function ParkingDetailScreen({route, navigation}: Props): React.JSX.Eleme
     navigation.push('ParkingDetailScreen', {parkingLotId: id});
   };
 
+  const shortName = lot.name.replace(/^가상\s*/, '').slice(0, 7);
+
   return (
     <View style={styles.screen}>
       {/* ── Hero map ── */}
@@ -95,13 +97,20 @@ export function ParkingDetailScreen({route, navigation}: Props): React.JSX.Eleme
             name={lot.name}
             status={lot.status}
             selected
-            top="28%"
+            top="55%"
             left="48%"
             isShared={lot.type === 'PRIVATE'}
           />
         </MapPlaceholder>
         <View style={styles.heroGradientTop} />
         <View style={styles.heroGradientBottom} />
+
+        {/* Lot name label at top-center */}
+        <View style={[styles.lotNameWrap, {top: insets.top + 8}]}>
+          <View style={styles.lotNamePill}>
+            <Text style={styles.lotNameText} numberOfLines={1}>{shortName}</Text>
+          </View>
+        </View>
 
         {/* Back button */}
         <Pressable
@@ -206,6 +215,27 @@ const styles = StyleSheet.create({
     position: 'relative',
     overflow: 'hidden',
     backgroundColor: '#E5EAF1',
+  },
+  lotNameWrap: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    alignItems: 'center',
+    zIndex: 8,
+  },
+  lotNamePill: {
+    backgroundColor: '#222225',
+    borderRadius: 20,
+    paddingHorizontal: 12,
+    paddingVertical: 4,
+    maxWidth: 140,
+  },
+  lotNameText: {
+    fontSize: 11,
+    fontWeight: '700',
+    color: '#FFFFFF',
+    letterSpacing: -0.2,
+    includeFontPadding: false,
   },
   heroGradientTop: {
     position: 'absolute',

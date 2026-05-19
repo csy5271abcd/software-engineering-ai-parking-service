@@ -103,17 +103,13 @@ export function DetailHomeTab({lot, soonMin}: DetailHomeTabProps): React.JSX.Ele
 
       {/* Photo placeholder */}
       <SectionHeader title="주차장 사진" />
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={styles.photoList}
-      >
-        {[1, 2, 3, 4].map(i => (
+      <View style={styles.photoList}>
+        {[1, 2, 3].map(i => (
           <View key={i} style={styles.photoThumb}>
-            <AppIcon name="imagePlus" size={32} color="#CAD1DB" strokeWidth={1.5} />
+            <AppIcon name="imagePlus" size={26} color="#CAD1DB" strokeWidth={1.5} />
           </View>
         ))}
-      </ScrollView>
+      </View>
 
       {/* Usage guide */}
       <SectionHeader title="이용 안내" />
@@ -144,9 +140,8 @@ const styles = StyleSheet.create({
     borderColor: '#E5EAF1',
     overflow: 'hidden',
     backgroundColor: '#E5EAF1',
-    gap: 1,
   },
-  gridRow: {flexDirection: 'row', gap: 1, backgroundColor: '#E5EAF1'},
+  gridRow: {flexDirection: 'row', backgroundColor: '#E5EAF1'},
   gridDivH: {height: 1, backgroundColor: '#E5EAF1'},
   gridDivV: {width: 1, backgroundColor: '#E5EAF1'},
 
@@ -187,10 +182,10 @@ const styles = StyleSheet.create({
   },
 
   // ── Photos
-  photoList: {gap: 8},
+  photoList: {flexDirection: 'row', gap: 8},
   photoThumb: {
-    width: 130,
-    height: 96,
+    flex: 1,
+    aspectRatio: 1.1,
     borderRadius: 10,
     backgroundColor: '#F0F4FF',
     borderWidth: 1,

@@ -5,7 +5,6 @@ import {
   Pressable,
   ScrollView,
   StyleSheet,
-  GestureResponderEvent,
 } from 'react-native';
 import {SectionHeader} from '../SectionHeader';
 import type {ParkingLotDetail} from '../../../types/parking';
@@ -18,20 +17,9 @@ const MAX_HOURS = 24;
 
 export function DetailPricingTab({lot}: DetailPricingTabProps): React.JSX.Element {
   const [hours, setHours] = useState(2);
-  const [trackWidth, setTrackWidth] = useState(0);
   const fee = lot.fee;
   const estimated = lot.pricePerHour * hours;
   const daily = fee?.maxDailyFee ?? lot.pricePerHour * 10;
-
-  const handleTrackPress = (e: GestureResponderEvent) => {
-    if (trackWidth === 0) {return;}
-    const x = e.nativeEvent.locationX;
-    const pct = Math.max(0, Math.min(1, x / trackWidth));
-    const newHours = Math.max(1, Math.min(MAX_HOURS, Math.round(pct * MAX_HOURS)));
-    setHours(newHours);
-  };
-
-  const fillPct = (hours / MAX_HOURS) * 100;
 
   return (
     <ScrollView
@@ -43,39 +31,20 @@ export function DetailPricingTab({lot}: DetailPricingTabProps): React.JSX.Elemen
       <View style={styles.calcCard}>
         <View style={styles.calcRow}>
           <Text style={styles.calcLabel}>예상 이용 시간</Text>
-          <Text style={styles.hoursValue}>{hours}시간</Text>
-        </View>
-
-        {/* Visual slider */}
-        <Pressable
-          onLayout={e => setTrackWidth(e.nativeEvent.layout.width)}
-          onPress={handleTrackPress}
-          style={styles.sliderTrack}
-        >
-          <View style={[styles.sliderFill, {width: `${fillPct}%` as `${number}%`}]} />
-          <View
-            style={[
-              styles.sliderHandle,
-              {left: `${fillPct}%` as `${number}%`, marginLeft: -10},
-            ]}
-          />
-        </Pressable>
-
-        <View style={styles.sliderStepRow}>
-          <Pressable onPress={() => setHours(h => Math.max(1, h - 1))} style={styles.stepBtn} hitSlop={8}>
-            <Text style={styles.stepBtnText}>−</Text>
-          </Pressable>
-          <Text style={styles.stepHint}>탭하여 조정</Text>
-          <Pressable onPress={() => setHours(h => Math.min(MAX_HOURS, h + 1))} style={styles.stepBtn} hitSlop={8}>
-            <Text style={styles.stepBtnText}>+</Text>
-          </Pressable>
+          <View style={styles.hourCtrl}>
+            <Pressable onPress={() => setHours(h => Math.max(1, h - 1))} style={styles.stepBtn} hitSlop={8}>
+              <Text style={styles.stepBtnText}>−</Text>
+            </Pressable>
+            <Text style={styles.hoursValue}>{hours}시간</Text>
+            <Pressable onPress={() => setHours(h => Math.min(MAX_HOURS, h + 1))} style={styles.stepBtn} hitSlop={8}>
+              <Text style={styles.stepBtnText}>+</Text>
+            </Pressable>
+          </View>
         </View>
 
         <View style={styles.estimateBox}>
           <Text style={styles.estimateLabel}>예상 결제 금액</Text>
-          <Text style={styles.estimateValue}>
-            ₩{estimated.toLocaleString()}
-          </Text>
+          <Text style={styles.estimateValue}>₩{estimated.toLocaleString()}</Text>
         </View>
         {estimated >= daily && (
           <Text style={styles.capNote}>
@@ -137,58 +106,27 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   calcLabel: {
-    fontSize: 12.5,
+    fontSize: 13,
     color: '#6B7C92',
     letterSpacing: -0.2,
     includeFontPadding: false,
   },
-  hoursValue: {
-    fontSize: 13.5,
-    fontWeight: '600',
-    color: '#222225',
-    includeFontPadding: false,
-  },
-
-  // ── Slider
-  sliderTrack: {
-    height: 6,
-    borderRadius: 3,
-    backgroundColor: '#E5EAF1',
-    position: 'relative',
-    overflow: 'visible',
-  },
-  sliderFill: {
-    position: 'absolute',
-    left: 0,
-    top: 0,
-    bottom: 0,
-    borderRadius: 3,
-    backgroundColor: '#006CFF',
-  },
-  sliderHandle: {
-    position: 'absolute',
-    top: -7,
-    width: 20,
-    height: 20,
-    borderRadius: 10,
-    backgroundColor: '#006CFF',
-    borderWidth: 3,
-    borderColor: '#FFFFFF',
-    elevation: 3,
-    shadowColor: '#006CFF',
-    shadowOffset: {width: 0, height: 2},
-    shadowOpacity: 0.3,
-    shadowRadius: 4,
-  },
-  sliderStepRow: {
+  hourCtrl: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-    marginTop: 4,
+    gap: 12,
+  },
+  hoursValue: {
+    fontSize: 15,
+    fontWeight: '700',
+    color: '#222225',
+    includeFontPadding: false,
+    minWidth: 44,
+    textAlign: 'center',
   },
   stepBtn: {
-    width: 32,
-    height: 32,
+    width: 34,
+    height: 34,
     borderRadius: 8,
     borderWidth: 1,
     borderColor: '#E5EAF1',
@@ -201,12 +139,6 @@ const styles = StyleSheet.create({
     color: '#4D5A6A',
     includeFontPadding: false,
     fontWeight: '600',
-  },
-  stepHint: {
-    fontSize: 11,
-    color: '#8B99AC',
-    includeFontPadding: false,
-    letterSpacing: -0.2,
   },
   estimateBox: {
     flexDirection: 'row',

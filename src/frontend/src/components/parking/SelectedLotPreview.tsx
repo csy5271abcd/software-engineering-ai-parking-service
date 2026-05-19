@@ -117,7 +117,7 @@ export function SelectedLotPreview({
 }
 
 const styles = StyleSheet.create({
-  wrap: {gap: 12, paddingHorizontal: 16},
+  wrap: {gap: 12, paddingHorizontal: 16, paddingTop: 4},
 
   // ── Title row ────────────────────────────────────────────────────────────────
   titleRow: {

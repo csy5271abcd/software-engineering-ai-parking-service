@@ -1,5 +1,6 @@
 import React from 'react';
 import {View, Text, Pressable, StyleSheet} from 'react-native';
+import Svg, {Circle} from 'react-native-svg';
 import {CongestionBadge} from './ParkingStatusBadge';
 import type {ParkingLotDetail} from '../../types/parking';
 
@@ -9,6 +10,10 @@ interface SoonAvailableCardProps {
   onPress?: () => void;
 }
 
+const RING_SIZE = 56;
+const RING_R = 22;
+const RING_CIRCUMFERENCE = 2 * Math.PI * RING_R;
+
 export function SoonAvailableCard({
   lot,
   soonMin,
@@ -16,17 +21,46 @@ export function SoonAvailableCard({
 }: SoonAvailableCardProps): React.JSX.Element {
   const walkMin = Math.max(1, Math.round(lot.distanceMeters / 80));
   const hasNfc = (lot.tags as string[]).includes('NFC');
-  const urgency = soonMin <= 5 ? '#FB5852' : soonMin <= 10 ? '#F5683C' : '#006CFF';
+  const urgency = soonMin <= 5 ? '#FB5852' : '#006CFF';
+
+  const progress = Math.max(0, Math.min(1, (30 - soonMin) / 30));
+  const strokeDashoffset = RING_CIRCUMFERENCE * (1 - progress);
 
   return (
     <Pressable
       onPress={onPress}
       style={({pressed}) => [styles.card, pressed && styles.cardPressed]}
     >
-      {/* Circular timer */}
-      <View style={[styles.timerCircle, {borderColor: urgency}]}>
-        <Text style={[styles.timerNum, {color: urgency}]}>{soonMin}</Text>
-        <Text style={[styles.timerUnit, {color: urgency}]}>분후</Text>
+      {/* Circular progress ring */}
+      <View style={styles.timerWrap}>
+        <Svg width={RING_SIZE} height={RING_SIZE}>
+          {/* Track */}
+          <Circle
+            cx={RING_SIZE / 2}
+            cy={RING_SIZE / 2}
+            r={RING_R}
+            stroke="#E5EAF1"
+            strokeWidth={4}
+            fill="none"
+          />
+          {/* Progress arc */}
+          <Circle
+            cx={RING_SIZE / 2}
+            cy={RING_SIZE / 2}
+            r={RING_R}
+            stroke={urgency}
+            strokeWidth={4}
+            fill="none"
+            strokeDasharray={RING_CIRCUMFERENCE}
+            strokeDashoffset={strokeDashoffset}
+            strokeLinecap="round"
+            transform={`rotate(-90 ${RING_SIZE / 2} ${RING_SIZE / 2})`}
+          />
+        </Svg>
+        <View style={styles.timerLabel}>
+          <Text style={[styles.timerNum, {color: urgency}]}>{soonMin}</Text>
+          <Text style={[styles.timerUnit, {color: urgency}]}>분 후</Text>
+        </View>
       </View>
 
       {/* Body */}
@@ -48,11 +82,7 @@ export function SoonAvailableCard({
       </View>
 
       {/* CTA */}
-      <Pressable
-        onPress={onPress}
-        style={styles.waitBtn}
-        hitSlop={4}
-      >
+      <Pressable onPress={onPress} style={styles.waitBtn} hitSlop={4}>
         <Text style={styles.waitBtnText}>대기</Text>
       </Pressable>
     </Pressable>
@@ -75,32 +105,34 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.06,
     shadowRadius: 6,
   },
-  cardPressed: {
-    backgroundColor: '#F8F9FB',
-  },
+  cardPressed: {backgroundColor: '#F8F9FB'},
 
-  // ── Timer
-  timerCircle: {
-    width: 64,
-    height: 64,
-    borderRadius: 32,
-    borderWidth: 3.5,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#FFFFFF',
+  // ── Progress ring
+  timerWrap: {
+    width: RING_SIZE,
+    height: RING_SIZE,
     flexShrink: 0,
   },
+  timerLabel: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   timerNum: {
-    fontSize: 22,
+    fontSize: 19,
     fontWeight: '800',
     includeFontPadding: false,
-    lineHeight: 26,
+    lineHeight: 22,
   },
   timerUnit: {
-    fontSize: 10,
+    fontSize: 9,
     fontWeight: '600',
     includeFontPadding: false,
-    lineHeight: 13,
+    lineHeight: 12,
   },
 
   // ── Body

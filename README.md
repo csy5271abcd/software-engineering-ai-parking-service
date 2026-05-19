@@ -339,7 +339,7 @@ React Navigation 구조를 NaverMapClone 기준으로 전환하였다.
 - Home BottomSheet 곧 비워짐 banner → SoonAvailableScreen 연결
 - 미적용: Naver Map SDK, 실제 길찾기 API, 결제, NFC, GPS 권한
 
-figma-make-design 이미지를 최우선 기준으로 곧 비워질 자리 화면, 마커 클릭 ParkingSummary, 주차장 상세 5탭 화면을 구현하였다 (v1.1.7).
+figma-make-design 이미지를 최우선 기준으로 곧 비워질 자리 화면, 마커 클릭 ParkingSummary, 주차장 상세 5탭 화면을 구현하였다 (v1.1.7). v1.2.0에서 SVG arc progress ring 적용, 화면별 시각 정합 보정, 카드 선택 시 BottomSheet half 자동 전환을 추가하였다.
 
 - `SoonAvailableCard.tsx` — 카드 전체 Pressable로 변경 (기존: 대기 버튼만 탭 가능)
 - `ParkingDetailScreen.tsx` — 파란 원형 핀 → `ParkingMarker` 컴포넌트(초록 teardrop) 교체, 우측 버튼 `heart` → `star` (저장 토글), marginTop 보정

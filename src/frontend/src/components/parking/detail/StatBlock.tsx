@@ -22,10 +22,7 @@ export function StatBlock({
         {iconNode != null && <View style={styles.iconWrap}>{iconNode}</View>}
         <Text style={styles.label}>{label}</Text>
       </View>
-      <Text
-        style={[styles.value, accentColor ? {color: accentColor} : undefined]}
-        numberOfLines={1}
-      >
+      <Text style={styles.value} numberOfLines={1}>
         {value}
       </Text>
       {sub != null && <Text style={styles.sub}>{sub}</Text>}
@@ -36,7 +33,8 @@ export function StatBlock({
 const styles = StyleSheet.create({
   cell: {
     flex: 1,
-    padding: 13,
+    padding: 14,
+    backgroundColor: '#FFFFFF',
   },
   labelRow: {
     flexDirection: 'row',
@@ -55,10 +53,10 @@ const styles = StyleSheet.create({
     includeFontPadding: false,
   },
   value: {
-    fontSize: 15.5,
+    fontSize: 22,
     fontWeight: '700',
     color: '#222225',
-    letterSpacing: -0.2,
+    letterSpacing: -0.4,
     includeFontPadding: false,
   },
   sub: {

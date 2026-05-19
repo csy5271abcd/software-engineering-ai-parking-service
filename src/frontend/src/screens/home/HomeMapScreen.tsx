@@ -217,7 +217,12 @@ export function HomeMapScreen(): React.JSX.Element {
       <ParkingBottomSheet
         lots={filteredLots}
         selectedLot={selectedLot}
-        onSelectLot={id => setSelectedId(id)}
+        onSelectLot={id => {
+          setSelectedId(id);
+          if (id !== null) {
+            setSheetMode('half');
+          }
+        }}
         onOpenDetail={id =>
           navigation.navigate('ParkingDetailScreen', {parkingLotId: id})
         }
