@@ -304,6 +304,27 @@ React Navigation 구조를 NaverMapClone 기준으로 전환하였다.
 - `HomeMapScreen`: CategoryChips(전체/이용가능/곧 비워짐/저렴/NFC/개인공유/공영/24시간) 추가, 카테고리별 필터링 적용, safe area 기준 레이아웃 정렬
 - `HomeParkingSummary`: 기본 뷰를 QuickShortcuts(집/회사/병원) + 곧 비워짐 배너로 변경, 주차장 카드 목록 제거
 
+`HomeMapScreen` 화면 컴포넌트를 분리하고 Claude Design 기준으로 디자인 정합성을 개선하였다 (v1.0.11).
+
+- `CategoryChips`, `FABStack`, `CurrentLocationButton` 컴포넌트를 `src/components/home/` 하위로 분리
+- `SectionHeader`, `QuickShortcuts`, `SelectedLotPreview`, `DefaultSheetContent` 컴포넌트를 `src/components/parking/` 하위로 분리
+- 카테고리 칩: 필 형태(borderRadius 100), 비활성 테두리 `#CAD1DB`, 활성 배경 `#222225`
+- zIndex 레이어 재정의: chips(29) < search(30) < FABStack(35) < locFab(36) < sheet(40)
+- `ParkingMarker` SOON_AVAILABLE 상태 뱃지에 "N분" 또는 "곧" 표시 개선
+- `ParkingBottomSheet` borderRadius 24 적용, SelectedLotPreview/DefaultSheetContent 분리
+
+`ParkingDetailScreen` 기본 UI를 구현하고 HomeMapScreen에서 이동할 수 있도록 연결하였다 (v1.1.0).
+
+- `ParkingDetailHeader`: 뒤로가기·타이틀·즐겨찾기 헤더, safe area top 처리
+- `ParkingInfoSection`: 운영시간·유형·출입방식·결제 안내 rows + 태그 chips
+- `ParkingFeeSection`: 요금 테이블(기본/추가/시간당/일최대) + NFC 배너
+- `ParkingActionBar`: 길찾기 + 이용 시작 CTA, safe area bottom 처리, 만차 시 대체 표시
+- `ParkingDetailScreen`: Header + ScrollView(미니맵·요약카드·AI배너·info·fee·사진) + ActionBar flex 레이아웃, 세 영역이 겹치지 않음
+- `ParkingCard`에 "상세 정보 ›" 링크 추가, `ParkingBottomSheet` SelectedPreview "상세 정보 열기" 버튼 연결
+- `HomeStackNavigator` / `ParkingStackNavigator` 양쪽에 `ParkingDetailScreen` 등록
+- `HomeMapScreen`에 `useNavigation` 추가 → `navigation.navigate('ParkingDetailScreen', {parkingLotId})` 연결
+- 미적용: 실제 지도 SDK, 길찾기 API, 결제, NFC, GPS 권한
+
 `ParkingBottomSheet`를 4단계 스와이프 방식으로 재구현하였다 (v1.0.10).
 
 - BottomSheet 상태를 `hidden` / `default` / `half` / `full` 4단계로 재정의하였다.

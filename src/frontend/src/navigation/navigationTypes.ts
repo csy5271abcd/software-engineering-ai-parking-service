@@ -2,6 +2,7 @@ import type {NavigatorScreenParams} from '@react-navigation/native';
 
 export type HomeStackParamList = {
   HomeMapScreen: undefined;
+  ParkingDetailScreen: {parkingLotId: string};
 };
 
 export type SearchStackParamList = {
@@ -10,6 +11,7 @@ export type SearchStackParamList = {
 
 export type ParkingStackParamList = {
   ParkingListScreen: undefined;
+  ParkingDetailScreen: {parkingLotId: string};
 };
 
 export type ProviderStackParamList = {

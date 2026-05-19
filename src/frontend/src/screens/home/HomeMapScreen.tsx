@@ -1,10 +1,16 @@
 import React, {useState, useEffect} from 'react';
-import {View, Text, ScrollView, Pressable, StyleSheet, DeviceEventEmitter} from 'react-native';
+import {View, StyleSheet, DeviceEventEmitter} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
+import type {StackNavigationProp} from '@react-navigation/stack';
+import type {HomeStackParamList} from '../../navigation/navigationTypes';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {MapPlaceholder} from '../../components/map/MapPlaceholder';
 import {ParkingMarker} from '../../components/map/ParkingMarker';
 import {SearchBar} from '../../components/common/SearchBar';
-import {FloatingButton} from '../../components/common/FloatingButton';
+import {CategoryChips} from '../../components/home/CategoryChips';
+import type {CategoryId} from '../../components/home/CategoryChips';
+import {FABStack} from '../../components/home/FABStack';
+import {CurrentLocationButton} from '../../components/home/CurrentLocationButton';
 import {
   ParkingBottomSheet,
   SHEET_SNAP,
@@ -15,6 +21,7 @@ import {PARKING_STATUS} from '../../constants/status';
 import type {ParkingLotDetail} from '../../types/parking';
 
 // ── Coordinate projection ─────────────────────────────────────────────────────
+
 const LAT_MAX = 37.57;
 const LAT_MIN = 37.45;
 const LON_MIN = 126.90;
@@ -33,20 +40,7 @@ function toMapPos(
   return {top: `${t}%`, left: `${l}%`};
 }
 
-// ── Category chips ────────────────────────────────────────────────────────────
-
-const CATEGORIES = [
-  {id: 'all',       label: '전체'},
-  {id: 'available', label: '이용가능'},
-  {id: 'soon',      label: '곧 비워짐'},
-  {id: 'cheap',     label: '저렴'},
-  {id: 'nfc',       label: 'NFC'},
-  {id: 'shared',    label: '개인공유'},
-  {id: 'public',    label: '공영'},
-  {id: '24h',       label: '24시간'},
-] as const;
-
-type CategoryId = (typeof CATEGORIES)[number]['id'];
+// ── Category filtering ────────────────────────────────────────────────────────
 
 function filterLots(
   lots: readonly ParkingLotDetail[],
@@ -76,92 +70,18 @@ function filterLots(
   }
 }
 
-function CategoryChips({
-  active,
-  onSelect,
-  style,
-}: {
-  active: CategoryId;
-  onSelect: (id: CategoryId) => void;
-  style?: object;
-}): React.JSX.Element {
-  return (
-    <ScrollView
-      horizontal
-      showsHorizontalScrollIndicator={false}
-      contentContainerStyle={chipStyles.content}
-      style={[chipStyles.scroll, style]}
-    >
-      {CATEGORIES.map(cat => {
-        const isActive = cat.id === active;
-        return (
-          <Pressable
-            key={cat.id}
-            onPress={() => onSelect(cat.id)}
-            style={[chipStyles.chip, isActive && chipStyles.chipActive]}
-          >
-            <Text
-              style={[
-                chipStyles.label,
-                isActive && chipStyles.labelActive,
-              ]}
-            >
-              {cat.label}
-            </Text>
-          </Pressable>
-        );
-      })}
-    </ScrollView>
-  );
-}
-
-const chipStyles = StyleSheet.create({
-  scroll: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    zIndex: 34,
-    maxHeight: 40,
-  },
-  content: {
-    paddingHorizontal: 12,
-    gap: 8,
-    alignItems: 'center',
-  },
-  chip: {
-    paddingHorizontal: 14,
-    paddingVertical: 6,
-    borderRadius: 20,
-    backgroundColor: '#FFFFFF',
-    borderWidth: 1,
-    borderColor: '#E5EAF1',
-    elevation: 2,
-    shadowColor: '#000',
-    shadowOffset: {width: 0, height: 1},
-    shadowOpacity: 0.06,
-    shadowRadius: 3,
-  },
-  chipActive: {
-    backgroundColor: '#222225',
-    borderColor: '#222225',
-  },
-  label: {
-    fontSize: 12,
-    fontWeight: '600',
-    color: '#444447',
-    includeFontPadding: false,
-  },
-  labelActive: {color: '#FFFFFF'},
-});
-
 // ── Screen ────────────────────────────────────────────────────────────────────
+
+type HomeNavProp = StackNavigationProp<HomeStackParamList, 'HomeMapScreen'>;
 
 export function HomeMapScreen(): React.JSX.Element {
   const insets = useSafeAreaInsets();
+  const navigation = useNavigation<HomeNavProp>();
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [category, setCategory] = useState<CategoryId>('all');
   const [sheetMode, setSheetMode] = useState<SheetMode>('default');
 
+  // Reset sheet to default when "주변" tab is pressed
   useEffect(() => {
     const sub = DeviceEventEmitter.addListener('HOME_TAB_PRESS', () => {
       setSheetMode('default');
@@ -186,22 +106,32 @@ export function HomeMapScreen(): React.JSX.Element {
     setSheetMode('default');
   };
 
-  // zIndex ladder: map(0) → markers(10/20) → chips(34) → search(35) → fabs(35/30) → sheet(40)
+  // ── Layout constants ──────────────────────────────────────────────────────
+  // zIndex: map(0) → markers(10/20) → chips(29) → search(30) → fabStack(35) → locFab(36) → sheet(40) → tabBar(50)
   const searchBarTop = insets.top + 8;
   const chipsTop = insets.top + 60;
-  const fabStackTop = insets.top + 108;
-  // locFab floats above the sheet; in hidden mode use a small offset
-  const locFabBottom = SHEET_SNAP[sheetMode] + 12;
+  const fabStackTop = insets.top + 112;
+  const locFabBottom = SHEET_SNAP[sheetMode] + 14;
 
   return (
     <View style={styles.container}>
-      {/* Map */}
+      {/* ── Map layer ── */}
       <MapPlaceholder>
         {filteredLots.map(lot => {
           const pos = toMapPos(
             lot.coordinates.latitude,
             lot.coordinates.longitude,
           );
+          const soonMin =
+            lot.status === PARKING_STATUS.SOON_AVAILABLE && lot.expectedExitAt
+              ? Math.max(
+                  1,
+                  Math.round(
+                    (new Date(lot.expectedExitAt).getTime() - Date.now()) /
+                      60000,
+                  ),
+                )
+              : null;
           return (
             <ParkingMarker
               key={lot.id}
@@ -210,49 +140,39 @@ export function HomeMapScreen(): React.JSX.Element {
               selected={selectedId === lot.id}
               top={pos.top}
               left={pos.left}
+              soonMin={soonMin}
               onPress={() => handleMarkerPress(lot.id)}
             />
           );
         })}
       </MapPlaceholder>
 
-      {/* Search bar */}
-      <SearchBar style={[styles.searchBar, {top: searchBarTop}]} />
+      {/* ── Search bar — zIndex 30 ── */}
+      <SearchBar
+        style={[styles.searchBar, {top: searchBarTop}]}
+      />
 
-      {/* Category chips */}
+      {/* ── Category chips — zIndex 29 ── */}
       <CategoryChips
         active={category}
         onSelect={handleCategorySelect}
-        style={{top: chipsTop}}
+        style={[styles.chips, {top: chipsTop}]}
       />
 
-      {/* FAB stack — right side */}
-      <View style={[styles.fabStack, {top: fabStackTop}]}>
-        <FloatingButton onPress={() => {}}>
-          <Text style={styles.fabIcon}>★</Text>
-        </FloatingButton>
-        <FloatingButton onPress={() => {}}>
-          <Text style={styles.fabIcon}>⊞</Text>
-        </FloatingButton>
-        <FloatingButton onPress={() => {}}>
-          <Text style={styles.fabIcon}>≡</Text>
-        </FloatingButton>
-      </View>
+      {/* ── FAB stack (right side) — zIndex 35 ── */}
+      <FABStack style={{top: fabStackTop}} />
 
-      {/* Location FAB — adjusts above bottom sheet */}
-      <FloatingButton
-        variant="primary"
-        onPress={() => {}}
-        style={[styles.locFab, {bottom: locFabBottom}]}
-      >
-        <Text style={styles.locFabIcon}>◎</Text>
-      </FloatingButton>
+      {/* ── Current location FAB — zIndex 36, floats above sheet ── */}
+      <CurrentLocationButton bottom={locFabBottom} />
 
-      {/* Bottom sheet */}
+      {/* ── Bottom sheet — zIndex 40 ── */}
       <ParkingBottomSheet
         lots={filteredLots}
         selectedLot={selectedLot}
         onSelectLot={id => setSelectedId(id)}
+        onOpenDetail={id =>
+          navigation.navigate('ParkingDetailScreen', {parkingLotId: id})
+        }
         mode={sheetMode}
         onModeChange={setSheetMode}
       />
@@ -266,25 +186,12 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: 12,
     right: 12,
-    zIndex: 35,
-  },
-  fabStack: {
-    position: 'absolute',
-    right: 12,
     zIndex: 30,
-    gap: 8,
   },
-  fabIcon: {
-    fontSize: 18,
-    color: '#444447',
-  },
-  locFab: {
+  chips: {
     position: 'absolute',
-    right: 12,
-    zIndex: 42,
-  },
-  locFabIcon: {
-    fontSize: 18,
-    color: '#FFFFFF',
+    left: 0,
+    right: 0,
+    zIndex: 29,
   },
 });

@@ -1,6 +1,7 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import {HomeMapScreen} from '../screens/home/HomeMapScreen';
+import {ParkingDetailScreen} from '../screens/parking/ParkingDetailScreen';
 import type {HomeStackParamList} from './navigationTypes';
 import {colors} from '../theme';
 
@@ -17,6 +18,11 @@ export function HomeStackNavigator(): React.JSX.Element {
       <Stack.Screen
         name="HomeMapScreen"
         component={HomeMapScreen}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="ParkingDetailScreen"
+        component={ParkingDetailScreen}
         options={{headerShown: false}}
       />
     </Stack.Navigator>

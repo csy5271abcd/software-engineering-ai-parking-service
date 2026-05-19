@@ -12,6 +12,7 @@ interface ParkingMarkerProps {
   top: DimensionValue;
   left: DimensionValue;
   onPress?: () => void;
+  soonMin?: number | null;
 }
 
 export function ParkingMarker({
@@ -21,22 +22,22 @@ export function ParkingMarker({
   top,
   left,
   onPress,
+  soonMin,
 }: ParkingMarkerProps): React.JSX.Element {
   const s = STATUS_DISPLAY[status];
-  const circleSize = selected ? 44 : 36;
-  const innerSize = selected ? 30 : 24;
+  const circleSize = selected ? 46 : 36;
+  const innerSize = selected ? 32 : 24;
   const labelFontSize = selected ? 15 : 12;
-  const tailBW = selected ? 10 : 8;   // half-base of triangle
-  const tailH = selected ? 12 : 10;   // height of triangle
-  const overlap = selected ? 6 : 5;   // circle/tail overlap
+  const tailBW = selected ? 10 : 8;
+  const tailH = selected ? 12 : 10;
+  const overlap = selected ? 6 : 5;
 
-  // bubbleH = height of name bubble + marginBottom above pin circle
-  const bubbleH = selected ? 24 : 0;
-  // Transform anchors pin TIP at (top, left) instead of component top-left
+  const bubbleH = selected ? 26 : 0;
   const tX = -(circleSize / 2);
   const tY = -(bubbleH + circleSize + tailH - overlap);
 
   const isSoon = status === PARKING_STATUS.SOON_AVAILABLE;
+  const badgeLabel = soonMin != null && soonMin > 0 ? `${soonMin}분` : '곧';
 
   return (
     <Pressable
@@ -84,15 +85,15 @@ export function ParkingMarker({
           </Text>
         </View>
 
-        {/* 곧 badge for SOON_AVAILABLE */}
+        {/* 곧/분 badge for SOON_AVAILABLE */}
         {isSoon && (
           <View style={styles.soonBadge}>
-            <Text style={styles.soonBadgeText}>곧</Text>
+            <Text style={styles.soonBadgeText}>{badgeLabel}</Text>
           </View>
         )}
       </View>
 
-      {/* Teardrop tail — CSS triangle trick */}
+      {/* Teardrop tail */}
       <View
         style={[
           styles.pinTail,
@@ -112,30 +113,32 @@ export function ParkingMarker({
 const styles = StyleSheet.create({
   bubble: {
     backgroundColor: '#222225',
-    paddingHorizontal: 8,
-    paddingVertical: 3,
+    paddingHorizontal: 10,
+    paddingVertical: 4,
     borderRadius: 100,
-    marginBottom: 4,
-    maxWidth: 120,
-    elevation: 3,
+    marginBottom: 5,
+    maxWidth: 130,
+    elevation: 4,
     shadowColor: '#000',
-    shadowOffset: {width: 0, height: 2},
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
+    shadowOffset: {width: 0, height: 3},
+    shadowOpacity: 0.22,
+    shadowRadius: 5,
   },
   bubbleText: {
     color: '#FFFFFF',
-    fontSize: 10,
+    fontSize: 11,
     fontWeight: '700',
+    letterSpacing: -0.3,
+    includeFontPadding: false,
   },
   pinOuter: {
     alignItems: 'center',
     justifyContent: 'center',
-    elevation: 4,
+    elevation: 5,
     shadowColor: '#000',
-    shadowOffset: {width: 0, height: 2},
-    shadowOpacity: 0.2,
-    shadowRadius: 5,
+    shadowOffset: {width: 0, height: 3},
+    shadowOpacity: 0.22,
+    shadowRadius: 6,
   },
   pinInner: {
     backgroundColor: '#FFFFFF',
@@ -154,17 +157,19 @@ const styles = StyleSheet.create({
   },
   soonBadge: {
     position: 'absolute',
-    top: 0,
-    right: 0,
+    top: -5,
+    right: -5,
     backgroundColor: '#006CFF',
-    borderRadius: 6,
-    paddingHorizontal: 3,
-    paddingVertical: 1,
+    borderRadius: 7,
+    paddingHorizontal: 4,
+    paddingVertical: 1.5,
     borderWidth: 1.5,
     borderColor: '#FFFFFF',
+    minWidth: 22,
+    alignItems: 'center',
   },
   soonBadgeText: {
-    fontSize: 7,
+    fontSize: 8,
     fontWeight: '800',
     color: '#FFFFFF',
     includeFontPadding: false,

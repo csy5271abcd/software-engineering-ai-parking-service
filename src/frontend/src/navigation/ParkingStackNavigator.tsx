@@ -1,6 +1,7 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import {ParkingListScreen} from '../screens/parking/ParkingListScreen';
+import {ParkingDetailScreen} from '../screens/parking/ParkingDetailScreen';
 import type {ParkingStackParamList} from './navigationTypes';
 import {colors} from '../theme';
 
@@ -18,6 +19,11 @@ export function ParkingStackNavigator(): React.JSX.Element {
         name="ParkingListScreen"
         component={ParkingListScreen}
         options={{title: '이용'}}
+      />
+      <Stack.Screen
+        name="ParkingDetailScreen"
+        component={ParkingDetailScreen}
+        options={{headerShown: false}}
       />
     </Stack.Navigator>
   );

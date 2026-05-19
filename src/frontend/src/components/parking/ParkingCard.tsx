@@ -7,6 +7,7 @@ import type {ParkingLotDetail} from '../../types/parking';
 interface ParkingCardProps {
   lot: ParkingLotDetail;
   onPress?: () => void;
+  onPressDetail?: () => void;
   selected?: boolean;
   rank?: number;
 }
@@ -14,6 +15,7 @@ interface ParkingCardProps {
 export function ParkingCard({
   lot,
   onPress,
+  onPressDetail,
   selected = false,
   rank,
 }: ParkingCardProps): React.JSX.Element {
@@ -121,6 +123,13 @@ export function ParkingCard({
           <View style={styles.soonRow}>
             <Text style={styles.soonText}>{soonLabel}</Text>
           </View>
+        )}
+
+        {/* Detail link */}
+        {onPressDetail != null && (
+          <Pressable onPress={onPressDetail} style={styles.detailLink} hitSlop={6}>
+            <Text style={styles.detailLinkText}>상세 정보 ›</Text>
+          </Pressable>
         )}
       </View>
     </Pressable>
@@ -262,6 +271,18 @@ const styles = StyleSheet.create({
   metaText: {
     fontSize: 12.5,
     color: '#6B7C92',
+    includeFontPadding: false,
+  },
+
+  // ── Detail link ──────────────────────────────────────────────────────────
+  detailLink: {
+    alignSelf: 'flex-start',
+    marginTop: 4,
+  },
+  detailLinkText: {
+    fontSize: 11.5,
+    fontWeight: '600',
+    color: '#006CFF',
     includeFontPadding: false,
   },
 

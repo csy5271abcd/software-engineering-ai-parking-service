@@ -356,6 +356,86 @@ SmartPark 프로젝트의 주요 변경 사항과 버전 tag 기록을 정리한
 
 ---
 
+## v1.0.11
+
+### Home 화면 Claude Design 정합성 개선 및 컴포넌트 분리
+
+- `src/components/home/CategoryChips.tsx` 추가
+  - 전체/이용가능/곧 비워짐/저렴/NFC/개인공유/공영/24시간 카테고리 칩 8종
+  - 필 형태(borderRadius 100), 비활성 테두리 `#CAD1DB`, 활성 배경 `#222225`
+- `src/components/home/FABStack.tsx` 추가
+  - 북마크/레이어/필터 FAB 3종, View 기반 아이콘 구현
+  - position absolute, right 12, zIndex 35
+- `src/components/home/CurrentLocationButton.tsx` 추가
+  - 파란색 primary FAB, BottomSheet 높이에 따라 `bottom` prop으로 동적 위치 지정
+- `src/components/parking/SectionHeader.tsx` 추가
+  - title(fontSize 17/fontWeight 700) + sub + 오른쪽 action 버튼 구조
+- `src/components/parking/QuickShortcuts.tsx` 추가
+  - 집/회사/병원 3종 단축 버튼, 가로 row 배치, 색상 아이콘 원형
+- `src/components/parking/SelectedLotPreview.tsx` 추가
+  - 선택 주차장 미리보기 — 상태/혼잡도/NFC 뱃지, 이름, 주소, 닫기 버튼
+  - 3칸 통계 그리드(시간당/거리/운영), 4종 액션 버튼, 상세 정보 버튼
+- `src/components/parking/DefaultSheetContent.tsx` 추가
+  - ParkingBottomSheet 기본 콘텐츠 분리
+  - mode별 카드 수 조절(default/half: 3장, full: 전체), AI 추천 섹션
+- `src/components/parking/ParkingBottomSheet.tsx` 수정
+  - SelectedLotPreview, DefaultSheetContent 컴포넌트 사용으로 리팩터링
+  - borderTopLeftRadius/Right 24으로 개선
+- `src/screens/home/HomeMapScreen.tsx` 수정
+  - CategoryChips, FABStack, CurrentLocationButton 컴포넌트로 분리
+  - zIndex 재정의: chips(29) < search(30) < FABStack(35) < locFab(36) < sheet(40)
+  - locFabBottom = SHEET_SNAP[sheetMode] + 14로 동적 배치
+- `src/components/map/ParkingMarker.tsx` 수정
+  - `soonMin` prop 추가 — SOON_AVAILABLE 상태 뱃지에 "N분" 또는 "곧" 표시
+- `npx tsc --noEmit` 검증 통과
+- `npm run android` 기준 Android 실기기 실행 확인
+
+---
+
+## v1.1.0
+
+### ParkingDetailScreen 기본 UI 구현
+
+- `src/components/parking/ParkingDetailHeader.tsx` 추가
+  - 뒤로가기(‹) + 중앙 타이틀 + 즐겨찾기(♡) 버튼
+  - `useSafeAreaInsets` 기반 상단 safe area 처리
+- `src/components/parking/ParkingInfoSection.tsx` 추가
+  - 주차장 유형, 운영시간, 운영요일, 출입방식, 결제 안내 행 목록
+  - 태그 칩 표시
+- `src/components/parking/ParkingFeeSection.tsx` 추가
+  - 기본 요금, 추가 요금, 시간당 환산(파란색 강조), 일 최대 요금
+  - NFC 지원 배너
+- `src/components/parking/ParkingActionBar.tsx` 추가
+  - 길찾기(outline) + 이용 시작(primary) CTA
+  - 만차 시 "만차 — 목록 보기" 대체 표시
+  - `useSafeAreaInsets` 기반 하단 safe area 처리
+- `src/screens/parking/ParkingDetailScreen.tsx` 추가
+  - Header + ScrollView(미니맵 + 요약카드 + AI배너 + 곧비워짐배너 + InfoSection + FeeSection + 사진placeholder) + ActionBar 레이아웃
+  - `MapPlaceholder` 재사용, 중앙 파란 P 마커 오버레이
+  - 상태/혼잡도/NFC/유형 뱃지, 2×2 stats grid (시간당/거리/이용가능/운영)
+  - AI 추천 배너: recommendationScore 기반 색상·문구 (85+녹색/70+파랑/else주황)
+  - SOON_AVAILABLE 출차 예정 배너
+  - `getMockParkingLotById` 기반 데이터 연결, 없을 시 fallback 표시
+- `src/navigation/navigationTypes.ts` 업데이트
+  - `HomeStackParamList`에 `ParkingDetailScreen: {parkingLotId: string}` 추가
+  - `ParkingStackParamList`에 동일 추가
+- `src/navigation/HomeStackNavigator.tsx` 업데이트 — ParkingDetailScreen 등록
+- `src/navigation/ParkingStackNavigator.tsx` 업데이트 — ParkingDetailScreen 등록
+- `src/components/parking/ParkingCard.tsx` 업데이트
+  - `onPressDetail?: () => void` prop 추가 → "상세 정보 ›" 링크 표시
+- `src/components/parking/ParkingBottomSheet.tsx` 업데이트
+  - `onOpenDetail?: (id: string) => void` prop 추가
+  - SelectedPreview "상세 정보 열기" 버튼, 카드 목록 "상세 정보 ›" 링크 연결
+- `src/screens/home/HomeMapScreen.tsx` 업데이트
+  - `useNavigation<HomeNavProp>()` 추가
+  - `onOpenDetail={(id) => navigation.navigate('ParkingDetailScreen', {parkingLotId: id})}` 연결
+- 화면 겹침 보정: Header/ScrollView/ActionBar flex:1 레이아웃, overlap 없음
+- `npx tsc --noEmit` 검증 통과
+- `npm run android` BUILD SUCCESSFUL, SM-S911N 실기기 설치 완료
+- 미적용: Naver Map SDK, 실제 길찾기 API, 결제, NFC, GPS 권한
+
+---
+
 ## v1.0.10
 
 ### ParkingBottomSheet 4단계 Swipe 전환 (Animated + PanResponder)
