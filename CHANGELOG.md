@@ -320,49 +320,6 @@ SmartPark 프로젝트의 주요 변경 사항과 버전 tag 기록을 정리한
 
 ---
 
-## v1.0.9
-
-- `HomeMapScreen` UI 2차 개선 — Claude Design 기준 정렬
-- `MainTabNavigator` 완전 재구성 (SmartParkTabBar 커스텀 탭바)
-  - 탭 레이블: 주변 / 저장 / 이용 / 공급자 / MY
-  - View 기반 아이콘 (IconLocation, IconStar, IconCalendar, IconHouse, IconPerson)
-  - 활성 탭: 파란 테두리(#006CFF, 1.5px, borderRadius 10) 적용
-  - 공급자 탭: 빨간 뱃지(1) 표시
-  - `useSafeAreaInsets` 기반 paddingBottom 처리
-- `ParkingMarker` 개선
-  - 핀 꼬리: 회전 사각형 → CSS 삼각형(width:0, borderTopWidth) 방식으로 진짜 눈물방울 형태
-  - SOON_AVAILABLE 상태: 파란 "곧" 뱃지 추가
-  - transform 앵커를 핀 TIP 기준으로 정확히 계산
-- `HomeMapScreen`에 CategoryChips 추가
-  - 카테고리: 전체/이용가능/곧 비워짐/저렴/NFC/개인공유/공영/24시간
-  - 활성: 검은 배경+흰 글자 / 비활성: 흰 배경+테두리
-  - 카테고리별 `filterLots` 적용 — 선택 마커 자동 해제
-  - SearchBar/CategoryChips/FAB 위치를 safe area 기준 절대 배치 정렬
-- `HomeParkingSummary` 기본 뷰 변경
-  - 하단 패널 기본 뷰: 주차장 카드 목록 제거 → QuickShortcuts + 곧 비워짐 배너만 표시
-  - QuickShortcuts: 집/회사/병원 카드 3개 가로 배열
-  - maxHeight 300 → 240으로 축소
-- `npx tsc --noEmit` 검증 통과
-
----
-
-## v1.0.8
-
-- `HomeMapScreen` 1차 UI 구현 (지도 중심 구조)
-- 신규 컴포넌트 추가
-  - `src/components/map/MapPlaceholder.tsx` — Naver Map 스타일 View 기반 지도 placeholder (토지/수계/공원/건물/도로 레이어)
-  - `src/components/map/ParkingMarker.tsx` — 상태별 색상 핀 마커 (ParkingStatus → 색상, 선택 시 이름 버블 표시)
-  - `src/components/common/SearchBar.tsx` — 절대 배치 흰색 검색바 (Pressable, 네비게이션 연동 준비)
-  - `src/components/common/FloatingButton.tsx` — 재사용 가능한 원형 FAB (default/primary 변형)
-  - `src/components/parking/HomeParkingSummary.tsx` — 하단 패널 (상위 3곳 주차장 카드, 곧 비워짐 배너, 선택 미리보기)
-- `src/utils/parkingStatus.ts` — ParkingStatus → 표시 레이블/색상 매핑 유틸리티 추가
-- `mockParkingLots` 좌표를 선형 투영으로 지도 퍼센트 위치 변환 (`toMapPos`)
-- `useSafeAreaInsets` 적용으로 노치/상태바 영역 안전 처리
-- `npx tsc --noEmit` 검증 통과
-- `npm run android` 실행 결과 Android 실기기에서 지도 화면 정상 표시 확인 예정
-
----
-
 ## v1.0.7
 
 - `@react-navigation/native-stack` 제거 및 `@react-navigation/stack` 기반으로 네비게이션 구조 전환
@@ -396,3 +353,63 @@ SmartPark 프로젝트의 주요 변경 사항과 버전 tag 기록을 정리한
 - 검색바, 카테고리 칩, FAB, 하단 패널, 하단 탭바 간 화면 겹침 문제 보정
 - `npx tsc --noEmit` 검증 통과
 - `npm run android` 기준 Android 실기기 실행 확인
+
+---
+
+## v1.0.9
+
+### Phase 2 — ParkingBottomSheet + ParkingCard + HomeMapScreen 연결
+
+- `src/utils/parkingStatus.ts` 보강
+  - `CONGESTION_DISPLAY`: CongestionStatus → label/color/bg 매핑 추가
+  - `STATUS_DISPLAY`: 기존 ParkingStatus 매핑 유지
+- `src/components/parking/ParkingStatusBadge.tsx` 추가
+  - `ParkingStatusBadge`: 상태 컬러 점(dot) + 레이블 뱃지
+  - `CongestionBadge`: 혼잡도 레이블 뱃지
+- `src/components/parking/ParkingCard.tsx` 추가
+  - 썸네일 64×64 (공영: 파란 "P" / 개인공유: 🏠 이모지)
+  - 상위 3위 rank 뱃지 (1위 파란, 2·3위 다크)
+  - AI 추천 점수 뱃지 (recommendationScore ≥ 85)
+  - 상태 뱃지 + 혼잡도 뱃지 + 추가 태그 (개인공유/NFC/24시간)
+  - 메타 행: 도보 N분 · 거리 · ₩요금/시
+  - SOON_AVAILABLE 출차 예정 배너 (expectedExitAt 기준 분 계산)
+  - 선택 상태: 파란 배경/테두리 강조
+- `src/components/parking/ParkingBottomSheet.tsx` 추가
+  - 3모드(collapsed/half/expanded) — Pressable 탭으로 전환, 드래그 없음
+  - `SHEET_HEIGHTS`: collapsed 52 / half 300 / expanded min(72%, 560px)
+  - collapsed: "주변 주차장 N곳 ▲" 힌트
+  - half/expanded: 선택된 주차장 상세 미리보기 OR QuickShortcuts + 곧 비워짐 배너
+  - 상세 미리보기: stat 격자(시간당/거리/가용) + 출발/도착/공유/신고 액션 행 + 상세 정보 열기
+  - 카드 목록: recommendationScore 내림차순, 상위 3곳 rank 뱃지, 빈 상태(empty state) 처리
+  - `scrollEnabled`: expanded 모드에서만 스크롤 활성
+  - TypeScript `never` narrowing 문제 해결: 카드 목록을 ternary 외부로 분리
+- `HomeMapScreen` 연결
+  - `HomeParkingSummary` → `ParkingBottomSheet` 교체
+  - `sheetMode` 상태 연결, 마커 탭 시 collapsed → half 자동 전환
+  - locFab 위치: `SHEET_HEIGHTS[sheetMode] + 12` 동적 계산
+  - zIndex 계층: map(0) → markers(10/20) → chips(34) → search(35) → fabStack(30) → locFab(42) → sheet(40)
+- `npx tsc --noEmit` 검증 통과
+- `npm run android` BUILD SUCCESSFUL (6m 54s), SM-S911N 실기기 설치 완료
+
+### Phase 1 — HomeMapScreen UI 개선 (Claude Design 기준)
+
+- `MainTabNavigator` 완전 재구성 (SmartParkTabBar 커스텀 탭바)
+  - 탭 레이블: 주변 / 저장 / 이용 / 공급자 / MY
+  - View 기반 아이콘 (IconLocation, IconStar, IconCalendar, IconHouse, IconPerson)
+  - 활성 탭: 파란 테두리(#006CFF, 1.5px, borderRadius 10) 적용
+  - 공급자 탭: 빨간 뱃지(1) 표시
+  - `useSafeAreaInsets` 기반 paddingBottom 처리
+- `ParkingMarker` 개선
+  - 핀 꼬리: 회전 사각형 → CSS 삼각형(width:0, borderTopWidth) 방식으로 진짜 눈물방울 형태
+  - SOON_AVAILABLE 상태: 파란 "곧" 뱃지 추가
+  - transform 앵커를 핀 TIP 기준으로 정확히 계산
+- `HomeMapScreen`에 CategoryChips 추가
+  - 카테고리: 전체/이용가능/곧 비워짐/저렴/NFC/개인공유/공영/24시간
+  - 활성: 검은 배경+흰 글자 / 비활성: 흰 배경+테두리
+  - 카테고리별 `filterLots` 적용 — 선택 마커 자동 해제
+  - SearchBar/CategoryChips/FAB 위치를 safe area 기준 절대 배치 정렬
+- `HomeParkingSummary` 기본 뷰 변경
+  - 하단 패널 기본 뷰: 주차장 카드 목록 제거 → QuickShortcuts + 곧 비워짐 배너만 표시
+  - QuickShortcuts: 집/회사/병원 카드 3개 가로 배열
+  - maxHeight 300 → 240으로 축소
+- `npx tsc --noEmit` 검증 통과

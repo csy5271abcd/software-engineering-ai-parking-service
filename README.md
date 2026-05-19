@@ -297,21 +297,23 @@ React Navigation 구조를 NaverMapClone 기준으로 전환하였다.
 - `mockParkingLots` 좌표를 선형 투영으로 지도 퍼센트 위치 변환 적용
 - `useSafeAreaInsets`로 노치/상태바 영역 처리, 하단 탭바와 겹치지 않는 레이아웃 구성
 
-`HomeMapScreen` UI를 Claude Design 기준으로 개선하였다 (v1.0.9).
+`HomeMapScreen` UI를 Claude Design 기준으로 개선하였다 (v1.0.9 Phase 1).
 
 - `MainTabNavigator`: SmartParkTabBar 커스텀 탭바로 전환 — 탭 레이블(주변/저장/이용/공급자/MY), View 기반 아이콘 5종, 활성 탭 파란 테두리, 공급자 탭 빨간 뱃지
 - `ParkingMarker`: CSS 삼각형 꼬리 방식으로 진짜 눈물방울 핀 형태 구현, SOON_AVAILABLE "곧" 뱃지 추가
 - `HomeMapScreen`: CategoryChips(전체/이용가능/곧 비워짐/저렴/NFC/개인공유/공영/24시간) 추가, 카테고리별 필터링 적용, safe area 기준 레이아웃 정렬
 - `HomeParkingSummary`: 기본 뷰를 QuickShortcuts(집/회사/병원) + 곧 비워짐 배너로 변경, 주차장 카드 목록 제거
 
-`v1.0.8`에서는 Claude Design 결과물을 기준으로 Home 화면의 하단바, 카테고리 칩, 주차장 마커, 하단 요약 패널의 UI와 인터랙션을 개선하였다.
+`ParkingBottomSheet`와 `ParkingCard` 컴포넌트를 추가하고 `HomeMapScreen`에 연결하였다 (v1.0.9 Phase 2).
 
-- 하단바를 주변, 저장, 이용, 공급자, MY 구조로 커스터마이징하였다.
-- View/Text 기반 아이콘을 적용해 Claude Design과 유사한 하단 탭 UI를 구현하였다.
-- HomeMapScreen에 카테고리 칩을 추가하여 주차장 상태와 조건별 필터링 흐름을 준비하였다.
-- ParkingMarker는 teardrop 형태로 수정하고, 곧 비워짐 상태에는 별도 badge를 표시하였다.
-- HomeParkingSummary는 QuickShortcuts와 곧 비워짐 banner 중심의 고정형 하단 패널로 정리하였다.
-- 검색바, 카테고리 칩, FAB, 하단 패널, 하단 탭바가 서로 겹치지 않도록 배치를 보정하였다.
+- `ParkingStatusBadge` / `CongestionBadge`: 주차 상태와 혼잡도를 컬러 뱃지로 표시하는 공통 컴포넌트 추가
+- `ParkingCard`: 썸네일(공영/개인공유), rank 뱃지, AI 추천 점수, 상태·혼잡도·태그 뱃지, 도보/거리/요금 메타, 출차 예정 배너를 포함한 주차장 카드 컴포넌트 추가
+- `ParkingBottomSheet`: 3모드(collapsed/half/expanded) 전환 바텀시트 추가
+  - collapsed: "주변 주차장 N곳 ▲" 힌트 표시
+  - half/expanded: 마커 선택 시 상세 미리보기(stat/액션), 기본 시 QuickShortcuts + 곧 비워짐 배너 + 카드 목록
+  - expanded 모드에서만 스크롤 활성화, 빈 상태(empty state) 처리 포함
+- `HomeMapScreen`: `HomeParkingSummary`를 `ParkingBottomSheet`로 교체, 마커 탭 시 collapsed → half 자동 전환, locFab 위치 동적 계산
+- `npx tsc --noEmit` 검증 통과, `npm run android` SM-S911N 실기기 설치 완료
 
 ---
 

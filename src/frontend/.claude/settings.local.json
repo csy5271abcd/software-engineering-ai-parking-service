@@ -3,7 +3,13 @@
     "allow": [
       "PowerShell(npm info *)",
       "PowerShell(echo y | & \"C:\\\\Users\\\\choi suyeon\\\\AppData\\\\Local\\\\Android\\\\Sdk\\\\cmdline-tools\\\\latest\\\\bin\\\\sdkmanager.bat\" \"cmake;3.18.1\" 2>&1 | Select-Object -Last 10)",
-      "PowerShell(& \"C:\\\\Users\\\\choi suyeon\\\\AppData\\\\Local\\\\Android\\\\Sdk\\\\platform-tools\\\\adb.exe\" devices 2>&1)"
+      "PowerShell(& \"C:\\\\Users\\\\choi suyeon\\\\AppData\\\\Local\\\\Android\\\\Sdk\\\\platform-tools\\\\adb.exe\" devices 2>&1)",
+      "Bash(npx tsc *)",
+      "Bash(npm run *)",
+      "Bash(npx react-native *)",
+      "Read(//c/Users/choi suyeon/Documents/SmartParkDesign/screenshots//**)",
+      "Read(//c/Users/choi suyeon/Documents/SmartParkDesign//**)",
+      "Bash(Read \"C:\\\\Users\\\\CHOISU~1\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\C--sp-src-frontend\\\\4854c64f-fb70-4d1a-83eb-92b30f9b8f60\\\\tasks\\\\b5tf9o7qn.output\")"
     ]
   }
 }
