@@ -306,3 +306,34 @@ SmartPark 프로젝트의 주요 변경 사항과 버전 tag 기록을 정리한
 - FEATURE_SPEC.md 상태값과 SCREEN_STRUCTURE.md 화면 흐름 기준 반영
 - `npx tsc --noEmit` 검증 통과 (오류 없음)
 - 이후 서비스/훅 구조 또는 React Navigation 설치 및 화면 구현 단계로 연결 예정
+
+---
+
+## v1.0.6
+
+- 프론트엔드 소스코드 Git 추적 상태 점검 및 오류 수정
+- `src/frontend`가 GitHub에서 하위 저장소처럼 표시되는 문제를 확인
+- `git ls-files -s src/frontend` 명령으로 `src/frontend` 하위 파일이 부모 저장소에서 실제 파일로 추적되는지 검증
+- `App.tsx`, Android 설정 파일, `theme`, `constants`, `types`, `mocks` 파일이 Git에서 정상 추적되는 것을 확인
+- 원격 `origin/main`에 최신 프론트엔드 소스코드 반영 완료
+- 이후 React Navigation 설치 및 기본 네비게이터 구성 단계로 연결 예정
+
+---
+
+## v1.0.7
+
+- `@react-navigation/native-stack` 제거 및 `@react-navigation/stack` 기반으로 네비게이션 구조 전환
+- NaverMapClone 구동 기준 의존성으로 재설정
+  - `@react-navigation/native 7.1.14`
+  - `@react-navigation/stack 7.4.2`
+  - `@react-navigation/bottom-tabs 7.2.0`
+  - `react-native-gesture-handler 2.31.2`
+  - `react-native-safe-area-context 5.5.1`
+  - `react-native-screens 4.14.0`
+- `RootNavigator`, `HomeStackNavigator`, `SearchStackNavigator`, `ParkingStackNavigator`, `ProviderStackNavigator`, `MyPageStackNavigator`에서 `createNativeStackNavigator` 제거 및 `createStackNavigator`로 전환
+- `MainTabNavigator`는 `@react-navigation/bottom-tabs` 기반으로 유지
+- `android/gradle.properties`에 `newArchEnabled=true` 추가
+- Windows + NDK 27.1 + CMake 3.18.1 환경의 `c++_shared` 링킹 누락 문제 해결
+  - `react-native-gesture-handler`, `react-native-screens`, `react-native-safe-area-context` CMakeLists.txt에 `target_link_libraries(..., c++_shared)` 추가
+- `npx tsc --noEmit` 검증 통과
+- `npm run android` 실행 결과 Android 실기기에서 하단 탭 5개 정상 표시 확인

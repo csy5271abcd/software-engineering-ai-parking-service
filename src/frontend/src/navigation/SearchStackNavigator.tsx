@@ -1,10 +1,10 @@
 import React from 'react';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {createStackNavigator} from '@react-navigation/stack';
 import {DestinationSearchScreen} from '../screens/search/DestinationSearchScreen';
 import type {SearchStackParamList} from './navigationTypes';
 import {colors} from '../theme';
 
-const Stack = createNativeStackNavigator<SearchStackParamList>();
+const Stack = createStackNavigator<SearchStackParamList>();
 
 export function SearchStackNavigator(): React.JSX.Element {
   return (

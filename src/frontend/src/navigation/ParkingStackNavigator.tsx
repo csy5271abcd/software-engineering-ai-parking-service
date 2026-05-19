@@ -1,10 +1,10 @@
 import React from 'react';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {createStackNavigator} from '@react-navigation/stack';
 import {ParkingListScreen} from '../screens/parking/ParkingListScreen';
 import type {ParkingStackParamList} from './navigationTypes';
 import {colors} from '../theme';
 
-const Stack = createNativeStackNavigator<ParkingStackParamList>();
+const Stack = createStackNavigator<ParkingStackParamList>();
 
 export function ParkingStackNavigator(): React.JSX.Element {
   return (

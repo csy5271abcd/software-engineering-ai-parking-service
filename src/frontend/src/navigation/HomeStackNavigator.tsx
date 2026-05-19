@@ -1,10 +1,10 @@
 import React from 'react';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {createStackNavigator} from '@react-navigation/stack';
 import {HomeMapScreen} from '../screens/home/HomeMapScreen';
 import type {HomeStackParamList} from './navigationTypes';
 import {colors} from '../theme';
 
-const Stack = createNativeStackNavigator<HomeStackParamList>();
+const Stack = createStackNavigator<HomeStackParamList>();
 
 export function HomeStackNavigator(): React.JSX.Element {
   return (

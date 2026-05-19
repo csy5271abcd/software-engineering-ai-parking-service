@@ -1,10 +1,10 @@
 import React from 'react';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {createStackNavigator} from '@react-navigation/stack';
 import {ProviderHomeScreen} from '../screens/provider/ProviderHomeScreen';
 import type {ProviderStackParamList} from './navigationTypes';
 import {colors} from '../theme';
 
-const Stack = createNativeStackNavigator<ProviderStackParamList>();
+const Stack = createStackNavigator<ProviderStackParamList>();
 
 export function ProviderStackNavigator(): React.JSX.Element {
   return (

@@ -271,6 +271,22 @@ git push origin main --tags
 - `mocks/parkingLots.mock.ts`: 9개 가상 주차장 데이터 (AVAILABLE/FULL/SOON_AVAILABLE/OCCUPIED/INACTIVE 상태, LOW~VERY_HIGH/UNKNOWN 혼잡도 포함)
 - 이후 서비스/훅 구조, 네비게이션, 화면 구현에서 이 데이터를 사용한다.
 
+프론트엔드 소스코드 Git 추적 상태를 점검하였다.
+
+- `src/frontend` 하위 React Native 프로젝트 파일이 부모 Git 저장소에서 정상 추적되는 것을 확인하였다.
+- `git ls-files -s src/frontend` 명령을 통해 `App.tsx`, Android 설정 파일, `theme`, `constants`, `types`, `mocks` 파일이 일반 파일로 추적되는 것을 확인하였다.
+- GitHub 원격 저장소의 `origin/main`에 최신 프론트엔드 소스코드가 반영된 상태를 확인하였다.
+- 현재 최신 안정 기준선은 `v1.0.6`이다.
+
+React Navigation 구조를 NaverMapClone 기준으로 전환하였다.
+
+- `@react-navigation/native-stack` 및 `react-native-screens` C++ 빌드 오류로 인해 `@react-navigation/stack` 기반으로 전환하였다.
+- NaverMapClone 구동 기준(`@react-navigation/native 7.1.14`, `@react-navigation/stack 7.4.2`, `react-native-gesture-handler 2.31.2`, `react-native-safe-area-context 5.5.1`, `react-native-screens 4.14.0`)으로 의존성을 재설정하였다.
+- `RootNavigator`, `HomeStackNavigator`, `SearchStackNavigator`, `ParkingStackNavigator`, `ProviderStackNavigator`, `MyPageStackNavigator`에서 `createNativeStackNavigator` 임포트를 제거하고 `@react-navigation/stack`의 `createStackNavigator`로 전환하였다.
+- `MainTabNavigator`는 `@react-navigation/bottom-tabs` 기반으로 유지하였다.
+- Windows + NDK 27.1 + CMake 3.18.1 환경에서 발생하는 `c++_shared` 링킹 누락 문제를 각 네이티브 모듈 CMakeLists.txt에 `target_link_libraries(..., c++_shared)` 를 추가하여 해결하였다.
+- `npm run android` 실행 결과 Android 실기기에서 하단 탭 5개가 정상 표시됨을 확인하였다.
+
 ---
 
 ## 12.1 구현 진행 방향

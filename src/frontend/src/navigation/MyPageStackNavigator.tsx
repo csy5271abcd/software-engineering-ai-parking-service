@@ -1,10 +1,10 @@
 import React from 'react';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {createStackNavigator} from '@react-navigation/stack';
 import {MyPageScreen} from '../screens/mypage/MyPageScreen';
 import type {MyPageStackParamList} from './navigationTypes';
 import {colors} from '../theme';
 
-const Stack = createNativeStackNavigator<MyPageStackParamList>();
+const Stack = createStackNavigator<MyPageStackParamList>();
 
 export function MyPageStackNavigator(): React.JSX.Element {
   return (
