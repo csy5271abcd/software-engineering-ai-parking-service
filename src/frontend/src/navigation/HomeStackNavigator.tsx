@@ -2,6 +2,10 @@ import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import {HomeMapScreen} from '../screens/home/HomeMapScreen';
 import {ParkingDetailScreen} from '../screens/parking/ParkingDetailScreen';
+import {RouteScreen} from '../screens/session/RouteScreen';
+import {ActiveSessionScreen} from '../screens/session/ActiveSessionScreen';
+import {PaymentScreen} from '../screens/session/PaymentScreen';
+import {PaymentResultScreen} from '../screens/session/PaymentResultScreen';
 import type {HomeStackParamList} from './navigationTypes';
 import {colors} from '../theme';
 
@@ -23,6 +27,26 @@ export function HomeStackNavigator(): React.JSX.Element {
       <Stack.Screen
         name="ParkingDetailScreen"
         component={ParkingDetailScreen}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="RouteScreen"
+        component={RouteScreen}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="ActiveSessionScreen"
+        component={ActiveSessionScreen}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="PaymentScreen"
+        component={PaymentScreen}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="PaymentResultScreen"
+        component={PaymentResultScreen}
         options={{headerShown: false}}
       />
     </Stack.Navigator>

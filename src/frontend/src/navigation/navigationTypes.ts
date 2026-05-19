@@ -3,6 +3,10 @@ import type {NavigatorScreenParams} from '@react-navigation/native';
 export type HomeStackParamList = {
   HomeMapScreen: undefined;
   ParkingDetailScreen: {parkingLotId: string};
+  RouteScreen: {parkingLotId: string};
+  ActiveSessionScreen: {parkingLotId: string};
+  PaymentScreen: {parkingLotId: string};
+  PaymentResultScreen: {parkingLotId: string};
 };
 
 export type SearchStackParamList = {
@@ -17,6 +21,10 @@ export type ParkingStackParamList = {
   ParkingListScreen: undefined;
   ParkingDetailScreen: {parkingLotId: string};
   SoonAvailableScreen: undefined;
+  RouteScreen: {parkingLotId: string};
+  ActiveSessionScreen: {parkingLotId: string};
+  PaymentScreen: {parkingLotId: string};
+  PaymentResultScreen: {parkingLotId: string};
 };
 
 export type ProviderStackParamList = {

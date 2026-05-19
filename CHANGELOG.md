@@ -4,6 +4,48 @@ SmartPark 프로젝트의 주요 변경 사항과 버전 tag 기록을 정리한
 
 ---
 
+## v1.3.0
+
+### 세션 플로우 구현 (경로 안내 → NFC → 이용 중 → 결제 → 결제 완료)
+
+#### 참고 이미지
+- `Home_ParkingDetail_Route_Click_UI.png` — RouteScreen
+- `NFC_Click_1.png`, `NFC_Click_2.png` — NFCScanModal
+- `Payment_UI_1.png`, `Payment_UI_2.png`, `Payment_UI_3.png` — ActiveSessionScreen, PaymentScreen, PaymentResultScreen
+
+#### RouteScreen (경로 안내)
+- `RouteScreen.tsx` (신규) — MapPlaceholder + react-native-svg 점선 경로 + 출발·도착 마커
+- 이동 수단 칩(자동차/도보/대중교통), 경로 카드 3개(추천/무료도로/최단), "안내 시작" CTA
+
+#### NFCScanModal (NFC 이용 시작)
+- `NFCScanModal.tsx` (신규) — React Native Modal (transparent), scanning → success 2단계 전환
+- Animated pulse ring (scanning), Animated.spring 원형 진입 (success), 3초 자동 전환
+
+#### ActiveSessionScreen (이용 중)
+- `ActiveSessionScreen.tsx` (신규) — 파란 히어로, useEffect 기반 1초 타이머, 요금 실시간 표시
+- 출차 예정 시간 칩(10분후/30분후/1시간후/직접입력), "NFC로 이용 종료·결제" CTA
+
+#### PaymentScreen (결제)
+- `PaymentScreen.tsx` (신규) — 이용 내역 카드, 결제 수단 선택(카카오페이/신한카드/삼성페이), 쿠폰 영역
+
+#### PaymentResultScreen (결제 완료)
+- `PaymentResultScreen.tsx` (신규) — Animated.spring 체크 원형, 요약 카드, 영수증 보기/완료 버튼
+
+#### 네비게이션 연결
+- `navigationTypes.ts` — HomeStackParamList, ParkingStackParamList에 4개 세션 화면 추가
+- `HomeStackNavigator.tsx`, `ParkingStackNavigator.tsx` — 세션 4개 스크린 등록
+- `ParkingDetailScreen.tsx` — DetailActionBar onRoute/onStart 연결, NFCScanModal 렌더링
+- `MainTabNavigator.tsx` — SESSION_SCREENS Set으로 5개 화면 모두에서 하단 탭바 숨김 처리
+
+#### 공통 컴포넌트
+- `AppIcon.tsx` — refreshCw, check, messageSquare 아이콘 추가
+
+#### TypeScript / 빌드
+- `npx tsc --noEmit` 통과
+- `npm run android` 성공
+
+---
+
 ## v1.2.0
 
 ### figma-make-design 3개 화면 재정합 (SoonAvailable / ParkingSummary / ParkingDetail)

@@ -21,10 +21,17 @@ import {DetailReviewsTab} from '../../components/parking/detail/DetailReviewsTab
 import {DetailActionBar} from '../../components/parking/detail/DetailActionBar';
 import {AppTabs} from '../../components/common/AppTabs';
 import {AppIcon} from '../../components/common/AppIcon';
+import {NFCScanModal} from '../../components/session/NFCScanModal';
 
 // ── Types ────────────────────────────────────────────────────────────────────
 
-type NavParam = {ParkingDetailScreen: {parkingLotId: string}};
+type NavParam = {
+  ParkingDetailScreen: {parkingLotId: string};
+  RouteScreen: {parkingLotId: string};
+  ActiveSessionScreen: {parkingLotId: string};
+  PaymentScreen: {parkingLotId: string};
+  PaymentResultScreen: {parkingLotId: string};
+};
 type DetailRoute = RouteProp<NavParam, 'ParkingDetailScreen'>;
 interface Props {
   route: DetailRoute;
@@ -56,6 +63,7 @@ export function ParkingDetailScreen({route, navigation}: Props): React.JSX.Eleme
   const insets = useSafeAreaInsets();
   const [activeTab, setActiveTab] = useState<TabKey>('home');
   const [saved, setSaved] = useState(false);
+  const [showNfcModal, setShowNfcModal] = useState(false);
 
   const lot = getMockParkingLotById(parkingLotId);
 
@@ -195,8 +203,17 @@ export function ParkingDetailScreen({route, navigation}: Props): React.JSX.Eleme
       <DetailActionBar
         status={lot.status}
         soonMin={soonMin}
-        onRoute={() => {}}
-        onStart={() => {}}
+        onRoute={() => navigation.navigate('RouteScreen', {parkingLotId})}
+        onStart={() => setShowNfcModal(true)}
+      />
+
+      <NFCScanModal
+        visible={showNfcModal}
+        onClose={() => setShowNfcModal(false)}
+        onSuccess={() => {
+          setShowNfcModal(false);
+          navigation.navigate('ActiveSessionScreen', {parkingLotId});
+        }}
       />
     </View>
   );

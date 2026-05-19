@@ -68,13 +68,21 @@ function TabIcon({
 
 // ── Hide tab bar when ParkingDetailScreen is the top screen ──────────────────
 
+const SESSION_SCREENS = new Set([
+  'ParkingDetailScreen',
+  'RouteScreen',
+  'ActiveSessionScreen',
+  'PaymentScreen',
+  'PaymentResultScreen',
+]);
+
 function hasDetailScreenActive(state: BottomTabBarProps['state']): boolean {
   const activeRoute = state.routes[state.index];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const nested = (activeRoute as any)?.state;
   if (!nested?.routes?.length) return false;
   const topIdx: number = nested.index ?? nested.routes.length - 1;
-  return nested.routes[topIdx]?.name === 'ParkingDetailScreen';
+  return SESSION_SCREENS.has(nested.routes[topIdx]?.name);
 }
 
 // ── Custom bottom tab bar ─────────────────────────────────────────────────────

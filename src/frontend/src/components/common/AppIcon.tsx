@@ -36,6 +36,9 @@ import {
   Layers,
   Cpu,
   Flag,
+  RefreshCw,
+  Check,
+  MessageSquare,
 } from 'lucide-react-native';
 
 export type AppIconName =
@@ -74,7 +77,10 @@ export type AppIconName =
   | 'cloud'
   | 'layers'
   | 'cpu'
-  | 'flag';
+  | 'flag'
+  | 'refreshCw'
+  | 'check'
+  | 'messageSquare';
 
 interface AppIconProps {
   name: AppIconName;
@@ -121,6 +127,9 @@ const ICON_MAP: Record<AppIconName, React.ElementType> = {
   layers: Layers,
   cpu: Cpu,
   flag: Flag,
+  refreshCw: RefreshCw,
+  check: Check,
+  messageSquare: MessageSquare,
 };
 
 export function AppIcon({
