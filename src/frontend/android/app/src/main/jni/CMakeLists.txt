@@ -16,3 +16,11 @@ foreach(autolinked_library ${AUTOLINKED_LIBRARIES})
     endif()
 endforeach()
 
+if(TARGET rnscreens)
+    target_link_libraries(rnscreens c++_shared)
+endif()
+
+if(TARGET gesturehandler)
+    target_link_libraries(gesturehandler c++_shared)
+endif()
+

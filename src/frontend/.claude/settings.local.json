@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(npm info *)",
+      "PowerShell(echo y | & \"C:\\\\Users\\\\choi suyeon\\\\AppData\\\\Local\\\\Android\\\\Sdk\\\\cmdline-tools\\\\latest\\\\bin\\\\sdkmanager.bat\" \"cmake;3.18.1\" 2>&1 | Select-Object -Last 10)",
+      "PowerShell(& \"C:\\\\Users\\\\choi suyeon\\\\AppData\\\\Local\\\\Android\\\\Sdk\\\\platform-tools\\\\adb.exe\" devices 2>&1)"
+    ]
+  }
+}
