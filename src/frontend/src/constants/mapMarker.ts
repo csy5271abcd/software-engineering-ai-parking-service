@@ -39,21 +39,22 @@ export function getMarkerVisual(
 }
 
 // ── Pill marker dimensions ────────────────────────────────────────────────────
-// Overlay height = pill height + 2px gap + tail height
 
 export const PILL_H = 28;
 export const PILL_H_SEL = 34;
 
-export const TAIL_H = 7;
-export const TAIL_H_SEL = 9;
-export const TAIL_W = 10;
-export const TAIL_W_SEL = 12;
+// SVG callout tail dimensions
+export const TAIL_H = 9;          // tail tip depth (actual curve bottom), normal
+export const TAIL_H_SEL = 11;     // selected
+export const TAIL_BASE_W = 14;    // tail base width, normal
+export const TAIL_BASE_W_SEL = 16; // selected
 
 export const ICON_SIZE = 14;
 export const ICON_SIZE_SEL = 16;
 
-export const OVERLAY_H = PILL_H + 2 + TAIL_H;               // 37
-export const OVERLAY_H_SEL = PILL_H_SEL + 2 + TAIL_H_SEL;  // 45
+// +2 for stroke overflow buffer
+export const OVERLAY_H = PILL_H + TAIL_H + 2;               // 39
+export const OVERLAY_H_SEL = PILL_H_SEL + TAIL_H_SEL + 2;  // 47
 
 // compact = icon only, full = icon + label text
 export const OVERLAY_W_COMPACT = 46;
