@@ -29,6 +29,86 @@ SmartPark AI 혼잡도 분석 모듈의 변경 이력을 정리한다.
 
 ---
 
+## v3.4.0
+
+### AI 학습용 샘플 데이터셋 생성 로직 구현
+
+#### 생성 파일
+
+- `src/ai/scripts/create_training_sample.py` — 대용량 `training_dataset.csv`를 chunk 단위로 읽어 AI 학습용 균형 샘플 데이터셋을 생성하는 스크립트
+
+#### 수정 파일
+
+- `src/ai/README.md` — AI 학습용 샘플 데이터셋 생성 흐름 보완
+- `src/ai/data/processed/README.md` — `training_sample.csv`와 `training_sample_summary.json` 설명 및 실행 명령 보완
+
+#### 생성 데이터
+
+다음 CSV 파일은 로컬에서 생성되는 산출물이므로 Git 추적 대상에서 제외한다.
+
+- `src/ai/data/processed/training_sample.csv`
+
+다음 요약 파일은 크기가 작아 필요 시 Git에 포함할 수 있다.
+
+- `src/ai/data/processed/training_sample_summary.json`
+
+#### 생성 결과
+
+| 항목                                |      결과 |
+| ----------------------------------- | --------: |
+| 최종 sample row 수                  |   280,000 |
+| `training_sample.csv` 크기          |  약 110MB |
+| `training_sample_summary.json` 크기 | 937 bytes |
+
+#### 원본 분포
+
+| congestion_level |     row 수 |
+| ---------------- | ---------: |
+| LOW              | 27,828,146 |
+| MEDIUM           | 14,992,958 |
+| HIGH             |    929,935 |
+| VERY_HIGH        |     72,961 |
+
+#### 샘플 분포
+
+| congestion_level | row 수 |
+| ---------------- | -----: |
+| LOW              | 70,000 |
+| MEDIUM           | 70,000 |
+| HIGH             | 70,000 |
+| VERY_HIGH        | 70,000 |
+| UNKNOWN          |      0 |
+
+#### 주요 구현 내용
+
+- 대용량 `training_dataset.csv`를 전체 로딩하지 않고 chunk 단위로 읽는 샘플링 구조 구현
+- 1차 pass에서 `congestion_level`별 원본 분포 계산
+- 2차 pass에서 `LOW`, `MEDIUM`, `HIGH`, `VERY_HIGH` 기준 균형 샘플링 수행
+- `UNKNOWN` level은 학습용 샘플에서 제외
+- level별 70,000 rows, 총 280,000 rows 규모의 AI 학습용 샘플 생성
+- `training_sample.csv`가 `training_dataset.csv`와 동일한 컬럼 구조를 유지하도록 처리
+- 샘플 생성 설정, 원본 분포, 샘플 분포를 `training_sample_summary.json`에 저장
+- 이후 `train_congestion_model.py`에서 전체 대용량 데이터 대신 `training_sample.csv`를 사용할 수 있는 기반 마련
+
+#### 검증
+
+- `python scripts\create_training_sample.py` 실행 성공
+- `python -m py_compile scripts\create_training_sample.py` 문법 검증 성공
+- `training_sample.csv`와 `training_dataset.csv` 컬럼 구조 일치 확인
+- `UNKNOWN` level 제외 확인
+- `congestion_score`, `recommendation_score`, `occupancy_rate` 범위 검증 완료
+- `git check-ignore`로 `training_sample.csv` 제외 확인
+- 프론트엔드/백엔드 폴더 미수정 확인
+
+#### 비고
+
+- `training_dataset.csv`는 약 16.7GB 규모의 대용량 산출물이므로 Git 저장소에 포함하지 않는다.
+- `training_sample.csv`도 로컬에서 재생성 가능한 산출물이므로 Git 저장소에 포함하지 않는다.
+- `training_sample_summary.json`은 크기가 작으므로 실험 재현성을 위해 Git에 포함할 수 있다.
+- 이후 `v3.5.0`에서는 `training_sample.csv`를 기반으로 AI 혼잡도 분석 모델 학습 로직을 구현한다.
+
+---
+
 ## v3.3.0
 
 ### AI 데이터 전처리 로직 구현
