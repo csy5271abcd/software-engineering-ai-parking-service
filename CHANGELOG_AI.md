@@ -21,6 +21,149 @@ SmartPark AI 혼잡도 분석 모듈의 변경 이력을 정리한다.
 
 ---
 
+## v3.7.0
+
+### AI 예측 결과 MySQL 적재 및 백엔드 연동 준비
+
+#### 생성 파일
+
+- `src/ai/sql/create_congestion_predictions_table.sql` — AI 예측 결과 저장용 MySQL 테이블 생성 SQL
+- `src/ai/sql/import_congestion_predictions.sql` — `congestion_predictions.csv` 수동 import 참고 SQL
+- `src/ai/scripts/load_predictions_to_mysql.py` — 예측 결과 CSV를 MySQL에 적재하는 Python loader
+- `src/ai/docs/MYSQL_INTEGRATION.md` — AI 예측 결과와 MySQL/Spring Boot 연동 기준 문서
+
+#### 수정 파일
+
+- `src/ai/README.md` — AI 예측 결과 MySQL 적재 흐름 추가
+- `src/ai/data/output/README.md` — `congestion_predictions.csv`의 MySQL 적재 용도 설명 보완
+- `src/ai/requirements.txt` — MySQL loader 실행을 위한 `mysql-connector-python` 의존성 추가
+- `.gitignore` — `congestion_predictions.csv`, `models/*.joblib`, `.env` Git 제외 규칙 확인 및 보완
+
+#### 주요 구현 내용
+
+- `congestion_predictions.csv`를 MySQL `congestion_predictions` 테이블에 적재할 수 있는 구조 작성
+- `prediction_id`를 Primary Key로 사용하는 테이블 스키마 정의
+- `parking_lot_id`, `target_datetime`, `congestion_level`, `recommendation_score` 조회 최적화를 위한 인덱스 정의
+- `parking_lot_id`, `target_datetime`, `model_version` 기준 unique key 정의
+- `ON DUPLICATE KEY UPDATE` 기반 upsert 적재 방식 구현
+- DB 접속 정보는 환경 변수 기반으로 관리하고 코드에 직접 작성하지 않도록 처리
+- `congestion_predictions.csv` 검증 후 chunk 단위로 MySQL에 적재하는 Python loader 작성
+- Spring Boot `CongestionPrediction` Entity, Repository, API 후보를 문서로 정리
+- 실제 백엔드 파일은 수정하지 않고, 이후 `v2.x.x` 백엔드 구현 단계에서 참고할 연동 기준만 작성
+
+#### 검증
+
+- `python -m py_compile scripts\load_predictions_to_mysql.py` 문법 검증 성공
+- `requirements.txt`에 `mysql-connector-python` 추가 확인
+- `congestion_predictions.csv`, `models/*.joblib`, `.env` Git 제외 확인
+- 프론트엔드/백엔드 폴더 미수정 확인
+
+#### DB 연결 여부
+
+- 실제 MySQL 적재는 실행하지 않음
+- `SMARTPARK_DB_USER`, `SMARTPARK_DB_PASSWORD` 환경 변수와 로컬 MySQL 준비 후 실행 필요
+
+#### 후속 백엔드 연동 작업
+
+- Spring Boot `CongestionPrediction` Entity 생성
+- `parking_lot_id`, `target_datetime`, `model_version` 기준 조회 Repository 추가
+- AI 혼잡도 예측 결과 조회 API 구현
+  - `GET /api/congestion/predictions`
+  - `GET /api/parking-lots/{parkingLotId}/congestion`
+  - `GET /api/parking-lots/nearby-with-congestion`
+
+#### 비고
+
+- `congestion_predictions.csv`는 재생성 가능한 산출물이므로 Git 저장소에 포함하지 않는다.
+- DB 비밀번호, `.env` 파일, 로컬 DB 설정 파일은 Git에 포함하지 않는다.
+- 이후 백엔드 `v2.x.x` 단계에서 `CongestionPrediction` Entity, Repository, API를 구현한다.
+
+---
+
+## v3.6.0
+
+### AI 혼잡도 예측 결과 생성 로직 구현
+
+#### 수정 파일
+
+- `src/ai/scripts/predict_congestion.py` — 학습된 AI 모델을 사용해 주차장별·시간대별 혼잡도 예측 결과를 생성하는 로직 구현
+- `src/ai/README.md` — AI 예측 결과 생성 실행 흐름 보완
+- `src/ai/data/output/README.md` — `congestion_predictions.csv`와 요약 파일 설명 보완
+
+#### 생성 파일
+
+다음 파일은 AI 예측 결과 산출물이다.
+
+- `src/ai/data/output/congestion_predictions.csv`
+- `src/ai/data/output/congestion_predictions_summary.json`
+
+#### 생성 결과
+
+| 항목                        |                    결과 |
+| --------------------------- | ----------------------: |
+| 예측 대상                   | 1,000개 주차장 × 24시간 |
+| 생성 row 수                 |                  24,000 |
+| 외부 요인 매칭 실패 row 수  |                   8,000 |
+| `prediction_id` 중복        |                       0 |
+| `model_version`             |   `ai-congestion-rf-v1` |
+| 평균 `congestion_score`     |                 42.8110 |
+| 평균 `recommendation_score` |                 52.5929 |
+| 평균 prediction confidence  |                  0.5906 |
+
+#### 혼잡도 분포
+
+| congestion_level | row 수 |
+| ---------------- | -----: |
+| LOW              | 14,411 |
+| MEDIUM           |  5,028 |
+| HIGH             |  3,757 |
+| VERY_HIGH        |    804 |
+
+#### 상위 추천 예시
+
+| parking_lot_id | target_datetime       | congestion_level | recommendation_score |
+| -------------- | --------------------- | ---------------- | -------------------: |
+| `PARK-0377`    | `2026-05-21 23:00:00` | LOW              |                75.90 |
+| `PARK-0377`    | `2026-05-21 22:00:00` | LOW              |                75.90 |
+| `PARK-0668`    | `2026-05-21 22:00:00` | LOW              |                75.82 |
+
+#### 주요 구현 내용
+
+- `models/congestion_model.joblib` 모델 pipeline 로딩
+- `models/congestion_model_metadata.json`에서 `model_version`, `feature_columns` 정보 활용
+- 모든 주차장에 대해 향후 24시간 기준 예측 대상 데이터 생성
+- `parking_lots.csv`와 `external_factors.csv`를 활용해 모델 입력 feature 구성
+- 학습 시 사용한 feature 구조와 동일한 컬럼 기준으로 `congestion_level` 예측
+- `congestion_level`과 예측 confidence를 기반으로 `congestion_score` 추정
+- `predicted_occupancy_rate`, `predicted_available_spaces` 계산
+- `recommendation_score`, `recommendation_reason` 생성
+- 백엔드/MySQL 적재용 `congestion_predictions.csv` 생성
+- 예측 결과 요약을 `congestion_predictions_summary.json`에 저장
+- 모델 파일이 없는 경우 `train_congestion_model.py` 실행 안내 출력
+
+#### 검증
+
+- `python scripts\predict_congestion.py` 실행 성공
+- `python -m py_compile scripts\predict_congestion.py` 문법 검증 성공
+- `congestion_predictions.csv` 생성 확인
+- `congestion_predictions_summary.json` 생성 확인
+- `DATA_SCHEMA.md`의 `congestion_predictions.csv` 컬럼 구조와 일치 확인
+- 예측 결과의 `prediction_id` 중복 없음 확인
+- `predicted_available_spaces`, `predicted_occupancy_rate`, `congestion_score`, `recommendation_score` 값 범위 검증
+- `congestion_predictions.csv` Git 제외 확인
+- 프론트엔드/백엔드 폴더 미수정 확인
+
+#### 비고
+
+- `congestion_model.joblib`는 로컬에서 재생성 가능한 모델 본체이므로 Git 저장소에 포함하지 않는다.
+- `congestion_predictions.csv`는 백엔드/MySQL 연동 테스트에 활용할 수 있으나, 재생성 가능한 산출물이므로 현재는 Git 추적 대상에서 제외한다.
+- `congestion_predictions_summary.json`은 크기가 작으므로 예측 결과 기록용으로 Git 포함을 권장한다.
+- 외부 요인 매칭 실패 8,000 rows는 미래 시간대가 `external_factors.csv`에 없어 기본값으로 보정된 결과이다.
+- 이후 고도화 시 미래 외부 요인 데이터 생성 로직을 별도로 추가할 수 있다.
+- 이후 `v3.7.0`에서는 `congestion_predictions.csv`를 MySQL에 적재하거나 백엔드 연동용 SQL/CSV 구조를 정리한다.
+
+---
+
 ## v3.5.0
 
 ### AI 혼잡도 분석 모델 학습 로직 구현

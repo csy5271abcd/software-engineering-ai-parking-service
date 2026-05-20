@@ -5,3 +5,4 @@ matplotlib
 openpyxl
 joblib
 python-dotenv
+mysql-connector-python

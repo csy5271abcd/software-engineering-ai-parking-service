@@ -1,8 +1,6 @@
 # SmartPark AI Module
 
-SmartPark AI 모듈은 주차장 이용 흐름과 외부 요인을 기반으로 주차장 혼잡도를 분석하고 예측 결과를 생성하기 위한 v3.x.x 구현 영역이다. v3.0.0에서는 기본 실행 구조를 만들었고, v3.1.0에서는 Mock 데이터 스키마와 데이터 흐름을 설계한다.
-
-이 모듈은 실제 개인정보나 실제 차량 데이터를 사용하지 않는다. 초기 개발과 테스트에는 Mock 주차장 데이터만 사용한다.
+SmartPark AI 모듈은 주차장 Mock 데이터 생성, 전처리, AI 학습, 혼잡도 예측, MySQL 적재 준비를 담당하는 v3.x.x 구현 영역이다. 실제 개인정보나 실제 차량 데이터는 사용하지 않으며 개발/검증용 Mock 데이터만 사용한다.
 
 ## 버전 관리 기준
 
@@ -10,97 +8,76 @@ SmartPark AI 모듈은 주차장 이용 흐름과 외부 요인을 기반으로 
 - `v2.x.x`: 백엔드 구현 버전
 - `v3.x.x`: AI 구현 버전
 - `v4.x.x`: 통합/MVP 버전
-- `v3.0.0`: AI 혼잡도 분석 모듈의 초기 폴더 구조 및 실행 스크립트 기준선
-- `v3.1.0`: AI Mock 데이터 스키마 및 데이터 흐름 문서화 기준선
-- `v3.2.0`: AI raw Mock 데이터 3종 생성 로직 구현 기준선
-- `v3.3.0`: AI 분석용 `training_dataset.csv` 대용량 전처리 로직 구현 기준선
-- `v3.4.0`: AI 학습용 균형 샘플 `training_sample.csv` 생성 로직 구현 기준선
-- `v3.5.0`: `training_sample.csv` 기반 AI 혼잡도 분류 모델 학습 및 평가 산출물 생성 기준선
+- `v3.7.0`: `congestion_predictions.csv` MySQL 적재용 SQL, Python loader, 백엔드 연동 문서 기준선
 
-## AI 데이터 흐름
+## 실행 흐름
 
-SmartPark AI 모듈의 기본 데이터 흐름은 다음 순서를 따른다.
-
-1. `data/raw`에 Mock 원본 CSV를 준비한다.
-2. `scripts/preprocess_parking_data.py`에서 원본 CSV를 결합하고 AI 학습용 데이터셋으로 변환한다.
-3. `scripts/train_congestion_model.py`에서 전처리 데이터를 기반으로 혼잡도 예측 모델을 학습한다.
-4. `scripts/predict_congestion.py`에서 예측 결과 CSV를 생성한다.
-5. 백엔드가 `data/output/congestion_predictions.csv`를 MySQL 적재 또는 API 응답 데이터로 활용한다.
-
-자세한 컬럼 정의와 상태값 기준은 [docs/DATA_SCHEMA.md](docs/DATA_SCHEMA.md)를 참고한다.
-
-## 폴더 구조
-
-```text
-ai/
-  data/
-    raw/          # Mock 원본 데이터 저장
-    processed/    # 전처리 완료 데이터 저장
-    output/       # AI 분석 결과 CSV 저장
-  docs/           # AI 데이터 스키마 및 설계 문서
-  models/         # 학습된 모델 파일 저장
-  notebooks/      # 실험용 노트북 저장
-  scripts/        # 데이터 생성, 전처리, 학습, 예측 실행 스크립트
-  requirements.txt
-  README.md
-```
-
-## 파일별 역할
-
-- `requirements.txt`: AI 모듈 실행에 필요한 Python 패키지 목록
-- `docs/DATA_SCHEMA.md`: v3.1.0 Mock 데이터 스키마와 백엔드 연동 기준
-- `scripts/generate_mock_parking_data.py`: Mock 원본 CSV 생성 진입점
-- `scripts/preprocess_parking_data.py`: 원본 CSV를 AI 학습용 데이터셋으로 전처리하는 진입점
-- `scripts/train_congestion_model.py`: 전처리 데이터를 기반으로 혼잡도 모델을 학습하는 진입점
-- `scripts/predict_congestion.py`: 학습된 모델과 입력 데이터를 사용해 혼잡도 예측 결과를 생성하는 진입점
-
-## 실행 순서
-
-1. Mock 주차장 데이터 생성
+1. Mock 원본 데이터 생성
 
    ```bash
    python scripts/generate_mock_parking_data.py
    ```
 
-2. 데이터 전처리
+2. AI 분석용 통합 데이터 생성
 
    ```bash
    python scripts/preprocess_parking_data.py
    ```
 
-3. 혼잡도 모델 학습
+3. AI 학습용 균형 샘플 생성
+
+   ```bash
+   python scripts/create_training_sample.py
+   ```
+
+4. AI 혼잡도 모델 학습
 
    ```bash
    python scripts/train_congestion_model.py
    ```
 
-4. 혼잡도 예측 결과 생성
+5. 혼잡도 예측 결과 생성
 
    ```bash
    python scripts/predict_congestion.py
    ```
 
-5. 예측 결과 CSV를 백엔드/MySQL 연동에 활용
+6. 예측 결과 MySQL 적재
 
-## 생성 예정 데이터 파일
+   ```bash
+   python scripts/load_predictions_to_mysql.py
+   ```
 
-- `data/raw/parking_lots.csv`: 주차장 기본 정보 Mock 데이터
-- `data/raw/parking_usage_history.csv`: 시간대별 주차장 이용 이력 Mock 데이터
-- `data/raw/external_factors.csv`: 날씨, 이벤트, 교통 등 외부 요인 Mock 데이터
-- `data/processed/training_dataset.csv`: AI 학습/검증용 통합 데이터
-- `data/output/congestion_predictions.csv`: 백엔드 연동 후보 예측 결과
+자세한 DB 연동 기준은 [docs/MYSQL_INTEGRATION.md](docs/MYSQL_INTEGRATION.md)를 참고한다.
 
-v3.2.0 기준으로 `scripts/generate_mock_parking_data.py`는 `parking_lots.csv`, `parking_usage_history.csv`, `external_factors.csv`를 실제 생성한다. `parking_usage_history.csv`는 대용량 파일이므로 주차장 chunk 단위로 생성해 append 저장한다.
+## 주요 폴더
 
-v3.3.0 기준으로 `scripts/preprocess_parking_data.py`는 대용량 `parking_usage_history.csv`를 row chunk 단위로 읽고 raw CSV 3종을 병합해 `data/processed/training_dataset.csv`를 생성한다.
+```text
+ai/
+  data/
+    raw/          # Mock 원본 데이터
+    processed/    # 전처리 및 학습 샘플 데이터
+    output/       # 예측 결과 및 평가 산출물
+  docs/           # 데이터 스키마 및 DB 연동 문서
+  models/         # 학습된 AI 모델과 메타데이터
+  notebooks/      # 실험용 노트북
+  scripts/        # 데이터 생성, 전처리, 학습, 예측, DB 적재 스크립트
+  sql/            # MySQL 테이블 생성 및 import 참고 SQL
+```
 
-v3.4.0 기준으로 `scripts/create_training_sample.py`는 대용량 `training_dataset.csv`를 chunk 단위로 읽고 `congestion_level` 기준 균형 샘플 `data/processed/training_sample.csv`를 생성한다.
+## 주요 산출물
 
-v3.5.0 기준으로 `scripts/train_congestion_model.py`는 `data/processed/training_sample.csv`를 사용해 `congestion_level` 분류 모델을 학습하고 모델, 메타데이터, 평가 지표, feature importance를 생성한다.
+- `data/raw/parking_lots.csv`
+- `data/raw/parking_usage_history.csv`
+- `data/raw/external_factors.csv`
+- `data/processed/training_dataset.csv`
+- `data/processed/training_sample.csv`
+- `models/congestion_model.joblib`
+- `models/congestion_model_metadata.json`
+- `data/output/congestion_predictions.csv`
+- `data/output/congestion_predictions_summary.json`
 
-## 백엔드 연동 예정 방식
-
-AI 모듈은 예측 결과를 `data/output/congestion_predictions.csv` 형태로 생성하고, 백엔드 모듈은 해당 CSV를 읽어 MySQL 테이블에 적재하는 방식으로 연동할 예정이다. 이후 API 연동이나 배치 실행 방식이 확정되면 README와 스크립트 실행 방식도 함께 갱신한다.
+대용량 CSV와 모델 본체는 재생성 가능한 산출물이므로 Git에 포함하지 않는다.
 
 ## 설치
 
