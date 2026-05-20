@@ -29,6 +29,72 @@ SmartPark AI 혼잡도 분석 모듈의 변경 이력을 정리한다.
 
 ---
 
+## v3.3.0
+
+### AI 데이터 전처리 로직 구현
+
+#### 수정 파일
+
+- `src/ai/scripts/preprocess_parking_data.py` — 대용량 raw CSV를 chunk 단위로 읽어 AI 분석용 `training_dataset.csv`를 생성하는 전처리 로직 구현
+- `src/ai/README.md` — AI 데이터 전처리 실행 흐름 보완
+- `src/ai/data/processed/README.md` — 전처리 산출물 설명 및 실행 명령 보완
+- `.gitignore` — 대용량 전처리 산출물 Git 제외 규칙 확인 및 보완
+
+#### 생성 데이터
+
+다음 CSV 파일은 로컬에서 생성되는 대용량 산출물이므로 Git 추적 대상에서 제외한다.
+
+- `src/ai/data/processed/training_dataset.csv`
+
+#### 생성 결과
+
+| 항목                        |       결과 |
+| --------------------------- | ---------: |
+| 생성 row 수                 | 43,824,000 |
+| 처리 chunk 수               |         88 |
+| 평균 `congestion_score`     |      29.28 |
+| 평균 `recommendation_score` |      62.72 |
+| 파일 크기                   |  약 16.7GB |
+
+#### 혼잡도 분포
+
+| congestion_level |     row 수 |
+| ---------------- | ---------: |
+| LOW              | 27,828,146 |
+| MEDIUM           | 14,992,958 |
+| HIGH             |    929,935 |
+| VERY_HIGH        |     72,961 |
+| UNKNOWN          |          0 |
+
+#### 주요 구현 내용
+
+- `parking_usage_history.csv`를 `chunksize=500,000` 기준으로 읽는 대용량 전처리 구조 구현
+- `parking_lots.csv`와 `parking_usage_history.csv`를 `parking_lot_id` 기준으로 병합
+- `external_factors.csv`를 `district`, `date`, `hour` 기준으로 병합
+- AI 분석용 통합 데이터셋 `training_dataset.csv` 생성
+- `congestion_score`, `congestion_level`, `recommendation_score`, `recommendation_reason` 파생 컬럼 생성
+- chunk별 병합, 파생변수 생성, 품질 검증, append 저장 구조 구현
+- 전체 대용량 파일을 한 번에 메모리에 올리지 않는 방식 적용
+- 대용량 산출물인 `training_dataset.csv`는 Git 추적 대상에서 제외
+
+#### 검증
+
+- `python scripts\preprocess_parking_data.py` 실행 성공
+- `python -m py_compile scripts\preprocess_parking_data.py` 문법 검증 성공
+- output CSV 헤더가 `DATA_SCHEMA.md`의 `training_dataset.csv` 컬럼 구조와 일치함 확인
+- 샘플 5 rows 로딩 확인
+- chunk 단위 병합/파생변수/품질 검증 수행
+- `git check-ignore`로 `data/processed/training_dataset.csv` 제외 확인
+- 프론트엔드/백엔드 폴더 미수정 확인
+
+#### 비고
+
+- `training_dataset.csv`는 약 16.7GB 규모의 대용량 산출물이므로 Git 저장소에는 포함하지 않는다.
+- 전처리 결과는 로컬에서 재생성 가능한 산출물로 관리하고, Git에는 전처리 스크립트와 문서만 반영한다.
+- 이후 모델 학습 단계에서는 전체 데이터를 바로 사용하기보다, 혼잡도 등급별 균형을 고려한 학습용 샘플 데이터셋을 생성한 뒤 학습에 활용한다.
+
+---
+
 ## v3.2.0
 
 ### AI Mock 데이터 생성 로직 구현
@@ -82,6 +148,10 @@ SmartPark AI 혼잡도 분석 모듈의 변경 이력을 정리한다.
 - 대용량 CSV는 로컬 재생성 가능한 산출물로 관리하고, Git에는 생성 스크립트와 문서만 반영한다.
 
 ---
+
+cd C:\sp
+
+git status
 
 ## v3.1.0
 
