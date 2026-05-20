@@ -12,6 +12,7 @@ SmartPark AI 모듈은 주차장 이용 흐름과 외부 요인을 기반으로 
 - `v4.x.x`: 통합/MVP 버전
 - `v3.0.0`: AI 혼잡도 분석 모듈의 초기 폴더 구조 및 실행 스크립트 기준선
 - `v3.1.0`: AI Mock 데이터 스키마 및 데이터 흐름 문서화 기준선
+- `v3.2.0`: AI raw Mock 데이터 3종 생성 로직 구현 기준선
 
 ## AI 데이터 흐름
 
@@ -85,6 +86,8 @@ ai/
 - `data/raw/external_factors.csv`: 날씨, 이벤트, 교통 등 외부 요인 Mock 데이터
 - `data/processed/training_dataset.csv`: AI 학습/검증용 통합 데이터
 - `data/output/congestion_predictions.csv`: 백엔드 연동 후보 예측 결과
+
+v3.2.0 기준으로 `scripts/generate_mock_parking_data.py`는 `parking_lots.csv`, `parking_usage_history.csv`, `external_factors.csv`를 실제 생성한다. `parking_usage_history.csv`는 대용량 파일이므로 주차장 chunk 단위로 생성해 append 저장한다.
 
 ## 백엔드 연동 예정 방식
 

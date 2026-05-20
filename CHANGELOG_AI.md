@@ -29,6 +29,60 @@ SmartPark AI 혼잡도 분석 모듈의 변경 이력을 정리한다.
 
 ---
 
+## v3.2.0
+
+### AI Mock 데이터 생성 로직 구현
+
+#### 수정 파일
+
+- `src/ai/scripts/generate_mock_parking_data.py` — SmartPark AI 혼잡도 분석용 원본 Mock 데이터 생성 로직 구현
+- `src/ai/README.md` — raw Mock 데이터 생성 흐름 및 실행 기준 보완
+- `src/ai/data/raw/README.md` — 생성되는 raw CSV 3종 설명 및 실행 명령 보완
+
+#### 생성 데이터
+
+다음 CSV 파일은 로컬에서 생성되는 대용량 산출물이므로 Git 추적 대상에서 제외한다.
+
+- `src/ai/data/raw/parking_lots.csv`
+- `src/ai/data/raw/external_factors.csv`
+- `src/ai/data/raw/parking_usage_history.csv`
+
+#### 생성 결과
+
+| 파일                        |     row 수 | 설명                                       |
+| --------------------------- | ---------: | ------------------------------------------ |
+| `parking_lots.csv`          |      1,000 | 서울 주요 지역 기반 주차장 기본 정보       |
+| `external_factors.csv`      |    657,360 | district, date, hour 기준 외부 요인 데이터 |
+| `parking_usage_history.csv` | 43,824,000 | 주차장별 5년치 시간대별 이용 이력          |
+
+#### 주요 구현 내용
+
+- 서울 주요 지역 기반 1,000개 주차장 기본 정보 Mock 데이터 생성
+- 주차장 유형, 주변 POI 유형, 운영 시간, 요금, 주차면 수 생성 로직 구현
+- 최근 5년치 시간대별 주차장 이용 이력 생성
+- 대용량 `parking_usage_history.csv` 생성을 위해 50개 주차장 단위 chunk 저장 구조 구현
+- 전체 usage history를 한 번에 메모리에 올리지 않고 chunk별 생성, 검증, append 저장 방식 적용
+- 요일, 시간대, 주말, 공휴일, 날씨, 행사, 교통 수준을 반영한 점유율 생성 로직 구현
+- `parking_lot_id` 기준으로 주차장 정보와 이용 이력을 연결할 수 있는 구조 구현
+- `district`, `date`, `hour` 기준으로 이용 이력과 외부 요인 데이터를 병합할 수 있는 구조 구현
+- Windows Excel 환경에서 한글이 깨지지 않도록 CSV 인코딩 처리
+
+#### 검증
+
+- `python scripts\generate_mock_parking_data.py` 실행 성공
+- `python -m py_compile scripts\generate_mock_parking_data.py` 문법 검증 성공
+- `parking_lots.csv`, `external_factors.csv` row 수 및 컬럼 확인 완료
+- `parking_usage_history.csv`는 전체 재로딩 없이 생성 중 chunk별 품질 검증 완료
+- `parking_usage_history.csv` 헤더 및 샘플 row 확인 완료
+- 프론트엔드/백엔드 폴더 미수정 확인
+
+#### 비고
+
+- `parking_usage_history.csv` 파일 크기는 약 4.0GB로, Git 저장소에는 포함하지 않는다.
+- 대용량 CSV는 로컬 재생성 가능한 산출물로 관리하고, Git에는 생성 스크립트와 문서만 반영한다.
+
+---
+
 ## v3.1.0
 
 ### AI Mock 데이터 스키마 설계
