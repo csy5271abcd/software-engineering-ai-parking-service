@@ -28,7 +28,9 @@
       "Bash(filter\" 2>&1)",
       "Bash(timeout 30 cmd /c \"npx react-native start --port 8084 2>&1 | head -5\")",
       "Bash(node -e ' *)",
-      "Bash(node *)"
+      "Bash(node *)",
+      "Bash(del \"C:\\\\sp\\\\src\\\\frontend\\\\src\\\\components\\\\map\\\\ParkingClusterMarker.tsx\")",
+      "Bash(del \"C:\\\\sp\\\\src\\\\frontend\\\\src\\\\utils\\\\mapCluster.ts\")"
     ]
   }
 }

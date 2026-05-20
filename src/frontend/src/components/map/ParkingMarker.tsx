@@ -1,10 +1,9 @@
 import React from 'react';
 import {View, Text, Pressable, StyleSheet} from 'react-native';
 import type {DimensionValue} from 'react-native';
-import {PARKING_STATUS} from '../../constants/status';
-import {STATUS_DISPLAY} from '../../utils/parkingStatus';
-import type {ParkingStatus} from '../../constants/status';
 import {AppIcon} from '../common/AppIcon';
+import {getMarkerVisual} from '../../constants/mapMarker';
+import type {ParkingStatus} from '../../constants/status';
 
 interface ParkingMarkerProps {
   name: string;
@@ -17,101 +16,73 @@ interface ParkingMarkerProps {
   isShared?: boolean;
 }
 
-const SHARED_COLOR = '#03AA5A';
-
 export function ParkingMarker({
-  name,
   status,
   selected = false,
   top,
   left,
   onPress,
-  soonMin,
   isShared = false,
 }: ParkingMarkerProps): React.JSX.Element {
-  const s = STATUS_DISPLAY[status];
-  const pinColor = isShared ? SHARED_COLOR : s.color;
-
-  const circleSize = selected ? 46 : 38;
-  const innerSize = selected ? 32 : 26;
-  const labelFontSize = selected ? 15 : 13;
-  const tailBW = selected ? 10 : 8;
-  const tailH = selected ? 12 : 10;
-  const overlap = selected ? 6 : 5;
-
-  const bubbleH = selected ? 26 : 0;
-  const tX = -(circleSize / 2);
-  const tY = -(bubbleH + circleSize + tailH - overlap);
-
-  const isSoon = status === PARKING_STATUS.SOON_AVAILABLE;
-  const badgeLabel = soonMin != null && soonMin > 0 ? `${soonMin}분` : '곧';
+  const visual = getMarkerVisual(status, isShared);
+  const pillH = selected ? 34 : 28;
+  const iconSz = selected ? 16 : 14;
+  const tailW = selected ? 12 : 10;
+  const tailH = selected ? 9 : 7;
+  const markerW = visual.label !== null ? (selected ? 78 : 68) : (selected ? 54 : 46);
+  const markerH = pillH + 2 + tailH;
 
   return (
     <Pressable
       onPress={onPress}
+      hitSlop={8}
       style={{
         position: 'absolute',
         top,
         left,
         alignItems: 'center',
-        transform: [{translateX: tX}, {translateY: tY}],
+        transform: [
+          {translateX: -(markerW / 2)},
+          {translateY: -markerH},
+        ],
         zIndex: selected ? 20 : 10,
       }}
     >
-      {/* Name bubble — selected only */}
-      {selected && (
-        <View style={styles.bubble}>
-          <Text style={styles.bubbleText} numberOfLines={1}>
-            {name}
-          </Text>
-        </View>
-      )}
-
-      {/* Pin circle */}
+      {/* Pill */}
       <View
         style={[
-          styles.pinOuter,
+          styles.pill,
           {
-            width: circleSize,
-            height: circleSize,
-            borderRadius: circleSize / 2,
-            backgroundColor: pinColor,
+            height: pillH,
+            backgroundColor: visual.bg,
+            borderColor: selected ? '#FFFFFF' : visual.border,
+            borderWidth: selected ? 2.5 : 1.5,
           },
+          selected && styles.pillSelected,
         ]}
       >
-        <View
-          style={[
-            styles.pinInner,
-            {width: innerSize, height: innerSize, borderRadius: innerSize / 2},
-          ]}
-        >
-          {isShared ? (
-            <AppIcon name="house" size={innerSize - 8} color={SHARED_COLOR} strokeWidth={2} />
-          ) : (
-            <Text style={[styles.pinLabel, {fontSize: labelFontSize, color: pinColor}]}>
-              P
-            </Text>
-          )}
-        </View>
-
-        {/* 곧/분 badge for SOON_AVAILABLE */}
-        {isSoon && (
-          <View style={styles.soonBadge}>
-            <Text style={styles.soonBadgeText}>{badgeLabel}</Text>
-          </View>
+        <AppIcon
+          name={visual.icon}
+          size={iconSz}
+          color="#FFFFFF"
+          strokeWidth={2.5}
+        />
+        {visual.label !== null && (
+          <Text style={[styles.pillText, {fontSize: selected ? 12 : 11}]}>
+            {visual.label}
+          </Text>
         )}
       </View>
 
-      {/* Teardrop tail */}
+      {/* Tail triangle */}
       <View
         style={[
-          styles.pinTail,
+          styles.tail,
           {
-            borderLeftWidth: tailBW,
-            borderRightWidth: tailBW,
+            borderLeftWidth: tailW / 2,
+            borderRightWidth: tailW / 2,
             borderTopWidth: tailH,
-            borderTopColor: pinColor,
-            marginTop: -overlap,
+            borderTopColor: visual.bg,
           },
         ]}
       />
@@ -120,67 +91,34 @@ export function ParkingMarker({
 }
 
 const styles = StyleSheet.create({
-  bubble: {
-    backgroundColor: '#222225',
-    paddingHorizontal: 10,
-    paddingVertical: 4,
+  pill: {
+    flexDirection: 'row',
+    alignItems: 'center',
     borderRadius: 100,
-    marginBottom: 5,
-    maxWidth: 140,
+    paddingHorizontal: 8,
+    gap: 4,
     elevation: 4,
     shadowColor: '#000',
-    shadowOffset: {width: 0, height: 3},
-    shadowOpacity: 0.22,
-    shadowRadius: 5,
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.18,
+    shadowRadius: 3,
   },
-  bubbleText: {
-    color: '#FFFFFF',
-    fontSize: 11,
-    fontWeight: '700',
-    letterSpacing: -0.3,
-    includeFontPadding: false,
-  },
-  pinOuter: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    elevation: 6,
-    shadowColor: '#000',
-    shadowOffset: {width: 0, height: 3},
-    shadowOpacity: 0.25,
+  pillSelected: {
+    elevation: 8,
+    shadowOpacity: 0.32,
     shadowRadius: 6,
   },
-  pinInner: {
-    backgroundColor: '#FFFFFF',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  pinLabel: {
-    fontWeight: '800',
+  pillText: {
+    color: '#FFFFFF',
+    fontWeight: '700',
     includeFontPadding: false,
+    lineHeight: 16,
   },
-  pinTail: {
+  tail: {
     width: 0,
     height: 0,
     borderLeftColor: 'transparent',
     borderRightColor: 'transparent',
-  },
-  soonBadge: {
-    position: 'absolute',
-    top: -5,
-    right: -6,
-    backgroundColor: '#006CFF',
-    borderRadius: 8,
-    paddingHorizontal: 4,
-    paddingVertical: 2,
-    borderWidth: 1.5,
-    borderColor: '#FFFFFF',
-    minWidth: 24,
-    alignItems: 'center',
-  },
-  soonBadgeText: {
-    fontSize: 8,
-    fontWeight: '800',
-    color: '#FFFFFF',
-    includeFontPadding: false,
+    marginTop: 2,
   },
 });
