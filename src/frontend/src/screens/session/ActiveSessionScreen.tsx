@@ -12,6 +12,8 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {AppIcon} from '../../components/common/AppIcon';
 import {NFCScanModal} from '../../components/session/NFCScanModal';
 import {getMockParkingLotById} from '../../mocks';
+import {calculateParkingFee} from '../../utils/parkingFee';
+import {formatHHMM} from '../../utils/formatters';
 
 type NavParam = {
   ActiveSessionScreen: {parkingLotId: string; startedAt: string};
@@ -30,19 +32,6 @@ interface Props {
 }
 
 const EXIT_OPTIONS = ['10분 후', '30분 후', '1시간 후', '직접 입력'] as const;
-
-// Billing rounds up to the nearest hour (minimum 1 hour)
-function calculateParkingFee(durationMinutes: number, pricePerHour: number): number {
-  const billingHours = Math.max(1, Math.ceil(durationMinutes / 60));
-  return billingHours * pricePerHour;
-}
-
-function formatHHMM(iso: string): string {
-  const d = new Date(iso);
-  const h = d.getHours().toString().padStart(2, '0');
-  const m = d.getMinutes().toString().padStart(2, '0');
-  return `${h}:${m}`;
-}
 
 export function ActiveSessionScreen({route: navRoute, navigation}: Props): React.JSX.Element {
   const insets = useSafeAreaInsets();

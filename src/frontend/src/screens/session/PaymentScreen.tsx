@@ -11,6 +11,7 @@ import type {StackNavigationProp} from '@react-navigation/stack';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {AppIcon} from '../../components/common/AppIcon';
 import {getMockParkingLotById} from '../../mocks';
+import {formatTimeLabel, formatDuration} from '../../utils/formatters';
 
 type NavParam = {
   PaymentScreen: {
@@ -41,20 +42,6 @@ const METHODS = [
   {key: 'samsung', name: '삼성페이', sub: '연결 안됨', emoji: '📱', disabled: true},
 ] as const;
 
-function formatTimeLabel(iso: string): string {
-  const d = new Date(iso);
-  const h = d.getHours().toString().padStart(2, '0');
-  const m = d.getMinutes().toString().padStart(2, '0');
-  return `오늘 ${h}:${m}`;
-}
-
-function formatDuration(minutes: number): string {
-  const h = Math.floor(minutes / 60);
-  const m = minutes % 60;
-  if (h === 0) {return `${m}분`;}
-  if (m === 0) {return `${h}시간`;}
-  return `${h}시간 ${m}분`;
-}
 
 export function PaymentScreen({route: navRoute, navigation}: Props): React.JSX.Element {
   const insets = useSafeAreaInsets();

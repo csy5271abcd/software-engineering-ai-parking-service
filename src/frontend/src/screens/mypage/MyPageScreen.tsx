@@ -4,8 +4,9 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useNavigation} from '@react-navigation/native';
 import type {StackNavigationProp} from '@react-navigation/stack';
 import {AppCard} from '../../components/common/AppCard';
-import {AppSeparator} from '../../components/common/AppSeparator';
 import {AppIcon} from '../../components/common/AppIcon';
+import {MenuSection} from '../../components/mypage/MenuSection';
+import type {MenuSectionData} from '../../components/mypage/MenuSection';
 import type {MyPageStackParamList} from '../../navigation/navigationTypes';
 
 type NavProp = StackNavigationProp<MyPageStackParamList, 'MyPageScreen'>;
@@ -22,20 +23,6 @@ const MOCK_USER = {
     {label: '신뢰도', value: '⭐ 4.8'},
   ],
 };
-
-// ── Menu section types ────────────────────────────────────────────────────────
-
-interface MenuItem {
-  icon: string; // emoji
-  label: string;
-  sub?: string;
-  badge?: string;
-}
-
-interface MenuSectionData {
-  title: string;
-  items: MenuItem[];
-}
 
 const MENU_SECTIONS: MenuSectionData[] = [
   {
@@ -71,42 +58,6 @@ const MENU_SECTIONS: MenuSectionData[] = [
     ],
   },
 ];
-
-// ── Components ────────────────────────────────────────────────────────────────
-
-function MenuSection({section}: {section: MenuSectionData}): React.JSX.Element {
-  return (
-    <View style={styles.menuSection}>
-      <Text style={styles.sectionTitle}>{section.title}</Text>
-      <AppCard padding="none" radius="xl" elevation>
-        {section.items.map((item, i) => (
-          <React.Fragment key={i}>
-            <Pressable style={styles.menuRow}>
-              <View style={styles.menuIconWrap}>
-                <Text style={styles.menuIconEmoji}>{item.icon}</Text>
-              </View>
-              <View style={styles.menuBody}>
-                <Text style={styles.menuLabel}>{item.label}</Text>
-                {item.sub != null && (
-                  <Text style={styles.menuSub}>{item.sub}</Text>
-                )}
-              </View>
-              {item.badge != null && (
-                <View style={styles.menuBadge}>
-                  <Text style={styles.menuBadgeText}>{item.badge}</Text>
-                </View>
-              )}
-              <AppIcon name="chevronRight" size={14} color="#CAD1DB" strokeWidth={2.2} />
-            </Pressable>
-            {i < section.items.length - 1 && (
-              <AppSeparator style={styles.rowDivider} />
-            )}
-          </React.Fragment>
-        ))}
-      </AppCard>
-    </View>
-  );
-}
 
 // ── Screen ────────────────────────────────────────────────────────────────────
 
@@ -356,10 +307,6 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     includeFontPadding: false,
   },
-  rowDivider: {
-    marginLeft: 54,
-  },
-
   version: {
     fontSize: 11.5,
     color: '#CAD1DB',

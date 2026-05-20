@@ -14,6 +14,7 @@ import {AppIcon} from '../../components/common/AppIcon';
 import {getMockParkingLotById} from '../../mocks';
 import {ReceiptModal} from '../../components/session/ReceiptModal';
 import type {ReceiptData} from '../../components/session/ReceiptModal';
+import {formatDuration} from '../../utils/formatters';
 
 type NavParam = {
   PaymentResultScreen: {
@@ -36,14 +37,6 @@ const PAYMENT_METHOD_LABEL: Record<string, string> = {
   shinhan: '신한카드',
   samsung: '삼성페이',
 };
-
-function formatDuration(minutes: number): string {
-  const h = Math.floor(minutes / 60);
-  const m = minutes % 60;
-  if (h === 0) {return `${m}분`;}
-  if (m === 0) {return `${h}시간`;}
-  return `${h}시간 ${m}분`;
-}
 
 function generateApprovalCode(): string {
   const pad = (n: number, len: number) => n.toString().padStart(len, '0');

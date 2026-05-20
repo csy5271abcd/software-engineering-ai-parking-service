@@ -13,6 +13,49 @@ SmartPark 프로젝트의 주요 변경 사항과 Git tag 기준선을 정리한
 
 ---
 
+## v1.1.13
+
+### 프론트엔드 코드베이스 도메인 기반 구조 리팩토링
+
+#### 유틸리티 함수 분리
+
+- `utils/formatters.ts` 신규 — `formatCurrency`, `formatDateTime`, `formatDuration`, `formatHHMM`, `formatTimeLabel` 추출 (ReceiptModal / PaymentScreen / PaymentResultScreen / ActiveSessionScreen에서 사용하던 인라인 함수)
+- `utils/parkingFee.ts` 신규 — `calculateParkingFee`, `calculateDurationMinutes` 추출 (ActiveSessionScreen에서 사용하던 인라인 함수)
+
+#### 타입 파일 분리
+
+- `types/history.ts` 신규 — `UsageStatus`, `UsageHistoryItem` 타입 정의 (이전: mocks/usageHistory.mock.ts 내 인라인)
+- `mocks/usageHistory.mock.ts` — 위 타입 re-export로 전환 (하위 호환 유지)
+
+#### 컴포넌트 추출
+
+- `components/history/HistoryCard.tsx` — UsedHistoryScreen에서 추출, STATUS_CONFIG 포함
+- `components/provider/ProviderParkingSpaceCard.tsx` — ProviderDashboardScreen에서 추출, STATUS_CONFIG 포함
+- `components/provider/ProviderTodayUsageRow.tsx` — ProviderDashboardScreen에서 추출
+- `components/provider/register/registerStyles.ts` — 위저드 스텝 공유 스타일 (stepScroll, stepContent, fieldLabel, input 등)
+- `components/provider/register/RegisterBasicInfoStep.tsx` — 기본 정보 스텝 (Step1)
+- `components/provider/register/RegisterLocationStep.tsx` — 위치 선택 스텝 (Step2)
+- `components/provider/register/RegisterPhotoStep.tsx` — 사진 등록 스텝 (Step3)
+- `components/provider/register/RegisterPricingStep.tsx` — 시간·요금 스텝 (Step4), `DAY_LABELS` export
+- `components/provider/register/RegisterPreviewStep.tsx` — 미리보기 스텝 (Step5)
+- `components/mypage/MenuSection.tsx` — MyPageScreen에서 추출, `MenuItem`/`MenuSectionData` 인터페이스 export
+
+#### ReceiptModal 버그 수정
+
+- `components/session/ReceiptModal.tsx` — `card` 스타일 `maxHeight` → `Dimensions.get('window').height * 0.86` 명시 (React Native ScrollView flex:1 높이 계산 버그 수정)
+
+#### 화면 파일 정리
+
+- `screens/session/ActiveSessionScreen.tsx` — 인라인 함수 제거, utils에서 임포트
+- `screens/session/PaymentScreen.tsx` — 인라인 함수 제거
+- `screens/session/PaymentResultScreen.tsx` — 인라인 함수 제거, ReceiptModal 연결
+- `screens/parking/UsedHistoryScreen.tsx` — 인라인 HistoryCard 제거, components에서 임포트
+- `screens/provider/ProviderDashboardScreen.tsx` — 인라인 카드/로우 컴포넌트 제거
+- `screens/provider/ProviderRegisterWizardScreen.tsx` — 인라인 Step1~5 함수 및 스텝 전용 스타일 제거, Register*Step 컴포넌트 임포트로 교체 (1040줄 → 약 190줄)
+- `screens/mypage/MyPageScreen.tsx` — 인라인 MenuSection 제거, components/mypage/MenuSection 임포트로 교체
+
+---
+
 ## v1.1.12
 
 ### NFC 이용 종료 인식 단계 및 결제 플로우 완성

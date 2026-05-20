@@ -15,81 +15,11 @@ import {
   mockProviderParkingSpaces,
   mockProviderTodayUsages,
 } from '../../mocks/provider.mock';
-import type {ProviderParkingSpace, ProviderTodayUsage} from '../../types/provider';
 import type {MyPageStackParamList} from '../../navigation/navigationTypes';
+import {ProviderParkingSpaceCard} from '../../components/provider/ProviderParkingSpaceCard';
+import {ProviderTodayUsageRow} from '../../components/provider/ProviderTodayUsageRow';
 
 type NavProp = StackNavigationProp<MyPageStackParamList, 'ProviderDashboardScreen'>;
-
-// ── Status config ─────────────────────────────────────────────────────────────
-
-const STATUS_CONFIG = {
-  APPROVED:       {label: '승인 완료', color: '#03AA5A', bg: 'rgba(3,170,90,0.10)'},
-  PENDING:        {label: '승인 대기', color: '#006CFF', bg: 'rgba(0,108,255,0.08)'},
-  NEEDS_REVISION: {label: '보완 요청', color: '#F5683C', bg: 'rgba(245,104,60,0.10)'},
-  REJECTED:       {label: '반려',      color: '#FB5852', bg: 'rgba(251,88,82,0.12)'},
-};
-
-// ── Sub-components ────────────────────────────────────────────────────────────
-
-function ParkingSpaceCard({lot}: {lot: ProviderParkingSpace}): React.JSX.Element {
-  const s = STATUS_CONFIG[lot.status];
-  return (
-    <Pressable style={styles.spaceCard}>
-      <View style={styles.spaceThumb}>
-        <AppIcon name="house" size={22} color="#006CFF" strokeWidth={1.8} />
-      </View>
-      <View style={styles.spaceBody}>
-        <View style={styles.spaceNameRow}>
-          <Text style={styles.spaceName} numberOfLines={1}>{lot.name}</Text>
-          <View style={[styles.statusBadge, {backgroundColor: s.bg}]}>
-            <Text style={[styles.statusBadgeText, {color: s.color}]}>{s.label}</Text>
-          </View>
-        </View>
-        <Text style={styles.spaceMeta}>{lot.address} · {lot.hours}</Text>
-        {lot.status === 'APPROVED' && lot.todayUses != null && (
-          <View style={styles.spaceStats}>
-            <Text style={styles.spaceStatText}>
-              오늘 {lot.todayUses}회 · ₩{lot.todayRevenue?.toLocaleString()}
-            </Text>
-            <Text style={styles.spaceMonthly}>
-              이번 달 ₩{lot.monthlyRevenue?.toLocaleString()}
-            </Text>
-          </View>
-        )}
-        {lot.status === 'PENDING' && (
-          <Text style={styles.spacePending}>관리자 검토 중 · 보통 1-2일 소요</Text>
-        )}
-        {lot.status === 'NEEDS_REVISION' && lot.revisionReason != null && (
-          <View style={styles.spaceRevision}>
-            <AppIcon name="alertCircle" size={12} color="#F5683C" strokeWidth={2} />
-            <Text style={styles.spaceRevisionText}>{lot.revisionReason}</Text>
-          </View>
-        )}
-      </View>
-    </Pressable>
-  );
-}
-
-function TodayUsageRow({
-  usage,
-  isLast,
-}: {
-  usage: ProviderTodayUsage;
-  isLast: boolean;
-}): React.JSX.Element {
-  return (
-    <View style={[styles.usageRow, !isLast && styles.usageRowBorder]}>
-      <View style={styles.usageAvatar}>
-        <Text style={styles.usageAvatarText}>{usage.userName[0]}</Text>
-      </View>
-      <View style={styles.usageBody}>
-        <Text style={styles.usageName}>{usage.userName} · {usage.duration}</Text>
-        <Text style={styles.usageMeta}>{usage.time} · {usage.lotName}</Text>
-      </View>
-      <Text style={styles.usageFee}>+₩{usage.fee.toLocaleString()}</Text>
-    </View>
-  );
-}
 
 // ── Screen ────────────────────────────────────────────────────────────────────
 
@@ -167,7 +97,7 @@ export function ProviderDashboardScreen(): React.JSX.Element {
         </View>
         <View style={styles.spaceList}>
           {mockProviderParkingSpaces.map(lot => (
-            <ParkingSpaceCard key={lot.id} lot={lot} />
+            <ProviderParkingSpaceCard key={lot.id} lot={lot} />
           ))}
         </View>
 
@@ -175,7 +105,7 @@ export function ProviderDashboardScreen(): React.JSX.Element {
         <Text style={[styles.sectionTitle, styles.sectionTitleMargin]}>오늘의 이용 현황</Text>
         <View style={styles.usageCard}>
           {mockProviderTodayUsages.map((u, i) => (
-            <TodayUsageRow
+            <ProviderTodayUsageRow
               key={u.id}
               usage={u}
               isLast={i === mockProviderTodayUsages.length - 1}
@@ -341,93 +271,6 @@ const styles = StyleSheet.create({
 
   // ── Space list
   spaceList: {gap: 8, marginBottom: 4},
-  spaceCard: {
-    backgroundColor: '#FFFFFF',
-    borderWidth: 1,
-    borderColor: '#E5EAF1',
-    borderRadius: 12,
-    padding: 14,
-    flexDirection: 'row',
-    gap: 12,
-  },
-  spaceThumb: {
-    width: 50,
-    height: 50,
-    borderRadius: 10,
-    backgroundColor: '#EEF4FF',
-    borderWidth: 1,
-    borderColor: '#E5EAF1',
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexShrink: 0,
-  },
-  spaceBody: {flex: 1, minWidth: 0, gap: 4},
-  spaceNameRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 6,
-    flexWrap: 'wrap',
-  },
-  spaceName: {
-    fontSize: 14,
-    fontWeight: '700',
-    color: '#222225',
-    letterSpacing: -0.3,
-    includeFontPadding: false,
-  },
-  statusBadge: {
-    paddingHorizontal: 7,
-    paddingVertical: 2,
-    borderRadius: 4,
-  },
-  statusBadgeText: {
-    fontSize: 10.5,
-    fontWeight: '700',
-    includeFontPadding: false,
-    letterSpacing: -0.2,
-  },
-  spaceMeta: {
-    fontSize: 11.5,
-    color: '#6B7C92',
-    letterSpacing: -0.2,
-    includeFontPadding: false,
-  },
-  spaceStats: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-    flexWrap: 'wrap',
-  },
-  spaceStatText: {
-    fontSize: 11.5,
-    color: '#4D5A6A',
-    letterSpacing: -0.2,
-    includeFontPadding: false,
-  },
-  spaceMonthly: {
-    fontSize: 11.5,
-    fontWeight: '700',
-    color: '#03AA5A',
-    letterSpacing: -0.2,
-    includeFontPadding: false,
-  },
-  spacePending: {
-    fontSize: 11.5,
-    color: '#6B7C92',
-    letterSpacing: -0.2,
-    includeFontPadding: false,
-  },
-  spaceRevision: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 4,
-  },
-  spaceRevisionText: {
-    fontSize: 11.5,
-    color: '#F5683C',
-    letterSpacing: -0.2,
-    includeFontPadding: false,
-  },
 
   // ── Usage card
   usageCard: {
@@ -436,51 +279,5 @@ const styles = StyleSheet.create({
     borderColor: '#E5EAF1',
     borderRadius: 12,
     paddingHorizontal: 14,
-  },
-  usageRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 10,
-    paddingVertical: 10,
-  },
-  usageRowBorder: {
-    borderBottomWidth: 1,
-    borderBottomColor: '#F2F4F7',
-  },
-  usageAvatar: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-    backgroundColor: 'rgba(0,108,255,0.08)',
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexShrink: 0,
-  },
-  usageAvatarText: {
-    fontSize: 11,
-    fontWeight: '700',
-    color: '#006CFF',
-    includeFontPadding: false,
-  },
-  usageBody: {flex: 1, minWidth: 0, gap: 2},
-  usageName: {
-    fontSize: 12.5,
-    fontWeight: '600',
-    color: '#222225',
-    letterSpacing: -0.2,
-    includeFontPadding: false,
-  },
-  usageMeta: {
-    fontSize: 10.5,
-    color: '#6B7C92',
-    letterSpacing: -0.2,
-    includeFontPadding: false,
-  },
-  usageFee: {
-    fontSize: 13.5,
-    fontWeight: '700',
-    color: '#03AA5A',
-    letterSpacing: -0.2,
-    includeFontPadding: false,
   },
 });

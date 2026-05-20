@@ -8,6 +8,7 @@ import {
   Text,
   View,
 } from 'react-native';
+import {formatCurrency, formatDateTime, formatDuration} from '../../utils/formatters';
 
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
@@ -43,33 +44,6 @@ const PAYMENT_METHOD_LABEL: Record<string, string> = {
   shinhan: '신한카드',
   samsung: '삼성페이',
 };
-
-function formatCurrency(amount: number): string {
-  return `₩${amount.toLocaleString()}`;
-}
-
-function formatDateTime(iso: string): string {
-  try {
-    const d = new Date(iso);
-    if (isNaN(d.getTime())) {return '-';}
-    const yy = d.getFullYear();
-    const mo = (d.getMonth() + 1).toString().padStart(2, '0');
-    const dd = d.getDate().toString().padStart(2, '0');
-    const hh = d.getHours().toString().padStart(2, '0');
-    const mm = d.getMinutes().toString().padStart(2, '0');
-    return `${yy}.${mo}.${dd} ${hh}:${mm}`;
-  } catch {
-    return '-';
-  }
-}
-
-function formatDuration(minutes: number): string {
-  const h = Math.floor(minutes / 60);
-  const m = minutes % 60;
-  if (h === 0) {return `${m}분`;}
-  if (m === 0) {return `${h}시간`;}
-  return `${h}시간 ${m}분`;
-}
 
 // ── Row helper ────────────────────────────────────────────────────────────────
 
