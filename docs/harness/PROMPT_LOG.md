@@ -546,13 +546,13 @@ git push origin main --tags
 
 ## PL-09. 구현 방향 수립 및 문서 보강
 
-| 항목        | 내용 |
-| ----------- | ---- |
-| 작업일      | 2026-05-18 |
-| 사용 도구   | ChatGPT |
-| 작업 유형   | 문서 수정 / 구현 방향 정리 |
-| 관련 파일   | `FOLDER_STRUCTURE.md`, `PROJECT_RULES.md`, `FEATURE_SPEC.md`, `SCREEN_STRUCTURE.md`, `CLAUDE.md`, `CODEX.md`, `PRD.md`, `README.md`, `CHANGELOG.md`, `configuration_management_plan.md`, `SERVICE_SCENARIO.md` |
-| 관련 버전   | v0.4.0 후보 |
+| 항목      | 내용                                                                                                                                                                                                           |
+| --------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 작업일    | 2026-05-18                                                                                                                                                                                                     |
+| 사용 도구 | ChatGPT                                                                                                                                                                                                        |
+| 작업 유형 | 문서 수정 / 구현 방향 정리                                                                                                                                                                                     |
+| 관련 파일 | `FOLDER_STRUCTURE.md`, `PROJECT_RULES.md`, `FEATURE_SPEC.md`, `SCREEN_STRUCTURE.md`, `CLAUDE.md`, `CODEX.md`, `PRD.md`, `README.md`, `CHANGELOG.md`, `configuration_management_plan.md`, `SERVICE_SCENARIO.md` |
+| 관련 버전 | v0.4.0 후보                                                                                                                                                                                                    |
 
 ### 1. 입력 프롬프트
 
@@ -938,16 +938,137 @@ AI 도구에 입력한 오류 해결 요청
 
 ---
 
-## 12. 향후 프롬프트 기록 예정 항목
+## 12. 프론트엔드 구현 프롬프트 기록
+
+## PL-FE-14. Home 화면 Naver Map 실제 연동
+
+| 항목        | 내용                                                                                                                                                                                                                                              |
+| ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 작업일      | 2026-05-20                                                                                                                                                                                                                                        |
+| 사용 도구   | Claude Code                                                                                                                                                                                                                                       |
+| 작업 유형   | 프론트엔드 구현                                                                                                                                                                                                                                   |
+| 관련 파일   | `src/frontend/src/components/map/SmartNaverMapView.tsx`, `src/frontend/src/screens/home/HomeMapScreen.tsx`, `src/frontend/android/build.gradle`, `src/frontend/android/app/build.gradle`, `src/frontend/android/app/src/main/AndroidManifest.xml` |
+| 관련 버전   | `v1.1.14`                                                                                                                                                                                                                                         |
+| 관련 commit | `[FEAT-14] Home 화면 Naver Map 실제 연동`                                                                                                                                                                                                         |
+
+### 1. 입력 프롬프트
+
+```text
+Home 화면의 기존 View 기반 MapPlaceholder를 실제 Naver Map으로 교체한다.
+@mj-studio/react-native-naver-map 기반 NaverMapView와 NaverMapMarkerOverlay를 사용한다.
+Naver Map Client ID는 android/local.properties에서 관리하고 코드와 문서에는 노출하지 않는다.
+기존 SearchBar, CategoryChips, 날씨 badge, FAB, ParkingBottomSheet, 하단 탭 구조는 유지한다.
+mock 현재 위치와 mock 주차장 데이터를 기준으로 지도와 마커를 표시한다.
+```
+
+### 2. 생성 결과
+
+- 생성/수정된 파일:
+  - `src/frontend/src/components/map/SmartNaverMapView.tsx`
+  - `src/frontend/src/screens/home/HomeMapScreen.tsx`
+  - `src/frontend/android/build.gradle`
+  - `src/frontend/android/app/build.gradle`
+  - `src/frontend/android/app/src/main/AndroidManifest.xml`
+- 주요 결과:
+  - `@mj-studio/react-native-naver-map` 기반 실제 Naver Map 렌더링을 적용하였다.
+  - 기존 MapPlaceholder는 fallback 구조로 유지하였다.
+  - mock 현재 위치와 mock 주차장 마커를 지도 위에 표시하였다.
+  - 현재 위치 버튼과 지도 카메라 이동 흐름을 연결하였다.
+  - `NAVER_MAP_CLIENT_ID`는 `android/local.properties`에서 관리하도록 설정하였다.
+
+### 3. 수정 및 검토 사항
+
+- Naver Map Client ID 값이 코드, README, CHANGELOG, console.log에 노출되지 않도록 점검해야 한다.
+- Android 설정 파일은 Naver Map 연동에 필요한 범위에서만 수정한다.
+- 지도 위 overlay UI와 BottomSheet 4단계 swipe 구조가 깨지지 않았는지 실기기에서 확인한다.
+
+### 4. 연결된 형상관리
+
+```bash
+git add src/frontend/src/ src/frontend/android/ README.md CHANGELOG.md
+
+git commit -m "[FEAT-14] Home 화면 Naver Map 실제 연동"
+
+git tag -a v1.1.14 -m "v1.1.14 Home 화면 Naver Map 실제 연동"
+
+git push origin main --tags
+```
+
+---
+
+## PL-FE-15. 지도 마커 UI 보정 및 mock 주차장 데이터 확장
+
+| 항목        | 내용                                                                                                                                                                                                  |
+| ----------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 작업일      | 2026-05-20                                                                                                                                                                                            |
+| 사용 도구   | Claude Code                                                                                                                                                                                           |
+| 작업 유형   | 프론트엔드 UI 개선                                                                                                                                                                                    |
+| 관련 파일   | `src/frontend/src/components/map/ParkingMarker.tsx`, `src/frontend/src/components/map/SmartNaverMapView.tsx`, `src/frontend/src/constants/mapMarker.ts`, `src/frontend/src/mocks/parkingLots.mock.ts` |
+| 관련 버전   | `v1.1.15`                                                                                                                                                                                             |
+| 관련 commit | `[FEAT-15] 지도 클러스터링 제거 및 커스텀 마커 개선`                                                                                                                                                  |
+
+### 1. 입력 프롬프트
+
+```text
+Home 화면에서 클러스터링 기능만 제거한다.
+v1.1.14에서 완료한 Naver Map 실제 불러오기 구조는 유지한다.
+커스텀 마커는 제거하지 않고, 현재 Home 화면의 Category Chip과 비슷한 디자인 톤으로 재구성한다.
+마커에는 Lucide icon을 포함하고, 상태별 색상 테두리를 적용한다.
+마커 하단에는 지도 마커처럼 보이도록 뾰족한 pointer를 추가한다.
+색상은 고정하지 않고 현재 SmartPark theme와 주차장 상태값 기준으로 적용한다.
+지도에 마커가 충분히 표시되도록 mock 주차장 데이터를 20개 이상 확장한다.
+지도 마커와 ParkingBottomSheet는 반드시 같은 mock 데이터를 사용한다.
+```
+
+### 2. 생성 결과
+
+- 생성/수정/삭제 대상 파일:
+  - `src/frontend/src/components/map/ParkingMarker.tsx`
+  - `src/frontend/src/components/map/SmartNaverMapView.tsx`
+  - `src/frontend/src/constants/mapMarker.ts`
+  - `src/frontend/src/mocks/parkingLots.mock.ts`
+  - `src/frontend/src/components/map/ParkingClusterMarker.tsx` 삭제 또는 미사용 처리
+  - `src/frontend/src/utils/mapCluster.ts` 삭제 또는 미사용 처리
+- 주요 결과:
+  - zoom 기반 클러스터링과 개수형 클러스터 마커를 제거하였다.
+  - Lucide 아이콘 기반 커스텀 마커는 유지하였다.
+  - 마커를 Category Chip과 유사한 compact pill/badge 구조로 보정하였다.
+  - 마커 하단 pointer, 상태별 border, 선택 상태 강조를 적용하였다.
+  - 지도 중심 주변 mock 주차장 데이터를 확장하였다.
+  - 지도 마커와 ParkingBottomSheet가 동일한 mock 데이터를 사용하도록 정리하였다.
+
+### 3. 수정 및 검토 사항
+
+- `ParkingClusterMarker`, `mapCluster`, `CLUSTER_SPEC`, cluster click handler 등 클러스터링 관련 import가 남아 있지 않은지 확인한다.
+- `ParkingMarker` 색상은 특정 팔레트로 고정하지 않고 theme와 상태값 기준으로 관리한다.
+- `HomeMapScreen`과 `SmartNaverMapView`에서 기존 `selectedParkingLot` 및 `ParkingSummary BottomSheet` 흐름이 유지되는지 확인한다.
+- 추가된 mock 데이터 좌표가 현재 `initialCamera` 주변에 배치되어 실지도에서 확인되는지 검증한다.
+
+### 4. 연결된 형상관리
+
+```bash
+git add src/frontend/src/ README.md CHANGELOG.md docs/harness/PROMPT_LOG.md
+
+git commit -m "[FEAT-15] 지도 클러스터링 제거 및 커스텀 마커 개선"
+
+git tag -a v1.1.15 -m "v1.1.15 지도 클러스터링 제거 및 커스텀 마커 개선"
+
+git push origin main --tags
+```
+
+---
+
+## 13. 향후 프롬프트 기록 예정 항목
 
 향후 개발 단계에서는 다음 항목을 추가로 기록한다.
 
 | 예정 항목 | 설명                                                 |
 | --------- | ---------------------------------------------------- |
-| FE-PL-01  | React Native 프로젝트 초기 구조 생성 프롬프트        |
-| FE-PL-02  | HomeMapScreen 구현 프롬프트                          |
-| FE-PL-03  | ParkingDetailScreen 구현 프롬프트                    |
-| FE-PL-04  | NFC 이용 시작/종료 화면 구현 프롬프트                |
+| FE-PL-01  | 실제 GPS 위치 권한 및 현재 위치 추적 구현 프롬프트   |
+| FE-PL-02  | 백엔드 주차장 조회 API 연동 프롬프트                 |
+| FE-PL-03  | 목적지 검색 API 연동 프롬프트                        |
+| FE-PL-04  | 경로 안내 API 연동 프롬프트                          |
+| FE-PL-05  | 실제 NFC 태그 인식 고도화 프롬프트                   |
 | BE-PL-01  | Spring Boot 프로젝트 초기 구조 생성 프롬프트         |
 | BE-PL-02  | ParkingLot 도메인 및 조회 API 구현 프롬프트          |
 | BE-PL-03  | ParkingSession 도메인 및 NFC 이용 흐름 구현 프롬프트 |
@@ -960,7 +1081,7 @@ AI 도구에 입력한 오류 해결 요청
 
 ---
 
-## 13. 정리
+## 14. 정리
 
 본 문서는 SmartPark 프로젝트에서 AI 도구를 활용한 작업 과정을 기록하기 위한 기준 문서이다.
 
