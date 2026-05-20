@@ -57,7 +57,7 @@ export function CategoryChips({
             <AppIcon
               name={cat.icon}
               size={15}
-              color={cat.iconColor}
+              color={isActive ? '#006CFF' : cat.iconColor}
               strokeWidth={2.2}
               fill="none"
             />

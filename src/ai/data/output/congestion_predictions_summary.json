@@ -1,0 +1,96 @@
+{
+  "generated_at": "2026-05-21 07:35:58",
+  "model_version": "ai-congestion-rf-v1",
+  "model_file": "C:\\sp\\src\\ai\\models\\congestion_model.joblib",
+  "metadata_file": "C:\\sp\\src\\ai\\models\\congestion_model_metadata.json",
+  "prediction_hours": 24,
+  "test_mode": false,
+  "total_prediction_rows": 24000,
+  "parking_lot_count": 1000,
+  "target_datetime_count": 24,
+  "congestion_level_distribution": {
+    "LOW": 14411,
+    "MEDIUM": 5028,
+    "HIGH": 3757,
+    "VERY_HIGH": 804
+  },
+  "average_congestion_score": 42.811,
+  "average_recommendation_score": 52.5929,
+  "average_predicted_occupancy_rate": 0.5061,
+  "average_predicted_available_spaces": 47.6969,
+  "average_prediction_confidence": 0.5906,
+  "external_factor_unmatched_rows": 8000,
+  "top_recommended_parking_lots": [
+    {
+      "parking_lot_id": "PARK-0377",
+      "target_datetime": "2026-05-21 23:00:00",
+      "congestion_level": "LOW",
+      "recommendation_score": 75.9,
+      "predicted_available_spaces": 1
+    },
+    {
+      "parking_lot_id": "PARK-0377",
+      "target_datetime": "2026-05-21 22:00:00",
+      "congestion_level": "LOW",
+      "recommendation_score": 75.9,
+      "predicted_available_spaces": 1
+    },
+    {
+      "parking_lot_id": "PARK-0668",
+      "target_datetime": "2026-05-21 22:00:00",
+      "congestion_level": "LOW",
+      "recommendation_score": 75.82,
+      "predicted_available_spaces": 1
+    },
+    {
+      "parking_lot_id": "PARK-0668",
+      "target_datetime": "2026-05-21 23:00:00",
+      "congestion_level": "LOW",
+      "recommendation_score": 75.81,
+      "predicted_available_spaces": 1
+    },
+    {
+      "parking_lot_id": "PARK-0377",
+      "target_datetime": "2026-05-21 21:00:00",
+      "congestion_level": "LOW",
+      "recommendation_score": 75.36,
+      "predicted_available_spaces": 1
+    },
+    {
+      "parking_lot_id": "PARK-0668",
+      "target_datetime": "2026-05-21 15:00:00",
+      "congestion_level": "LOW",
+      "recommendation_score": 75.19,
+      "predicted_available_spaces": 1
+    },
+    {
+      "parking_lot_id": "PARK-0668",
+      "target_datetime": "2026-05-21 17:00:00",
+      "congestion_level": "LOW",
+      "recommendation_score": 75.08,
+      "predicted_available_spaces": 1
+    },
+    {
+      "parking_lot_id": "PARK-0668",
+      "target_datetime": "2026-05-21 14:00:00",
+      "congestion_level": "LOW",
+      "recommendation_score": 74.9,
+      "predicted_available_spaces": 1
+    },
+    {
+      "parking_lot_id": "PARK-0668",
+      "target_datetime": "2026-05-22 04:00:00",
+      "congestion_level": "LOW",
+      "recommendation_score": 74.86,
+      "predicted_available_spaces": 1
+    },
+    {
+      "parking_lot_id": "PARK-0668",
+      "target_datetime": "2026-05-22 05:00:00",
+      "congestion_level": "LOW",
+      "recommendation_score": 74.86,
+      "predicted_available_spaces": 1
+    }
+  ],
+  "source_note": "congestion_predictions.csv is generated from SmartPark AI model and is intended for backend/MySQL integration."
+}

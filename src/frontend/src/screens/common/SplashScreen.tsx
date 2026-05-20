@@ -1,12 +1,46 @@
-import React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
-import {colors, spacing, typography} from '../../theme';
+import React, {useEffect, useRef} from 'react';
+import {Animated, Image, StyleSheet, View} from 'react-native';
+import {CommonActions} from '@react-navigation/native';
+import type {StackScreenProps} from '@react-navigation/stack';
+import type {RootStackParamList} from '../../navigation/navigationTypes';
 
-export function SplashScreen(): React.JSX.Element {
+type Props = StackScreenProps<RootStackParamList, 'SplashScreen'>;
+
+export function SplashScreen({navigation}: Props): React.JSX.Element {
+  const opacity = useRef(new Animated.Value(0)).current;
+  const scale = useRef(new Animated.Value(0.72)).current;
+
+  useEffect(() => {
+    Animated.parallel([
+      Animated.timing(opacity, {
+        toValue: 1,
+        duration: 900,
+        useNativeDriver: true,
+      }),
+      Animated.spring(scale, {
+        toValue: 1,
+        friction: 8,
+        tension: 40,
+        useNativeDriver: true,
+      }),
+    ]).start(() => {
+      setTimeout(() => {
+        navigation.dispatch(
+          CommonActions.reset({index: 0, routes: [{name: 'MainTab'}]}),
+        );
+      }, 900);
+    });
+  }, [navigation, opacity, scale]);
+
   return (
     <View style={styles.container}>
-      <Text style={styles.appName}>SmartPark</Text>
-      <Text style={styles.tagline}>AI 기반 스마트 주차 플랫폼</Text>
+      <Animated.View style={{opacity, transform: [{scale}]}}>
+        <Image
+          source={require('../../assets/Logo/SmartParkLogo.png')}
+          style={styles.logo}
+          resizeMode="contain"
+        />
+      </Animated.View>
     </View>
   );
 }
@@ -14,23 +48,12 @@ export function SplashScreen(): React.JSX.Element {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#FFFFFF',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: colors.primary.default,
-    padding: spacing.screen,
   },
-  appName: {
-    fontSize: typography.title.xl.fontSize,
-    fontWeight: typography.title.xl.fontWeight,
-    lineHeight: typography.title.xl.lineHeight,
-    color: colors.primary.text,
-    marginBottom: spacing.xs,
-  },
-  tagline: {
-    fontSize: typography.body.md.fontSize,
-    fontWeight: typography.body.md.fontWeight,
-    lineHeight: typography.body.md.lineHeight,
-    color: colors.primary.text,
-    opacity: 0.85,
+  logo: {
+    width: 180,
+    height: 180,
   },
 });

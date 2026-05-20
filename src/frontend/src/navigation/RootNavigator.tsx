@@ -12,7 +12,7 @@ const Stack = createStackNavigator<RootStackParamList>();
 export function RootNavigator(): React.JSX.Element {
   return (
     <Stack.Navigator
-      initialRouteName="MainTab"
+      initialRouteName="SplashScreen"
       screenOptions={{headerShown: false}}>
       <Stack.Screen name="SplashScreen" component={SplashScreen} />
       <Stack.Screen name="PermissionGuideScreen" component={PermissionGuideScreen} />

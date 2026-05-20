@@ -1,0 +1,13 @@
+# SmartPark AI generated data
+data/raw/*.csv
+data/processed/*.csv
+data/output/congestion_predictions.csv
+models/*.joblib
+.env
+*.env
+local*.json
+
+# Keep README files
+!data/raw/README.md
+!data/processed/README.md
+!data/output/README.md

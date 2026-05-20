@@ -4,7 +4,7 @@ import React, {
   useImperativeHandle,
   useRef,
 } from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import Svg, {Path} from 'react-native-svg';
 import {
   NaverMapMarkerOverlay,
@@ -12,27 +12,26 @@ import {
   type NaverMapViewRef,
 } from '@mj-studio/react-native-naver-map';
 import {
-  ICON_SIZE,
-  ICON_SIZE_SEL,
-  OVERLAY_H,
-  OVERLAY_H_SEL,
-  OVERLAY_W_COMPACT,
-  OVERLAY_W_COMPACT_SEL,
-  OVERLAY_W_LABEL,
-  OVERLAY_W_LABEL_SEL,
-  PILL_H,
-  PILL_H_SEL,
-  TAIL_BASE_W,
-  TAIL_BASE_W_SEL,
+  OUTER_D,
+  OUTER_D_SEL,
+  INNER_D,
+  INNER_D_SEL,
   TAIL_H,
   TAIL_H_SEL,
+  ICON_SIZE,
+  ICON_SIZE_SEL,
+  STROKE_W,
+  STROKE_W_SEL,
+  OVERLAY_W,
+  OVERLAY_W_SEL,
+  OVERLAY_H,
+  OVERLAY_H_SEL,
   getMarkerVisual,
 } from '../../constants/mapMarker';
 import {AppIcon} from '../common/AppIcon';
 import type {ParkingLotDetail} from '../../types/parking';
 
 // ── 위치 상수 ─────────────────────────────────────────────────────────────────
-// 성수역 기준 mock 현재 위치
 const MOCK_LOCATION = {latitude: 37.5444, longitude: 127.0567};
 const INITIAL_ZOOM = 13;
 const INITIAL_CAMERA = {
@@ -54,56 +53,49 @@ type Props = {
   onMapReady?: () => void;
 };
 
-// ── Callout bubble SVG background ────────────────────────────────────────────
-// Draws a single seamless speech-bubble outline: rounded pill + teardrop tail.
+// ── Pin-shaped SVG marker shell ───────────────────────────────────────────────
 
-type CalloutBubbleProps = {
-  width: number;
-  height: number;
-  pillH: number;
+type PinBubbleProps = {
+  overlayW: number;
+  overlayH: number;
+  outerD: number;
   tailH: number;
-  tailBaseW: number;
   color: string;
   strokeWidth: number;
 };
 
-function CalloutBubble({
-  width: W,
-  height: H,
-  pillH: pH,
-  tailH: tH,
-  tailBaseW: tW,
+function PinBubble({
+  overlayW,
+  overlayH,
+  outerD,
+  tailH,
   color,
   strokeWidth: sw,
-}: CalloutBubbleProps) {
-  const cx = W / 2;
-  const r = pH / 2; // full pill radius
+}: PinBubbleProps) {
+  const R = outerD / 2;
+  const cx = overlayW / 2;
+  const cy = R + 1; // 1px top buffer for stroke
 
-  // Quadratic bezier tail: to place the actual curve tip at pH+tH,
-  // the control point must be at pH + 2*tH (midpoint formula).
-  const ctrlY = pH + 2 * tH;
+  const tailAngle = 30 * (Math.PI / 180);
+  const ax = R * Math.sin(tailAngle);
+  const attachY = cy + R * Math.cos(tailAngle);
+  const tipY = overlayH - 1; // 1px bottom buffer for stroke
+  const midY = attachY + (tipY - attachY) * 0.5;
 
   const d = [
-    `M ${r} 0`,
-    `L ${W - r} 0`,
-    `Q ${W} 0 ${W} ${r}`,
-    `L ${W} ${pH - r}`,
-    `Q ${W} ${pH} ${W - r} ${pH}`,
-    `L ${cx + tW / 2} ${pH}`,
-    `Q ${cx} ${ctrlY} ${cx - tW / 2} ${pH}`,
-    `L ${r} ${pH}`,
-    `Q 0 ${pH} 0 ${pH - r}`,
-    `L 0 ${r}`,
-    `Q 0 0 ${r} 0`,
+    `M ${cx + ax} ${attachY}`,
+    `A ${R} ${R} 0 1 0 ${cx - ax} ${attachY}`,
+    `Q ${cx - ax * 0.1} ${midY} ${cx} ${tipY}`,
+    `Q ${cx + ax * 0.1} ${midY} ${cx + ax} ${attachY}`,
     'Z',
   ].join(' ');
 
   const half = sw / 2;
   return (
     <Svg
-      width={W}
-      height={H}
-      viewBox={`${-half} ${-half} ${W + sw} ${H + sw}`}
+      width={overlayW}
+      height={overlayH}
+      viewBox={`${-half} ${-half} ${overlayW + sw} ${overlayH + sw}`}
       style={StyleSheet.absoluteFill}
     >
       <Path d={d} fill="#FFFFFF" stroke={color} strokeWidth={sw} />
@@ -126,18 +118,18 @@ const LotMarker = React.memo(function LotMarker({
 }: LotMarkerProps) {
   const isShared = lot.type === 'PRIVATE';
   const visual = getMarkerVisual(lot.status, isShared);
-  const hasLabel = visual.label !== null;
 
-  const pillH = isSelected ? PILL_H_SEL : PILL_H;
+  const outerD = isSelected ? OUTER_D_SEL : OUTER_D;
+  const innerD = isSelected ? INNER_D_SEL : INNER_D;
   const iconSz = isSelected ? ICON_SIZE_SEL : ICON_SIZE;
   const tailH = isSelected ? TAIL_H_SEL : TAIL_H;
-  const tailBaseW = isSelected ? TAIL_BASE_W_SEL : TAIL_BASE_W;
-  const bw = isSelected ? 2.5 : 1.5;
-  const overlayW = isSelected
-    ? hasLabel ? OVERLAY_W_LABEL_SEL : OVERLAY_W_COMPACT_SEL
-    : hasLabel ? OVERLAY_W_LABEL : OVERLAY_W_COMPACT;
+  const bw = isSelected ? STROKE_W_SEL : STROKE_W;
+  const overlayW = isSelected ? OVERLAY_W_SEL : OVERLAY_W;
   const overlayH = isSelected ? OVERLAY_H_SEL : OVERLAY_H;
-  // key change forces native view remount so the marker image is re-captured
+
+  const innerTop = (outerD - innerD) / 2 + 1;
+  const innerLeft = (overlayW - innerD) / 2;
+
   const viewKey = `${lot.id}/${isSelected}/${lot.status}`;
   const handleTap = useCallback(() => onPress(lot.id), [lot.id, onPress]);
 
@@ -154,37 +146,35 @@ const LotMarker = React.memo(function LotMarker({
       <View
         key={viewKey}
         collapsable={false}
-        style={[styles.markerRoot, {width: overlayW, height: overlayH}]}
+        style={{width: overlayW, height: overlayH}}
       >
-        {/* SVG callout: single seamless outline (no pill/tail seam) */}
-        <CalloutBubble
-          width={overlayW}
-          height={overlayH}
-          pillH={pillH}
+        <PinBubble
+          overlayW={overlayW}
+          overlayH={overlayH}
+          outerD={outerD}
           tailH={tailH}
-          tailBaseW={tailBaseW}
           color={visual.color}
           strokeWidth={bw}
         />
-
-        {/* Content layer: sits inside the pill area */}
-        <View style={[styles.pillContent, {height: pillH}]}>
+        <View
+          style={[
+            styles.innerCircle,
+            {
+              top: innerTop,
+              left: innerLeft,
+              width: innerD,
+              height: innerD,
+              borderRadius: innerD / 2,
+              backgroundColor: visual.color,
+            },
+          ]}
+        >
           <AppIcon
             name={visual.icon}
             size={iconSz}
-            color={visual.color}
+            color="#FFFFFF"
             strokeWidth={2.5}
           />
-          {hasLabel && (
-            <Text
-              style={[
-                styles.pillText,
-                {fontSize: isSelected ? 12 : 11, color: visual.color},
-              ]}
-            >
-              {visual.label}
-            </Text>
-          )}
         </View>
       </View>
     </NaverMapMarkerOverlay>
@@ -240,18 +230,9 @@ export const SmartNaverMapView = forwardRef<SmartNaverMapViewRef, Props>(
 
 const styles = StyleSheet.create({
   map: {flex: 1},
-  markerRoot: {
+  innerCircle: {
+    position: 'absolute',
+    justifyContent: 'center',
     alignItems: 'center',
-  },
-  pillContent: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 8,
-    gap: 4,
-  },
-  pillText: {
-    fontWeight: '700',
-    includeFontPadding: false,
-    lineHeight: 16,
   },
 });

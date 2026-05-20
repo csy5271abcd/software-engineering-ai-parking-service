@@ -1,24 +1,24 @@
 import React from 'react';
-import {View, Text, Pressable, StyleSheet} from 'react-native';
+import {View, Pressable, StyleSheet} from 'react-native';
 import type {DimensionValue} from 'react-native';
 import Svg, {Path} from 'react-native-svg';
 import {AppIcon} from '../common/AppIcon';
 import {
   getMarkerVisual,
-  PILL_H,
-  PILL_H_SEL,
+  OUTER_D,
+  OUTER_D_SEL,
+  INNER_D,
+  INNER_D_SEL,
   TAIL_H,
   TAIL_H_SEL,
-  TAIL_BASE_W,
-  TAIL_BASE_W_SEL,
-  OVERLAY_H,
-  OVERLAY_H_SEL,
-  OVERLAY_W_COMPACT,
-  OVERLAY_W_COMPACT_SEL,
-  OVERLAY_W_LABEL,
-  OVERLAY_W_LABEL_SEL,
   ICON_SIZE,
   ICON_SIZE_SEL,
+  STROKE_W,
+  STROKE_W_SEL,
+  OVERLAY_W,
+  OVERLAY_W_SEL,
+  OVERLAY_H,
+  OVERLAY_H_SEL,
 } from '../../constants/mapMarker';
 import type {ParkingStatus} from '../../constants/status';
 
@@ -33,47 +33,45 @@ interface ParkingMarkerProps {
   isShared?: boolean;
 }
 
-function CalloutBubble({
-  width: W,
-  height: H,
-  pillH: pH,
-  tailH: tH,
-  tailBaseW: tW,
+function PinBubble({
+  overlayW,
+  overlayH,
+  outerD,
+  tailH,
   color,
   strokeWidth: sw,
 }: {
-  width: number;
-  height: number;
-  pillH: number;
+  overlayW: number;
+  overlayH: number;
+  outerD: number;
   tailH: number;
-  tailBaseW: number;
   color: string;
   strokeWidth: number;
 }) {
-  const cx = W / 2;
-  const r = pH / 2;
-  const ctrlY = pH + 2 * tH;
+  const R = outerD / 2;
+  const cx = overlayW / 2;
+  const cy = R + 1;
+
+  const tailAngle = 30 * (Math.PI / 180);
+  const ax = R * Math.sin(tailAngle);
+  const attachY = cy + R * Math.cos(tailAngle);
+  const tipY = overlayH - 1;
+  const midY = attachY + (tipY - attachY) * 0.5;
+
   const d = [
-    `M ${r} 0`,
-    `L ${W - r} 0`,
-    `Q ${W} 0 ${W} ${r}`,
-    `L ${W} ${pH - r}`,
-    `Q ${W} ${pH} ${W - r} ${pH}`,
-    `L ${cx + tW / 2} ${pH}`,
-    `Q ${cx} ${ctrlY} ${cx - tW / 2} ${pH}`,
-    `L ${r} ${pH}`,
-    `Q 0 ${pH} 0 ${pH - r}`,
-    `L 0 ${r}`,
-    `Q 0 0 ${r} 0`,
+    `M ${cx + ax} ${attachY}`,
+    `A ${R} ${R} 0 1 0 ${cx - ax} ${attachY}`,
+    `Q ${cx - ax * 0.1} ${midY} ${cx} ${tipY}`,
+    `Q ${cx + ax * 0.1} ${midY} ${cx + ax} ${attachY}`,
     'Z',
   ].join(' ');
 
   const half = sw / 2;
   return (
     <Svg
-      width={W}
-      height={H}
-      viewBox={`${-half} ${-half} ${W + sw} ${H + sw}`}
+      width={overlayW}
+      height={overlayH}
+      viewBox={`${-half} ${-half} ${overlayW + sw} ${overlayH + sw}`}
       style={StyleSheet.absoluteFill}
     >
       <Path d={d} fill="#FFFFFF" stroke={color} strokeWidth={sw} />
@@ -90,16 +88,17 @@ export function ParkingMarker({
   isShared = false,
 }: ParkingMarkerProps): React.JSX.Element {
   const visual = getMarkerVisual(status, isShared);
-  const hasLabel = visual.label !== null;
-  const pillH = selected ? PILL_H_SEL : PILL_H;
+
+  const outerD = selected ? OUTER_D_SEL : OUTER_D;
+  const innerD = selected ? INNER_D_SEL : INNER_D;
   const iconSz = selected ? ICON_SIZE_SEL : ICON_SIZE;
   const tailH = selected ? TAIL_H_SEL : TAIL_H;
-  const tailBaseW = selected ? TAIL_BASE_W_SEL : TAIL_BASE_W;
-  const bw = selected ? 2.5 : 1.5;
-  const markerW = hasLabel
-    ? selected ? OVERLAY_W_LABEL_SEL : OVERLAY_W_LABEL
-    : selected ? OVERLAY_W_COMPACT_SEL : OVERLAY_W_COMPACT;
+  const bw = selected ? STROKE_W_SEL : STROKE_W;
+  const markerW = selected ? OVERLAY_W_SEL : OVERLAY_W;
   const markerH = selected ? OVERLAY_H_SEL : OVERLAY_H;
+
+  const innerTop = (outerD - innerD) / 2 + 1;
+  const innerLeft = (markerW - innerD) / 2;
 
   return (
     <Pressable
@@ -111,7 +110,6 @@ export function ParkingMarker({
         left,
         width: markerW,
         height: markerH,
-        alignItems: 'center',
         transform: [
           {translateX: -(markerW / 2)},
           {translateY: -markerH},
@@ -119,47 +117,42 @@ export function ParkingMarker({
         zIndex: selected ? 20 : 10,
       }}
     >
-      <CalloutBubble
-        width={markerW}
-        height={markerH}
-        pillH={pillH}
+      <PinBubble
+        overlayW={markerW}
+        overlayH={markerH}
+        outerD={outerD}
         tailH={tailH}
-        tailBaseW={tailBaseW}
         color={visual.color}
         strokeWidth={bw}
       />
-      <View style={[styles.pillContent, {height: pillH}]}>
+      <View
+        style={[
+          styles.innerCircle,
+          {
+            top: innerTop,
+            left: innerLeft,
+            width: innerD,
+            height: innerD,
+            borderRadius: innerD / 2,
+            backgroundColor: visual.color,
+          },
+        ]}
+      >
         <AppIcon
           name={visual.icon}
           size={iconSz}
-          color={visual.color}
+          color="#FFFFFF"
           strokeWidth={2.5}
         />
-        {hasLabel && (
-          <Text
-            style={[
-              styles.pillText,
-              {fontSize: selected ? 12 : 11, color: visual.color},
-            ]}
-          >
-            {visual.label}
-          </Text>
-        )}
       </View>
     </Pressable>
   );
 }
 
 const styles = StyleSheet.create({
-  pillContent: {
-    flexDirection: 'row',
+  innerCircle: {
+    position: 'absolute',
+    justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: 8,
-    gap: 4,
-  },
-  pillText: {
-    fontWeight: '700',
-    includeFontPadding: false,
-    lineHeight: 16,
   },
 });

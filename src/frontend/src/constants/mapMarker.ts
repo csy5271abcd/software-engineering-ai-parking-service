@@ -6,7 +6,7 @@ import {PARKING_STATUS} from './status';
 
 export type MarkerVisual = {
   icon: AppIconName;
-  color: string;   // icon color + border color + label color
+  color: string;
   label: string | null;
 };
 
@@ -18,46 +18,50 @@ export function getMarkerVisual(
     case PARKING_STATUS.AVAILABLE:
       return {
         icon: isShared ? 'house' : 'circleParking',
-        color: '#03AA5A',
-        label: null,
+        color: '#34C97C',
+        label: '이용가능',
       };
     case PARKING_STATUS.SOON_AVAILABLE:
-      return {icon: 'clock', color: '#006CFF', label: '곧'};
+      return {icon: 'clock', color: '#4E96FF', label: '곧'};
     case PARKING_STATUS.FULL:
-      return {icon: 'alertCircle', color: '#FB5852', label: '만차'};
+      return {icon: 'alertCircle', color: '#FC7C78', label: '만차'};
     case PARKING_STATUS.OCCUPIED:
       return {
         icon: isShared ? 'house' : 'car',
-        color: '#F5683C',
+        color: '#F88560',
         label: null,
       };
     case PARKING_STATUS.INACTIVE:
-      return {icon: 'mapPin', color: '#8B99AC', label: '종료'};
+      return {icon: 'mapPin', color: '#A0ADBF', label: '종료'};
     default:
-      return {icon: 'car', color: '#8B99AC', label: null};
+      return {icon: 'car', color: '#A0ADBF', label: null};
   }
 }
 
-// ── Pill marker dimensions ────────────────────────────────────────────────────
+// ── Pin marker dimensions ─────────────────────────────────────────────────────
 
-export const PILL_H = 28;
-export const PILL_H_SEL = 34;
+// Outer circle (white fill, status color border)
+export const OUTER_D = 34;
+export const OUTER_D_SEL = 42;
 
-// SVG callout tail dimensions
-export const TAIL_H = 9;          // tail tip depth (actual curve bottom), normal
-export const TAIL_H_SEL = 11;     // selected
-export const TAIL_BASE_W = 14;    // tail base width, normal
-export const TAIL_BASE_W_SEL = 16; // selected
+// Inner colored circle (status color fill, white icon)
+export const INNER_D = 23;
+export const INNER_D_SEL = 29;
 
+// Pointed tail below the outer circle
+export const TAIL_H = 8;
+export const TAIL_H_SEL = 10;
+
+// Icon size inside the inner circle
 export const ICON_SIZE = 14;
-export const ICON_SIZE_SEL = 16;
+export const ICON_SIZE_SEL = 17;
 
-// +2 for stroke overflow buffer
-export const OVERLAY_H = PILL_H + TAIL_H + 2;               // 39
-export const OVERLAY_H_SEL = PILL_H_SEL + TAIL_H_SEL + 2;  // 47
+// Border stroke width
+export const STROKE_W = 1.5;
+export const STROKE_W_SEL = 2;
 
-// compact = icon only, full = icon + label text
-export const OVERLAY_W_COMPACT = 46;
-export const OVERLAY_W_LABEL = 68;
-export const OVERLAY_W_COMPACT_SEL = 54;
-export const OVERLAY_W_LABEL_SEL = 78;
+// Overlay total dimensions (+2 for stroke overflow buffer)
+export const OVERLAY_W = OUTER_D + 2;                        // 36
+export const OVERLAY_W_SEL = OUTER_D_SEL + 2;               // 44
+export const OVERLAY_H = OUTER_D + TAIL_H + 2;              // 44
+export const OVERLAY_H_SEL = OUTER_D_SEL + TAIL_H_SEL + 2; // 54

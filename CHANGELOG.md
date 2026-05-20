@@ -1,283 +1,256 @@
 # CHANGELOG
 
-SmartPark 프로젝트의 전체 변경 이력 요약과 Git tag 기준선을 정리한다.
-
-본 프로젝트는 프론트엔드, 백엔드, AI 분석 모듈을 병렬로 개발하므로, 전체 변경 이력은 본 문서에서 요약하고 영역별 상세 변경 이력은 별도 CHANGELOG 파일에서 관리한다.
+SmartPark 프로젝트의 주요 변경 사항과 버전 tag 기록을 정리한다.
 
 ---
 
-## 변경 이력 관리 기준
+## v0.1.1
 
-| 파일 | 관리 범위 |
-|---|---|
-| `CHANGELOG.md` | 전체 프로젝트 요약, 버전 관리 기준, 최신 기준선 정리 |
-| `CHANGELOG_FRONTEND.md` | 프론트엔드 `v1.x.x` 상세 구현 이력 |
-| `CHANGELOG_BACKEND.md` | 백엔드 `v2.x.x` 상세 구현 이력 |
-| `CHANGELOG_AI.md` | AI `v3.x.x` 상세 구현 이력 |
-
----
-
-## 버전 관리 기준
-
-SmartPark 구현 단계부터는 개발 영역별로 Major 버전을 분리하여 관리한다.
-
-| 버전 라인 | 영역 | 설명 |
-|---|---|---|
-| `v0.x.x` | 문서/기획/하네스 | 소프트웨어공학 산출물, 제품 기획 문서, 하네스 문서, 요구사항 문서 |
-| `v1.x.x` | 프론트엔드 | React Native 앱, Naver Map UI, 화면/컴포넌트/네비게이션 구현 |
-| `v2.x.x` | 백엔드 | Spring Boot API, MySQL, Swagger/OpenAPI, 외부 API 연동 구현 |
-| `v3.x.x` | AI | Python 기반 Mock 데이터 생성, AI 혼잡도 분석, 모델 학습, 예측 결과 생성 |
-| `v4.x.x` | 통합/MVP | 프론트엔드-백엔드-AI 연동, 발표 가능한 MVP 시제품 통합 |
-
-각 영역 내부에서는 다음 기준을 따른다.
-
-| 구분 | 의미 |
-|---|---|
-| Minor | 해당 영역의 주요 기능 추가 또는 구조 확장 |
-| Patch | 오류 수정, UI 보정, 문서 보완, 경미한 개선 |
-
----
-
-## 최신 기준선 요약
-
-| 영역 | 최신 버전 | 상세 문서 | 주요 내용 |
-|---|---:|---|---|
-| 문서/기획/하네스 | `v0.4.2` | `CHANGELOG.md` | CHANGELOG 영역별 분리 및 형상관리 문서 갱신 |
-| 프론트엔드 | `v1.1.15` | `CHANGELOG_FRONTEND.md` | 지도 마커 UI 개선, 성수역 Mock 데이터 확장 |
-| 백엔드 | `v2.0.0` 예정 | `CHANGELOG_BACKEND.md` | 백엔드 구현 시작 예정 |
-| AI | `v3.7.0` | `CHANGELOG_AI.md` | AI 예측 결과 MySQL 적재 및 백엔드 연동 준비 |
-| 통합/MVP | `v4.0.0` 예정 | 추후 작성 | 프론트엔드-백엔드-AI 통합 예정 |
-
----
-
-## v0.4.2
-
-### CHANGELOG 영역별 분리 및 형상관리 문서 갱신
-
-- 단일 `CHANGELOG.md` 구조를 전체 요약 + 영역별 상세 CHANGELOG 구조로 분리
-- `CHANGELOG_FRONTEND.md` 생성 및 기존 프론트엔드 `v1.x.x` 상세 이력 이관
-- `CHANGELOG_BACKEND.md` 생성 및 백엔드 `v2.x.x` 기록 기준 마련
-- `CHANGELOG_AI.md` 생성 및 AI `v3.x.x` 상세 구현 이력 관리 기준 마련
-- `README.md`에 영역별 CHANGELOG 링크와 최신 진행 상태 반영
-- `configuration_management_plan.md`에 영역별 변경 이력 관리 기준 반영
-
----
-
-## v0.4.1
-
-### 영역별 버전 관리 기준 정리
-
-- SmartPark 구현 단계의 버전 관리 기준을 영역별 Major 버전 방식으로 재정리
-- `v1.x.x`는 프론트엔드, `v2.x.x`는 백엔드, `v3.x.x`는 AI, `v4.x.x`는 통합/MVP 작업으로 구분
-- 프론트엔드, 백엔드, AI 모듈을 병렬로 개발할 때 각 작업 이력이 충돌하지 않도록 기준 정리
-- `configuration_management_plan.md`의 버전 규칙과 형상 상태 기록 기준 갱신
-- 기존 단일 `CHANGELOG.md` 구조를 전체 요약 + 영역별 상세 CHANGELOG 구조로 분리할 기준 마련
-
----
-
-## v0.4.0
-
-### 구현 단계 진입 전 문서 전반 보강
-
-- `FOLDER_STRUCTURE.md`에 `src/ai` 구조 추가
-- `configuration_management_plan.md`에 프론트엔드/백엔드/AI 형상 항목 세분화
-- 하네스 문서에 구현 기준, AI mock 데이터, Android 검증, Swagger/OpenAPI, 배포 기준 보강
-- `README.md`에 구현 진행 방향과 `src/ai` 구조 반영
-
----
-
-## v0.3.9
-
-### 과제4 요구사항분석서 추가
-
-- `docs/requirements/과제4.요구사항분석서.md` 추가
-- `docs/requirements/과제4.요구사항분석서.pdf` 추가
-- Use Case Diagram, Use Case Description, 클래스 다이어그램, CRC 카드, 시퀀스 다이어그램 반영
-- SmartPark 주요 기능 흐름을 분석 모델로 구체화
-
----
-
-## v0.3.8
-
-### 과제3 요구사항정의서 추가
-
-- `docs/requirements/과제3.요구사항정의서.md` 추가
-- `docs/requirements/과제3.요구사항정의서.pdf` 추가
-- 기능적 요구사항, 비기능적 요구사항, 외부 인터페이스 요구사항, 데이터 요구사항 정리
-
----
-
-## v0.3.7
-
-### 하네스 문서 7종 작성 완료 반영
-
-- `README.md` 갱신
-- `CHANGELOG.md` 갱신
-- `docs/harness/` 문서 7종 완료 현황 반영
-
----
-
-## v0.3.6
-
-### PROMPT_LOG 작성
-
-- `docs/harness/PROMPT_LOG.md` 추가
-- AI 도구 프롬프트 기록 기준, 템플릿, 예시 작성
-
----
-
-## v0.3.5
-
-### CODEX 작업 지침 작성
-
-- `docs/harness/CODEX.md` 추가
-- Spring Boot 백엔드 설계 및 문서화 작업 기준 정리
-
----
-
-## v0.3.4
-
-### CLAUDE 작업 지침 작성
-
-- `docs/harness/CLAUDE.md` 추가
-- React Native 프론트엔드 구현 작업 기준 정리
-
----
-
-## v0.3.3
-
-### 프로젝트 작업 규칙 작성
-
-- `docs/harness/PROJECT_RULES.md` 추가
-- 코드 작성 규칙, 폴더 규칙, 문서 규칙, commit/tag 규칙 정리
-
----
-
-## v0.3.2
-
-### 화면 구조 문서 작성
-
-- `docs/harness/SCREEN_STRUCTURE.md` 추가
-- React Native 앱 화면 구조와 네비게이션 구성 정리
-
----
-
-## v0.3.1
-
-### 기능 명세 문서 작성
-
-- `docs/harness/FEATURE_SPEC.md` 추가
-- 핵심 기능별 입력값, 출력값, 예외 상황, API 후보, 완료 기준 정리
-
----
-
-## v0.3.0
-
-### PRD 작성
-
-- `docs/harness/PRD.md` 추가
-- SmartPark 제품 목표, 핵심 기능, MVP 범위, 사용자 유형, 개발 기준 정리
-- Claude Code와 Codex가 참고할 제품 요구사항 기준 문서 작성
-
----
-
-## v0.2.9
-
-### README 및 CHANGELOG 갱신
-
-- `README.md` 갱신
-- `CHANGELOG.md` 갱신
-- 제품 기획 문서 작성 이력을 문서별로 분리하여 정리
-- 버전 tag 흐름이 실제 작업 순서와 일치하도록 변경 이력 정리
-
----
-
-## v0.2.8
-
-### 제품 기획 문서 완료 현황 반영
-
-- `README.md`에 제품 기획 문서 목록 반영
-- `CHANGELOG.md`에 제품 기획 문서 작성 이력 반영
-- `docs/product/` 문서 체계 정리
-
----
-
-## v0.2.7
-
-### 서비스 시나리오 문서 작성
-
-- `docs/product/SERVICE_SCENARIO.md` 추가
-- 이용자, 공급자, 관리자 관점의 실제 서비스 이용 시나리오 작성
-
----
-
-## v0.2.6
-
-### 비즈니스 모델 문서 작성
-
-- `docs/product/BUSINESS_MODEL.md` 추가
-- 목표 시장, 가치 제안, 수익 모델, 확장 가능성 정리
-
----
-
-## v0.2.5
-
-### 경쟁 서비스 분석 문서 작성
-
-- `docs/product/COMPETITOR_ANALYSIS.md` 추가
-- 모두의주차장, 카카오 T 주차, TMAP 주차 등 경쟁 서비스와 SmartPark 차별성 정리
-
----
-
-## v0.2.4
-
-### 사용자 여정 문서 작성
-
-- `docs/product/USER_JOURNEY.md` 추가
-- 일반 운전자, 공급자, 관리자 관점의 사용자 흐름 정리
-
----
-
-## v0.2.3
-
-### 페르소나 문서 작성
-
-- `docs/product/PERSONA.md` 추가
-- 일반 운전자, 일정 기반 방문 운전자, 공급자, 관리자 페르소나 정리
-
----
-
-## v0.2.2
-
-### 폴더 구조 설명 문서 추가
-
-- `FOLDER_STRUCTURE.md` 추가
-- `docs/`, `src/`, `docs/harness`, `docs/product` 등 폴더별 역할 설명
-
----
-
-## v0.2.1
-
-### 형상관리 계획서 정리
-
-- `configuration_management_plan.md` 정리
-- 형상 항목, 버전 규칙, commit/tag 기준, 변경 이력 관리 방식 정의
+- 프로젝트정의서 파일명을 형상관리 규칙에 맞게 정리
 
 ---
 
 ## v0.2.0
 
-### 프로젝트 문서 구조 확장
-
-- 공식 과제 산출물 외 추가 프로젝트 문서 관리 구조 정리
-- `docs/product`, `docs/harness`, `docs/design`, `docs/test` 구조 확장 기준 마련
+- 프로젝트관리계획서 md 등록
+- 프로젝트관리계획서 참고용 PDF 등록
 
 ---
 
-## v0.1.0
+## v0.2.1
 
-### 초기 프로젝트 문서 등록
+- CHANGELOG 갱신
 
-- SmartPark 프로젝트 초기 문서 등록
-- 프로젝트 정의, 요구사항, 계획 문서 작성 기반 마련
-- Git 기반 산출물 관리 시작
+---
+
+## v0.2.2
+
+- `FOLDER_STRUCTURE.md` 추가
+- 프로젝트 루트, `docs`, `src` 폴더의 역할 정리
+- `requirements`, `plan`, `design`, `product`, `harness`, `test` 폴더 설명 추가
+- 공식 과제 산출물과 추가 프로젝트 산출물의 관리 기준 정리
+- `README.md`에 저장소 구조, 산출물 구성, 주요 문서 링크 추가
+- `configuration_management_plan.md`에 추가 산출물 관리 기준과 폴더 구조 관리 항목 보완
+
+---
+
+## v0.2.3
+
+- `docs/product/PERSONA.md` 추가
+- SmartPark의 주요 사용자 유형과 대표 페르소나 정리
+- 일반 운전자, 일정 기반 방문 운전자, 개인 주차 공간 공급자, 상가 주차장 관리자, 서비스 운영 관리자 정의
+- 요구사항 정의와 UI/UX 설계의 근거가 되는 사용자 분석 문서 작성
+
+---
+
+## v0.2.4
+
+- `docs/product/USER_JOURNEY.md` 추가
+- SmartPark 사용자 유형별 서비스 이용 흐름 정리
+- 일반 이용자, 공급자, 관리자 관점의 사용자 여정 작성
+- 사용자 흐름 기반 기능 요구사항 후보, 화면 우선순위, 테스트 케이스 연결 방향 정리
+
+---
+
+## v0.2.5
+
+- `docs/product/COMPETITOR_ANALYSIS.md` 추가
+- 모두의주차장, 카카오 T 주차, 아이파킹, TMAP 주차, 공공 주차 정보, 지도 서비스와 SmartPark 비교
+- 기존 주차 서비스 대비 SmartPark의 차별성 정리
+- AI 혼잡도 분석, 곧 비워질 자리 안내, 개인 주차장 공유, NFC 기반 이용 흐름을 경쟁 전략으로 정리
+
+---
+
+## v0.2.6
+
+- `docs/product/SERVICE_SCENARIO.md` 추가
+- SmartPark의 실제 서비스 이용 상황을 시나리오 단위로 정리
+- 도심 주차장 탐색, 병원 예약 시간 기반 탐색, 곧 비워질 자리 이용, 개인 주차 공간 등록, 상가 주차장 운영, NFC 결제, 관리자 승인/신고 처리 시나리오 작성
+- 서비스 시나리오 기반 요구사항, 화면 흐름, 데이터 흐름, 테스트 케이스 연결 방향 정리
+
+---
+
+## v0.2.7
+
+- `docs/product/BUSINESS_MODEL.md` 추가
+- SmartPark의 목표 시장, 고객 세그먼트, 가치 제안, 수익 모델, 비용 구조, 성장 전략 정리
+- 이용 건당 중개 수수료, 결제 수수료, 상위 노출, B2B 구독, 멤버십 모델 정리
+- 제품 기획 문서를 기반으로 향후 요구사항 정의서, 요구사항 분석서, 화면 설계서 작성 기반 마련
+
+---
+
+## v0.2.8
+
+- `README.md` 갱신
+- `CHANGELOG.md` 갱신
+- `docs/product/` 폴더의 제품 기획 문서 5종 작성 완료 현황을 README에 반영
+- 추가 프로젝트 산출물 목록에 `PERSONA.md`, `USER_JOURNEY.md`, `COMPETITOR_ANALYSIS.md`, `SERVICE_SCENARIO.md`, `BUSINESS_MODEL.md` 완료 상태 반영
+- 현재 진행 상태에 SmartPark의 사용자 분석, 사용자 여정, 경쟁 서비스 분석, 서비스 시나리오, 비즈니스 모델 정리 완료 내용 추가
+- 제품 기획 문서 작성 이력을 CHANGELOG에 반영
+
+---
+
+## v0.2.9
+
+- `CHANGELOG.md` 갱신
+- 제품 기획 문서 작성 이력을 `v0.2.3`부터 `v0.2.7`까지 문서별로 분리하여 정리
+- `v0.2.8` 항목에 `README.md`와 `CHANGELOG.md` 갱신 내용을 추가
+- 버전 tag 흐름이 실제 작업 순서와 일치하도록 변경 이력 정리
+- 향후 요구사항 정의서 작성 전 기준 변경 이력 정리 완료
+
+---
+
+## v0.3.0
+
+- `docs/harness/PRD.md` 추가
+- SmartPark의 제품 요구사항, 제품 목표, MVP 범위, 핵심 기능 요구사항 정리
+- 주요 사용자, 가치 제안, 화면 요구사항, 데이터 요구사항, 비기능 요구사항 정리
+- Claude Code와 Codex가 SmartPark 프로젝트를 일관성 있게 이해하고 작업할 수 있도록 하네스 기준 문서 작성
+- 향후 `FEATURE_SPEC.md`, `SCREEN_STRUCTURE.md`, `PROJECT_RULES.md`, `CLAUDE.md`, `CODEX.md`, `PROMPT_LOG.md` 작성 기반 마련
+
+---
+
+## v0.3.1
+
+- `docs/harness/FEATURE_SPEC.md` 추가
+- SmartPark의 핵심 기능을 개발 가능한 단위로 분해하여 정리
+- 현재 위치 기반 주차장 조회, 목적지 기반 검색, 주차장 상세 조회, 곧 비워질 자리 안내 기능 명세 작성
+- 개인/상가 주차 공간 등록, 이용 가능 시간 및 요금 설정, NFC 이용 시작/종료, 결제 내역 저장 기능 명세 작성
+- AI/규칙 기반 혼잡도 분석, 관리자 승인/반려, 신고 및 분쟁 관리, 결제 오류 관리, 운영 통계 기능 명세 작성
+- 기능별 입력값, 출력값, 예외 상황, API 후보, 완료 기준, 테스트 케이스 연결 방향 정리
+
+---
+
+## v0.3.2
+
+- `docs/harness/SCREEN_STRUCTURE.md` 추가
+- SmartPark React Native 앱의 전체 화면 구조와 네비게이션 구성 정리
+- RootNavigator, MainTabNavigator, HomeStack, SearchStack, ParkingStack, ProviderStack, MyPageStack 구조 정의
+- 일반 이용자, 공급자, 관리자 관점의 주요 화면 흐름 정리
+- 메인 지도, 목적지 검색, 추천 주차장, 상세 화면, NFC 이용, 결제, 공급자 등록, 관리자 승인 화면 구조 작성
+- 화면별 주요 컴포넌트, 상태값, API 연결 기준, 테스트 케이스 연결 방향 정리
+
+---
+
+## v0.3.3
+
+- `docs/harness/PROJECT_RULES.md` 추가
+- SmartPark 프로젝트의 코드 작성 규칙, 폴더 관리 규칙, 문서 작성 규칙 정리
+- React Native 프론트엔드와 Spring Boot 백엔드의 기본 파일 구조 및 네이밍 규칙 정의
+- 주차장 상태, 주차 세션 상태, 결제 상태, 승인 상태, 신고 상태의 상태값 관리 기준 정리
+- Git commit 메시지, tag 생성, CHANGELOG 작성 규칙 정리
+- Claude Code와 Codex 작업 시 따라야 할 AI 도구 작업 규칙 및 프롬프트 작성 기준 정리
+- 문서, 프론트엔드, 백엔드 검토 체크리스트와 금지 사항 정리
+
+---
+
+## v0.3.4
+
+- `docs/harness/CLAUDE.md` 추가
+- Claude Code가 SmartPark React Native 프론트엔드 구현 시 참고할 작업 지침 정리
+- Claude Code의 역할, 작업 범위, 금지 사항, 기본 작업 흐름 정의
+- 프론트엔드 폴더 구조, 화면 구현 규칙, 컴포넌트 구현 규칙, 네이밍 규칙 정리
+- HomeMapScreen, DestinationSearchScreen, RecommendedParkingScreen, ParkingDetailScreen, ActiveParkingSessionScreen, PaymentScreen, ProviderHomeScreen 등 주요 화면별 구현 기준 작성
+- API 연동, mock 데이터, 상태값, 네비게이션, Prompt 작성 기준 정리
+- Claude Code 작업 결과 보고 형식과 검증 기준 정리
+
+---
+
+## v0.3.5
+
+- `docs/harness/CODEX.md` 추가
+- Codex가 SmartPark Spring Boot 백엔드 설계 및 문서화 작업 시 참고할 작업 지침 정리
+- Codex의 역할, 작업 범위, 금지 사항, 기본 작업 흐름 정의
+- 백엔드 폴더 구조, 도메인 설계 기준, Entity/DTO/API 작성 규칙 정리
+- User, Provider, ParkingLot, ParkingSpace, ParkingSession, Payment, Settlement, Report, CongestionPrediction, NfcTag 등 핵심 도메인 기준 작성
+- 주차장 조회, 목적지 기반 검색, 공급자 등록, 관리자 승인, NFC 이용 시작/종료, 결제 및 정산, 신고 처리, 혼잡도 분석 로직 기준 정리
+- 공통 응답, 예외 처리, 외부 API 연동, 데이터베이스 설계, 보안/권한, 테스트 작성 기준 정리
+- Codex Prompt 작성 기준과 작업 결과 보고 형식 정리
+
+---
+
+## v0.3.6
+
+- `docs/harness/PROMPT_LOG.md` 추가
+- SmartPark 프로젝트에서 AI 도구에 입력한 프롬프트와 생성 결과, 수정 사항을 기록하기 위한 문서 작성
+- 프롬프트 기록 대상, 제외 가능 항목, 기록 방식, 기록 템플릿 정리
+- PRD, FEATURE_SPEC, SCREEN_STRUCTURE, PROJECT_RULES, CLAUDE, CODEX 문서 작성 과정의 주요 프롬프트 기록 정리
+- Claude Code와 Codex 작업 프롬프트 예시, 문서 수정 프롬프트 예시, 오류 수정 기록 양식 작성
+- AI 기반 작업 결과를 commit, tag, CHANGELOG와 연결하기 위한 형상관리 기준 정리
+
+---
+
+## v0.3.7
+
+- `README.md` 갱신
+- `CHANGELOG.md` 갱신
+- `docs/harness/` 폴더의 하네스 문서 7종 작성 완료 현황을 README에 반영
+- 추가 프로젝트 산출물 목록에 `PRD.md`, `FEATURE_SPEC.md`, `SCREEN_STRUCTURE.md`, `PROJECT_RULES.md`, `CLAUDE.md`, `CODEX.md`, `PROMPT_LOG.md` 완료 상태 반영
+- 현재 진행 상태에 SmartPark의 제품 요구사항, 기능 명세, 화면 구조, 프로젝트 작업 규칙, Claude Code/Codex 작업 지침, 프롬프트 기록 기준 정리 완료 내용 추가
+- 하네스 문서 작성 이력을 CHANGELOG에 `v0.3.0`부터 `v0.3.6`까지 문서별로 분리하여 정리
+
+---
+
+## v0.3.8
+
+- `docs/requirements/과제3.요구사항정의서.md` 추가
+- `docs/requirements/과제3.요구사항정의서.pdf` 추가
+- SmartPark의 기능적 요구사항, 비기능적 요구사항, 외부 인터페이스 요구사항, 데이터 요구사항 정리
+- 일반 이용자, 공급자, 운영 관리자 관점의 요구사항 분리
+- 위치 기반 주차장 조회, 목적지 기반 검색, 곧 비워질 자리 안내, 개인/상가 주차 공간 등록, NFC 이용, 결제, 혼잡도 분석, 관리자 승인/신고 관리 요구사항 작성
+- 운영 정책, 제약사항, 가정사항, 향후 확장사항, 특이사항을 기타 요구사항으로 보강
+- `README.md`의 과제3 요구사항정의서 상태를 완료로 갱신
+- 향후 요구사항 분석서, 소프트웨어 설계서, 테스트 결과서 작성 기준 마련
+
+---
+
+## v0.3.9
+
+- `docs/requirements/과제4.요구사항분석서.md` 추가
+- `docs/requirements/과제4.요구사항분석서.pdf` 추가
+- SmartPark 요구사항 분석서 작성 완료
+- 서론, 시스템 개요, 요구사항 명세, 인터페이스 분석, 제약사항, 요구사항 추적표, 참고문헌 및 부록 구성
+- Use Case Diagram, Use Case Description, 정적 분석 클래스 다이어그램, CRC 카드, 동적 분석 시퀀스 다이어그램 반영
+- SmartPark의 현재 위치 기반 주차장 조회, 목적지 기반 검색, 곧 비워질 자리 확인, 공급자 등록, NFC 이용, 결제, 관리자 승인/신고 처리 흐름을 분석 모델로 구체화
+- 일반 표 스타일을 정리하고, UseCase Description 및 CRC 카드 표 형식은 샘플 문서 형식에 맞게 유지
+- `README.md`의 과제4 요구사항분석서 상태를 완료로 갱신
+- 향후 과제5 소프트웨어설계서, 과제6 인스펙션예제, 과제7 테스트결과서 작성 기준 마련
+
+---
+
+## v0.4.0
+
+- 구현 단계 진입을 위한 문서 전반 보강
+- `FOLDER_STRUCTURE.md`에 `src/ai` 폴더와 AI 데이터/모델/스크립트 구조 추가
+- `configuration_management_plan.md`에 프론트엔드, 백엔드, AI 분석 모듈 형상 항목 세분화
+- `docs/harness/PROJECT_RULES.md`에 Python AI 분석 모듈 규칙, 데이터 관리 규칙, 모델링 규칙 추가
+- `docs/harness/FEATURE_SPEC.md`의 F-09 AI/규칙 기반 혼잡도 분석 기능을 Mock 데이터 생성, 예측 결과, MySQL 적재, API 연동 기준으로 보강
+- `docs/harness/SCREEN_STRUCTURE.md`에 1차 MVP 화면 범위와 ParkingBottomSheet 중심 흐름 추가
+- `docs/harness/CLAUDE.md`에 Android 실기기 USB 검증, NaverMaps 스타일 UI 구현 기준, 1차 MVP Prompt 예시 추가
+- `docs/harness/CODEX.md`에 Swagger/OpenAPI, AWS 배포 설정, Tmap API, AI 예측 결과 CSV 적재 기준 추가
+- `docs/harness/PRD.md`에 1차 MVP 범위와 AI Mock 데이터 요구사항 보강
+- `docs/harness/PROMPT_LOG.md`에 구현 방향 수립 및 문서 보강 프롬프트 기록 추가
+- `docs/product/SERVICE_SCENARIO.md`의 SS-09를 AI Mock 데이터 생성 및 혼잡도 예측 흐름 중심으로 보강
+- `README.md`에 구현 진행 방향과 `src/ai` 구조 반영
+
+---
+
+## v1.0.0
+
+- SmartPark 프론트엔드 구현 단계 시작
+- `docs/design/reference/naver-map-design-system/` 하위에 Naver Map Design System 이미지 reference 추가
+- `docs/design/NAVER_MAP_STYLE_GUIDE.md` 추가
+- Component 기준 정리: BottomSheet, SearchBar, Chip, Button(CTA/Pill), Header, NaviBar, Modal, Tab, Card, MapMarker, Pagination, Radio, Switch, TimePicker, Drop Down
+- Foundation 기준 정리: Color(Black&White/Warm Gray/Cool Gray/Green/Red/Orange), Typography(KR/EN,NUM), Radius, Spacing, Layout, Elevation, Icon
+
+---
+
+## v1.0.1
+
+- `src/frontend/` 하위에 React Native TypeScript 프로젝트 설정 완료
+- React Native 0.85.3 + TypeScript 기반 CLI 프로젝트 생성 (`@react-native-community/cli` 사용)
+- `App.tsx`를 SmartPark 기본 앱 화면으로 정리 (예제 문구 제거)
+- `package.json`, `tsconfig.json`, `android/`, `ios/`, `index.js` 구조 확인
+- `npm install` 완료, Android 실행 가능 상태 준비
+- 이후 Android 실기기 실행 확인 단계로 연결 예정
+- 다음 단계: Naver Map 스타일 UI, 지도 화면, 바텀시트, 주차장 카드, 네비게이션 구현

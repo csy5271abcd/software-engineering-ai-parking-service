@@ -19,45 +19,59 @@ SmartPark 프론트엔드 구현 변경 이력을 정리한다.
 
 | 최신 버전 | 주요 내용 |
 |---:|---|
-| `v1.1.15` | 지도 마커 UI 개선, Category Chip 스타일 pill 마커 적용, 성수역 Mock 주차장 데이터 확장 |
+| `v1.1.15` | 클러스터링 제거, Category Chip 스타일 커스텀 마커 적용, 성수역 Mock 주차장 데이터 확장 |
 
 ---
 
 ## v1.1.15
 
-### 지도 마커 UI 개선 — Lucide 아이콘 + 클러스터링
+### 지도 마커 UI 보정 — 클러스터링 제거 + Category Chip 스타일 커스텀 마커
 
-#### 신규 파일
+#### 주요 변경
 
-- `constants/mapMarker.ts` — 마커 상태별 아이콘·색상·테두리 상수 및 클러스터 등급 정의
-  - `MARKER_SPEC`: `AVAILABLE`(circleParking/초록), `SOON_AVAILABLE`(clock/파랑), `OCCUPIED`(car/주황), `FULL`(alertCircle/빨강), `INACTIVE`(mapPin/회색)
-  - `SHARED_MARKER_SPEC`: PRIVATE 타입 공용 (house/초록)
-  - `CLUSTER_SPEC`: small(2–9, 파랑), medium(10–29, 주황), large(30+, 빨강)
-  - `MARKER_SIZE = 40`, `MARKER_SIZE_SELECTED = 52`
-- `utils/mapCluster.ts` — 줌 레벨 기반 greedy 클러스터링 유틸
-  - `clusterParkingLots(lots, zoom)` → `ClusterGroup[]`
-  - zoom 15 이상: 클러스터링 없음 (개별 마커)
-  - zoom 11~14: `cellRadius = 0.08 / 2^(zoom-11)` 도(degree) 단위 반경으로 인근 좌표 묶음
-- `components/map/ParkingClusterMarker.tsx` — 클러스터 카운트 원형 배지 컴포넌트
-  - `React.memo`, `collapsable={false}`
-  - tier별 크기: small 44px, medium 56px, large 68px
+- Home 화면의 Naver Map 구조는 유지한 상태에서 지도 마커 UI를 보정
+- zoom 기반 클러스터링 로직 제거
+- 개수형 클러스터 마커와 클러스터 클릭 확대 흐름 제거
+- `ParkingClusterMarker.tsx`, `mapCluster.ts` 등 클러스터링 관련 파일 및 import 정리
+- Lucide 아이콘 기반 커스텀 주차장 마커는 유지
+- 마커를 Category Chip과 유사한 compact pill/badge 구조로 개선
+- 마커 하단에 지도 marker처럼 보이는 pointer 구조 적용
+- 주차장 상태별 icon, borderColor, background style 적용
+- 마커 색상은 고정하지 않고 현재 theme와 주차장 상태값 기준으로 적용
+- 성수역 중심으로 지도에 표시 가능한 Mock 주차장 데이터 확장
+- 지도 마커와 ParkingBottomSheet가 동일한 mock 주차장 데이터를 사용하도록 정리
 
-#### SmartNaverMapView.tsx 개선
+#### 수정/정리 파일
 
-- 마커 아이콘: 텍스트(`'P'`/`'🏠'`) → `AppIcon` (Lucide 아이콘) 으로 교체
-- `LotMarker` 서브컴포넌트 분리 (`React.memo` + `useCallback`)
-- `ClusterOverlay` 서브컴포넌트 추가 (`React.memo` + `useCallback`)
-- `onCameraChanged` 훅으로 현재 zoom 추적 → `useMemo`로 클러스터 재계산
-- 클러스터 탭 시 `animateCameraTo` 클러스터 중심 + zoom+2 (최대 16)
-- 개별 마커 탭 → 기존 `onPressParkingLot` 동작 유지
-- `useMemo([parkingLots, zoom])` 클러스터 계산 메모이제이션
+- `components/map/SmartNaverMapView.tsx` — 클러스터링 제거, 개별 마커 렌더링 유지
+- `components/map/ParkingMarker.tsx` — Category Chip 스타일 pill 마커 및 하단 pointer 구조 적용
+- `constants/mapMarker.ts` — 클러스터 관련 상수 제거, 마커 상태별 스타일 상수만 유지
+- `mocks/parkingLots.mock.ts` — 성수역 중심 Mock 주차장 데이터 확장
+- `types/parking.ts` — 필요한 경우 주차장 상태/타입 필드 보완
+
+#### 삭제 또는 미사용 처리
+
+- `components/map/ParkingClusterMarker.tsx`
+- `utils/mapCluster.ts`
+- `CLUSTER_SPEC`
+- `ClusterOverlay`
+- zoom 기반 cluster 계산 로직
+- cluster click zoom-in 흐름
+
+#### 유지한 기능
+
+- Home 화면 Naver Map 실제 표시
+- `@mj-studio/react-native-naver-map` 기반 지도 렌더링
+- mock 현재 위치 기준 지도 표시
+- 주차장 개별 마커 표시
+- 마커 클릭 시 `selectedParkingLot` 갱신
+- ParkingSummary BottomSheet 표시
+- SearchBar, CategoryChips, 날씨 badge, FAB, ParkingBottomSheet, 하단 탭 구조 유지
 
 #### 검증
 
 - `npx tsc --noEmit` 통과
-- `npm run android` 빌드 및 단말 설치 확인
-
----
+- `npm run android` 빌드 및 Android 실기기 실행 확인
 
 ---
 
