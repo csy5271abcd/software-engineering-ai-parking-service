@@ -13,6 +13,51 @@ SmartPark 프로젝트의 주요 변경 사항과 Git tag 기준선을 정리한
 
 ---
 
+## v1.1.14
+
+### Naver Map SDK 연동 — Home 화면 실제 지도 적용
+
+#### 패키지 추가
+
+- `@mj-studio/react-native-naver-map@2.8.0` (Naver Maps Android SDK 3.23.0 기반) 설치
+
+#### Android 설정
+
+- `android/build.gradle` — `allprojects.repositories`에 Naver Maven repository 추가
+  (`https://repository.map.naver.com/archive/maven`)
+- `android/app/build.gradle` — `local.properties`에서 `NAVER_MAP_CLIENT_ID` 읽어 `manifestPlaceholders`에 전달
+- `android/app/src/main/AndroidManifest.xml` — `com.naver.maps.map.NCP_KEY_ID` meta-data 추가
+  (`android:value="${NAVER_MAP_CLIENT_ID}"` — 실제 키 값은 코드 미포함)
+- `android/local.properties` — `NAVER_MAP_CLIENT_ID=...` (Git 미추적, `.gitignore` 기반)
+
+#### 신규 컴포넌트
+
+- `components/map/SmartNaverMapView.tsx` 신규
+  - `NaverMapView` + `NaverMapMarkerOverlay` 기반 SmartPark 전용 지도 컴포넌트
+  - 성수역 기준 mock 현재 위치 (`locationOverlay`) 표시
+  - `mockParkingLots` 좌표 기반 `NaverMapMarkerOverlay` 마커 렌더링
+  - 주차장 상태별 마커 색상: AVAILABLE(초록), SOON_AVAILABLE(파랑), OCCUPIED(주황), FULL(빨강), INACTIVE(회색)
+  - PRIVATE 타입 주차장: '🏠' 아이콘, 그 외: 'P' 텍스트
+  - SOON_AVAILABLE 마커에 `Xmin` 텍스트 표시
+  - 선택된 마커: 크기 확대(40→50px) + 흰색 테두리 + zIndex 상승
+  - `forwardRef` + `useImperativeHandle`로 `moveToCurrentLocation()` 메서드 제공
+  - `animateCameraTo` 500ms 애니메이션으로 mock 현재 위치로 이동
+
+#### HomeMapScreen 수정
+
+- `ENABLE_NAVER_MAP = true` 플래그 추가
+- `naverMapRef = useRef<SmartNaverMapViewRef>(null)` 추가
+- 지도 영역을 `SmartNaverMapView`로 교체 (`ENABLE_NAVER_MAP` 조건부)
+- 기존 `MapPlaceholder` + `ParkingMarker` 로직은 fallback(`ENABLE_NAVER_MAP=false`)으로 유지
+- `CurrentLocationButton`에 `onPress` 연결 → `naverMapRef.current?.moveToCurrentLocation()`
+
+#### 검증
+
+- `npx tsc --noEmit` 통과
+- `npm run android` 빌드 성공
+
+---
+
 ## v1.1.13
 
 ### 프론트엔드 코드베이스 도메인 기반 구조 리팩토링
@@ -51,8 +96,13 @@ SmartPark 프로젝트의 주요 변경 사항과 Git tag 기준선을 정리한
 - `screens/session/PaymentResultScreen.tsx` — 인라인 함수 제거, ReceiptModal 연결
 - `screens/parking/UsedHistoryScreen.tsx` — 인라인 HistoryCard 제거, components에서 임포트
 - `screens/provider/ProviderDashboardScreen.tsx` — 인라인 카드/로우 컴포넌트 제거
-- `screens/provider/ProviderRegisterWizardScreen.tsx` — 인라인 Step1~5 함수 및 스텝 전용 스타일 제거, Register*Step 컴포넌트 임포트로 교체 (1040줄 → 약 190줄)
+- `screens/provider/ProviderRegisterWizardScreen.tsx` — 인라인 Step1~5 함수 및 스텝 전용 스타일 제거, Register\*Step 컴포넌트 임포트로 교체 (1040줄 → 약 190줄)
 - `screens/mypage/MyPageScreen.tsx` — 인라인 MenuSection 제거, components/mypage/MenuSection 임포트로 교체
+
+#### 검증
+
+- `npx tsc --noEmit` 통과
+- Android 실행 검증은 Naver Map SDK 연동 전 별도 확인 예정
 
 ---
 

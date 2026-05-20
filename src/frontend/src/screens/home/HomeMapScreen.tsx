@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {View, Text, StyleSheet, DeviceEventEmitter} from 'react-native';
 import {useNavigation, CommonActions} from '@react-navigation/native';
 import type {StackNavigationProp} from '@react-navigation/stack';
@@ -6,6 +6,8 @@ import type {HomeStackParamList} from '../../navigation/navigationTypes';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {MapPlaceholder} from '../../components/map/MapPlaceholder';
 import {ParkingMarker} from '../../components/map/ParkingMarker';
+import {SmartNaverMapView} from '../../components/map/SmartNaverMapView';
+import type {SmartNaverMapViewRef} from '../../components/map/SmartNaverMapView';
 import {SearchBar} from '../../components/common/SearchBar';
 import {CategoryChips} from '../../components/home/CategoryChips';
 import type {CategoryId} from '../../components/home/CategoryChips';
@@ -86,11 +88,14 @@ function HomeWeatherBadge({top}: {top: number}): React.JSX.Element {
 
 // ── Screen ────────────────────────────────────────────────────────────────────
 
+const ENABLE_NAVER_MAP = true;
+
 type HomeNavProp = StackNavigationProp<HomeStackParamList, 'HomeMapScreen'>;
 
 export function HomeMapScreen(): React.JSX.Element {
   const insets = useSafeAreaInsets();
   const navigation = useNavigation<HomeNavProp>();
+  const naverMapRef = useRef<SmartNaverMapViewRef>(null);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [category, setCategory] = useState<CategoryId>('all');
   const [sheetMode, setSheetMode] = useState<SheetMode>('default');
@@ -143,38 +148,47 @@ export function HomeMapScreen(): React.JSX.Element {
   return (
     <View style={styles.container}>
       {/* ── Map layer ── */}
-      <MapPlaceholder>
-        {filteredLots.map(lot => {
-          const pos = toMapPos(
-            lot.coordinates.latitude,
-            lot.coordinates.longitude,
-          );
-          const soonMin =
-            lot.status === PARKING_STATUS.SOON_AVAILABLE && lot.expectedExitAt
-              ? Math.max(
-                  1,
-                  Math.round(
-                    (new Date(lot.expectedExitAt).getTime() - Date.now()) /
-                      60000,
-                  ),
-                )
-              : null;
-          const isShared = lot.type === 'PRIVATE';
-          return (
-            <ParkingMarker
-              key={lot.id}
-              name={lot.name}
-              status={lot.status}
-              selected={selectedId === lot.id}
-              top={pos.top}
-              left={pos.left}
-              soonMin={soonMin}
-              isShared={isShared}
-              onPress={() => handleMarkerPress(lot.id)}
-            />
-          );
-        })}
-      </MapPlaceholder>
+      {ENABLE_NAVER_MAP ? (
+        <SmartNaverMapView
+          ref={naverMapRef}
+          parkingLots={filteredLots}
+          selectedParkingLotId={selectedId}
+          onPressParkingLot={handleMarkerPress}
+        />
+      ) : (
+        <MapPlaceholder>
+          {filteredLots.map(lot => {
+            const pos = toMapPos(
+              lot.coordinates.latitude,
+              lot.coordinates.longitude,
+            );
+            const soonMin =
+              lot.status === PARKING_STATUS.SOON_AVAILABLE && lot.expectedExitAt
+                ? Math.max(
+                    1,
+                    Math.round(
+                      (new Date(lot.expectedExitAt).getTime() - Date.now()) /
+                        60000,
+                    ),
+                  )
+                : null;
+            const isShared = lot.type === 'PRIVATE';
+            return (
+              <ParkingMarker
+                key={lot.id}
+                name={lot.name}
+                status={lot.status}
+                selected={selectedId === lot.id}
+                top={pos.top}
+                left={pos.left}
+                soonMin={soonMin}
+                isShared={isShared}
+                onPress={() => handleMarkerPress(lot.id)}
+              />
+            );
+          })}
+        </MapPlaceholder>
+      )}
 
       {/* ── Search bar — zIndex 30, right:68 leaves room for blue FAB ── */}
       <SearchBar
@@ -206,7 +220,10 @@ export function HomeMapScreen(): React.JSX.Element {
       <FABStack style={{top: fabStackTop}} />
 
       {/* ── Current location FAB — zIndex 36, floats above sheet ── */}
-      <CurrentLocationButton bottom={locFabBottom} />
+      <CurrentLocationButton
+        bottom={locFabBottom}
+        onPress={() => naverMapRef.current?.moveToCurrentLocation()}
+      />
 
       {/* ── Bottom sheet — zIndex 40 ── */}
       <ParkingBottomSheet
