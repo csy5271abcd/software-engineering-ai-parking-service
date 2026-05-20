@@ -76,6 +76,8 @@ const SESSION_SCREENS = new Set([
   'ActiveSessionScreen',
   'PaymentScreen',
   'PaymentResultScreen',
+  'ProviderDashboardScreen',
+  'ProviderRegisterWizardScreen',
 ]);
 
 function hasDetailScreenActive(state: BottomTabBarProps['state']): boolean {

@@ -13,6 +13,38 @@ SmartPark 프로젝트의 주요 변경 사항과 Git tag 기준선을 정리한
 
 ---
 
+## v1.1.10
+
+### 공급자 기능 구현 — 대시보드 및 주차장 등록 Wizard
+
+#### 참고 이미지
+
+- `Provider_Default.png` / `Provider_Default_2.png` — 공급자 대시보드
+- `Provider_ParkingLot_Register_1~5.png` — 5단계 등록 Wizard
+
+#### 주요 변경
+
+- `ProviderDashboardScreen.tsx` 신규 작성
+  - 헤더: 뒤로가기 + "공급자" 제목 + "+ 주차장 등록" 파란 pill 버튼
+  - 정산 요약 카드: 이번 달 정산 예정 금액, 이용건수·평균이용·활성주차장 3열 통계
+  - 주황 알림 배너: 보완 요청 건수 표시
+  - 등록된 주차 공간 카드 목록: 승인완료/승인대기/보완요청 상태 badge
+  - 오늘의 이용 현황: 이용자별 행 (아바타, 이름, 시간, 요금)
+- `ProviderRegisterWizardScreen.tsx` 신규 작성 (5단계 Wizard)
+  - STEP 1: 기본 정보 (이름, 면수, 유형, 설명)
+  - STEP 2: 위치 선택 (지도 placeholder + 주소 입력)
+  - STEP 3: 사진 등록 (photo slot 3개 + 출입 방식 2×2 선택)
+  - STEP 4: 시간·요금 (요일 선택, 시간, 요금 + 예상 수익 계산)
+  - STEP 5: 미리보기 (등록 정보 요약 카드 + 안내 박스)
+  - 하단 고정 버튼: 이전/다음 (마지막 단계는 "등록 신청")
+- `MyPageScreen.tsx` "공급자" 섹션 추가 → `ProviderDashboardScreen`으로 이동
+- `MyPageStackNavigator.tsx`: `ProviderDashboardScreen`, `ProviderRegisterWizardScreen` 스택 추가
+- `MainTabNavigator.tsx` SESSION_SCREENS에 provider 화면 2개 추가 (탭바 숨김)
+- `types/provider.ts`, `mocks/provider.mock.ts` 신규 작성
+- `AppIcon.tsx`: `qrCode`, `keyRound`, `smartphoneNfc` 아이콘 추가
+
+---
+
 ## v1.1.9
 
 ### 하단 탭 화면 구현 — 이용 내역, 저장한 주차장, MY

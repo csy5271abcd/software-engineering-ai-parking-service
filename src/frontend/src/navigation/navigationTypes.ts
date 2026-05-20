@@ -47,6 +47,8 @@ export type RecommendStackParamList = {
 
 export type MyPageStackParamList = {
   MyPageScreen: undefined;
+  ProviderDashboardScreen: undefined;
+  ProviderRegisterWizardScreen: undefined;
 };
 
 export type MainTabParamList = {

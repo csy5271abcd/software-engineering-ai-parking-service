@@ -20,7 +20,12 @@
       "PowerShell(Get-ChildItem -Path \"C:\\\\sp\" -Recurse -Directory | Where-Object {$_.Name -eq \"imports\"} | Select-Object FullName)",
       "PowerShell(Get-ChildItem -Path \"C:\\\\\" -Recurse -Directory -ErrorAction SilentlyContinue | Where-Object {$_.Name -eq \"SmartParkReDesign\" -or $_.Name -eq \"imports\"} | Select-Object FullName | Select-Object -First 10)",
       "PowerShell(Get-ChildItem -Path \"C:\\\\Users\\\\choi suyeon\" -Recurse -Directory -ErrorAction SilentlyContinue | Where-Object {$_.Name -eq \"SmartParkReDesign\" -or $_.Name -eq \"imports\"} | Select-Object FullName | Select-Object -First 10)",
-      "Bash(Get-Content *)"
+      "Bash(Get-Content *)",
+      "Bash(node -e \"const l = require\\('lucide-react-native'\\); console.log\\(Object.keys\\(l\\).filter\\(k => ['QrCode','KeyRound','Smartphone','Nfc','Filter','Image','MapPin'].includes\\(k\\)\\).join\\(', '\\)\\)\")",
+      "Bash(key-round)",
+      "Bash(smartphone)",
+      "Bash(nfc)",
+      "Bash(filter\" 2>&1)"
     ]
   }
 }

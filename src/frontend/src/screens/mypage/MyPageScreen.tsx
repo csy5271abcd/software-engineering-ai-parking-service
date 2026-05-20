@@ -1,9 +1,14 @@
 import React from 'react';
 import {View, Text, ScrollView, Pressable, StyleSheet} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {useNavigation} from '@react-navigation/native';
+import type {StackNavigationProp} from '@react-navigation/stack';
 import {AppCard} from '../../components/common/AppCard';
 import {AppSeparator} from '../../components/common/AppSeparator';
 import {AppIcon} from '../../components/common/AppIcon';
+import type {MyPageStackParamList} from '../../navigation/navigationTypes';
+
+type NavProp = StackNavigationProp<MyPageStackParamList, 'MyPageScreen'>;
 
 // ── Mock user data ────────────────────────────────────────────────────────────
 
@@ -107,6 +112,7 @@ function MenuSection({section}: {section: MenuSectionData}): React.JSX.Element {
 
 export function MyPageScreen(): React.JSX.Element {
   const insets = useSafeAreaInsets();
+  const navigation = useNavigation<NavProp>();
 
   return (
     <ScrollView
@@ -153,6 +159,26 @@ export function MyPageScreen(): React.JSX.Element {
           ))}
         </View>
       </AppCard>
+
+      {/* ── Provider section ── */}
+      <View style={styles.menuSection}>
+        <Text style={styles.sectionTitle}>공급자</Text>
+        <AppCard padding="none" radius="xl" elevation>
+          <Pressable
+            style={styles.menuRow}
+            onPress={() => navigation.navigate('ProviderDashboardScreen')}
+          >
+            <View style={styles.menuIconWrap}>
+              <Text style={styles.menuIconEmoji}>🏠</Text>
+            </View>
+            <View style={styles.menuBody}>
+              <Text style={styles.menuLabel}>공급자 대시보드</Text>
+              <Text style={styles.menuSub}>주차장 등록 및 수익 현황</Text>
+            </View>
+            <AppIcon name="chevronRight" size={14} color="#CAD1DB" strokeWidth={2.2} />
+          </Pressable>
+        </AppCard>
+      </View>
 
       {/* ── Menu sections ── */}
       {MENU_SECTIONS.map(section => (
