@@ -21,11 +21,87 @@ SmartPark AI 혼잡도 분석 모듈의 변경 이력을 정리한다.
 
 ---
 
-## 최신 기준선
+## v3.5.0
 
-| 최신 버전 | 주요 내용                          |
-| --------: | ---------------------------------- |
-|  `v3.0.0` | AI 혼잡도 분석 모듈 초기 구조 생성 |
+### AI 혼잡도 분석 모델 학습 로직 구현
+
+#### 수정 파일
+
+- `src/ai/scripts/train_congestion_model.py` — `training_sample.csv` 기반 AI 혼잡도 분석 모델 학습 로직 구현
+- `src/ai/README.md` — AI 모델 학습 실행 흐름 보완
+- `src/ai/data/output/README.md` — 모델 평가 산출물 설명 보완
+- `.gitignore` — `models/*.joblib` 제외 규칙 추가
+
+#### 생성 파일
+
+다음 파일은 모델 학습 결과 산출물이다.
+
+- `src/ai/models/congestion_model.joblib`
+- `src/ai/models/congestion_model_metadata.json`
+- `src/ai/data/output/model_evaluation.json`
+- `src/ai/data/output/classification_report.csv`
+- `src/ai/data/output/confusion_matrix.csv`
+- `src/ai/data/output/feature_importance.csv`
+
+#### Git 관리 기준
+
+- `src/ai/models/congestion_model.joblib`는 재생성 가능한 모델 본체이므로 Git 추적 대상에서 제외한다.
+- `src/ai/models/congestion_model_metadata.json`은 모델 재현성 확인을 위한 작은 메타데이터 파일이므로 Git 추적 후보로 유지한다.
+- `src/ai/data/output/model_evaluation.json`, `classification_report.csv`, `confusion_matrix.csv`, `feature_importance.csv`는 평가 결과 확인용 작은 산출물이므로 Git 추적 후보로 유지한다.
+
+#### 학습 설정
+
+| 항목        |                                   값 |
+| ----------- | -----------------------------------: |
+| 입력 데이터 | `data/processed/training_sample.csv` |
+| 학습 rows   |                              224,000 |
+| 테스트 rows |                               56,000 |
+| feature 수  |                                   25 |
+| target      |                   `congestion_level` |
+| classes     | `LOW`, `MEDIUM`, `HIGH`, `VERY_HIGH` |
+
+#### 주요 평가 지표
+
+| 지표        |     값 |
+| ----------- | -----: |
+| accuracy    | 0.9466 |
+| macro_f1    | 0.9466 |
+| weighted_f1 | 0.9466 |
+
+#### 주요 구현 내용
+
+- `training_sample.csv`를 기반으로 `congestion_level` 예측 모델 학습
+- `LOW`, `MEDIUM`, `HIGH`, `VERY_HIGH` 4개 혼잡도 등급 분류
+- `RandomForestClassifier` 기반 AI 모델 학습 파이프라인 구현
+- `ColumnTransformer`, `OneHotEncoder`, `SimpleImputer` 기반 전처리 파이프라인 구성
+- `train_test_split`에서 `stratify=y`를 사용하여 클래스 분포 유지
+- 데이터 누수 방지를 위해 `congestion_score`, `recommendation_score`, `recommendation_reason` 등 결과 컬럼을 feature에서 제외
+- 기본 예측 안전 모드에서 실시간 이용 현황 컬럼도 feature에서 제외
+- accuracy, macro F1, weighted F1, classification report, confusion matrix 산출
+- feature importance 추출 및 저장
+- 학습된 모델 pipeline을 `joblib` 파일로 저장
+- 모델 메타데이터와 평가 결과를 JSON/CSV로 저장
+
+#### 검증
+
+- `python scripts\train_congestion_model.py` 실행 성공
+- `python -m py_compile scripts\train_congestion_model.py` 문법 검증 성공
+- `models/congestion_model.joblib` 생성 확인
+- `models/congestion_model_metadata.json` 생성 확인
+- `data/output/model_evaluation.json` 생성 확인
+- `data/output/classification_report.csv` 생성 확인
+- `data/output/confusion_matrix.csv` 생성 확인
+- `data/output/feature_importance.csv` 생성 확인
+- `models/*.joblib` Git 제외 규칙 확인
+- 프론트엔드/백엔드 폴더 미수정 확인
+
+#### 비고
+
+- `training_sample.csv`는 로컬에서 재생성 가능한 산출물이므로 Git 저장소에 포함하지 않는다.
+- `congestion_model.joblib`도 재생성 가능한 모델 본체이므로 Git 저장소에 포함하지 않는다.
+- 메타데이터와 평가 결과 파일은 크기가 작으므로 실험 재현성을 위해 Git 포함을 권장한다.
+- 전역 ignore 접근 권한 경고가 있었으나 프로젝트 `.gitignore` 기준으로 모델 본체 제외는 확인했다.
+- 이후 `v3.6.0`에서는 학습된 모델을 사용해 `congestion_predictions.csv`를 생성하는 예측 로직을 구현한다.
 
 ---
 

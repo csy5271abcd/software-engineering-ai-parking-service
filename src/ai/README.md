@@ -15,6 +15,7 @@ SmartPark AI 모듈은 주차장 이용 흐름과 외부 요인을 기반으로 
 - `v3.2.0`: AI raw Mock 데이터 3종 생성 로직 구현 기준선
 - `v3.3.0`: AI 분석용 `training_dataset.csv` 대용량 전처리 로직 구현 기준선
 - `v3.4.0`: AI 학습용 균형 샘플 `training_sample.csv` 생성 로직 구현 기준선
+- `v3.5.0`: `training_sample.csv` 기반 AI 혼잡도 분류 모델 학습 및 평가 산출물 생성 기준선
 
 ## AI 데이터 흐름
 
@@ -94,6 +95,8 @@ v3.2.0 기준으로 `scripts/generate_mock_parking_data.py`는 `parking_lots.csv
 v3.3.0 기준으로 `scripts/preprocess_parking_data.py`는 대용량 `parking_usage_history.csv`를 row chunk 단위로 읽고 raw CSV 3종을 병합해 `data/processed/training_dataset.csv`를 생성한다.
 
 v3.4.0 기준으로 `scripts/create_training_sample.py`는 대용량 `training_dataset.csv`를 chunk 단위로 읽고 `congestion_level` 기준 균형 샘플 `data/processed/training_sample.csv`를 생성한다.
+
+v3.5.0 기준으로 `scripts/train_congestion_model.py`는 `data/processed/training_sample.csv`를 사용해 `congestion_level` 분류 모델을 학습하고 모델, 메타데이터, 평가 지표, feature importance를 생성한다.
 
 ## 백엔드 연동 예정 방식
 
