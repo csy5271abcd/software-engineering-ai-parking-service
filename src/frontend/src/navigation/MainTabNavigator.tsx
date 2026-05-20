@@ -69,6 +69,8 @@ function TabIcon({
 // ── Hide tab bar when ParkingDetailScreen is the top screen ──────────────────
 
 const SESSION_SCREENS = new Set([
+  'DestinationSearchScreen',
+  'RecommendedParkingScreen',
   'ParkingDetailScreen',
   'RouteScreen',
   'ActiveSessionScreen',

@@ -2,6 +2,8 @@ import type {NavigatorScreenParams} from '@react-navigation/native';
 
 export type HomeStackParamList = {
   HomeMapScreen: undefined;
+  DestinationSearchScreen: undefined;
+  RecommendedParkingScreen: {destinationName: string; destinationSub?: string};
   ParkingDetailScreen: {parkingLotId: string};
   RouteScreen: {parkingLotId: string};
   ActiveSessionScreen: {parkingLotId: string};

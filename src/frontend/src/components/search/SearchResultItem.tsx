@@ -1,5 +1,8 @@
 import React from 'react';
 import {View, Text, Pressable, StyleSheet} from 'react-native';
+import {AppIcon} from '../common/AppIcon';
+
+type IconType = 'place' | 'parking' | 'subway';
 
 interface SearchResultItemProps {
   name: string;
@@ -7,7 +10,7 @@ interface SearchResultItemProps {
   type?: string;
   matchQuery?: string;
   onPress?: () => void;
-  icon?: 'place' | 'parking';
+  icon?: IconType;
   showArrow?: boolean;
   isLast?: boolean;
 }
@@ -35,18 +38,20 @@ export function SearchResultItem({
   showArrow = false,
   isLast = false,
 }: SearchResultItemProps): React.JSX.Element {
+  const isBlue = icon === 'parking';
+
   return (
     <Pressable
       onPress={onPress}
       style={[styles.row, !isLast && styles.rowBorder]}
     >
-      <View style={[styles.iconCircle, icon === 'parking' && styles.iconCircleBlue]}>
-        {icon === 'place' ? (
-          <View style={styles.pinIcon}>
-            <View style={styles.pinDot} />
-          </View>
-        ) : (
+      <View style={[styles.iconCircle, isBlue && styles.iconCircleBlue]}>
+        {icon === 'subway' ? (
+          <AppIcon name="train" size={15} color="#4D5A6A" strokeWidth={1.8} />
+        ) : icon === 'parking' ? (
           <Text style={styles.pText}>P</Text>
+        ) : (
+          <AppIcon name="mapPin" size={15} color="#4D5A6A" strokeWidth={1.8} />
         )}
       </View>
       <View style={styles.body}>
@@ -89,21 +94,6 @@ const styles = StyleSheet.create({
   },
   iconCircleBlue: {
     backgroundColor: 'rgba(0,108,255,0.08)',
-  },
-  pinIcon: {
-    width: 14,
-    height: 14,
-    borderRadius: 7,
-    borderWidth: 1.5,
-    borderColor: '#8B99AC',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  pinDot: {
-    width: 4,
-    height: 4,
-    borderRadius: 2,
-    backgroundColor: '#8B99AC',
   },
   pText: {
     fontSize: 13,

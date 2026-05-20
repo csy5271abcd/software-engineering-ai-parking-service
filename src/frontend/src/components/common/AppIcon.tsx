@@ -13,6 +13,7 @@ import {
   Mic,
   ChevronLeft,
   ChevronRight,
+  ChevronUp,
   X,
   Share2,
   Heart,
@@ -39,6 +40,7 @@ import {
   RefreshCw,
   Check,
   MessageSquare,
+  Train,
 } from 'lucide-react-native';
 
 export type AppIconName =
@@ -55,6 +57,7 @@ export type AppIconName =
   | 'mic'
   | 'chevronLeft'
   | 'chevronRight'
+  | 'chevronUp'
   | 'x'
   | 'share2'
   | 'heart'
@@ -80,7 +83,8 @@ export type AppIconName =
   | 'flag'
   | 'refreshCw'
   | 'check'
-  | 'messageSquare';
+  | 'messageSquare'
+  | 'train';
 
 interface AppIconProps {
   name: AppIconName;
@@ -104,6 +108,7 @@ const ICON_MAP: Record<AppIconName, React.ElementType> = {
   mic: Mic,
   chevronLeft: ChevronLeft,
   chevronRight: ChevronRight,
+  chevronUp: ChevronUp,
   x: X,
   share2: Share2,
   heart: Heart,
@@ -130,6 +135,7 @@ const ICON_MAP: Record<AppIconName, React.ElementType> = {
   refreshCw: RefreshCw,
   check: Check,
   messageSquare: MessageSquare,
+  train: Train,
 };
 
 export function AppIcon({

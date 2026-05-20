@@ -120,12 +120,7 @@ export function HomeMapScreen(): React.JSX.Element {
   };
 
   const handleSearchPress = () => {
-    navigation.dispatch(
-      CommonActions.navigate({
-        name: 'SearchTab',
-        params: {screen: 'DestinationSearchScreen'},
-      }),
-    );
+    navigation.navigate('DestinationSearchScreen');
   };
 
   const handlePressSoon = () => {

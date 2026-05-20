@@ -10,44 +10,26 @@ import {useNavigation, useRoute} from '@react-navigation/native';
 import type {StackNavigationProp} from '@react-navigation/stack';
 import type {RouteProp} from '@react-navigation/native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import type {SearchStackParamList} from '../../navigation/navigationTypes';
-import {mockParkingLots} from '../../mocks';
-import {ParkingCard} from '../../components/parking/ParkingCard';
+import {SearchHeader} from '../../components/search/SearchHeader';
 import {ArrivalTimeSelector} from '../../components/search/ArrivalTimeSelector';
 import type {ArrivalTime} from '../../components/search/ArrivalTimeSelector';
+import {ParkingCard} from '../../components/parking/ParkingCard';
 import {SectionHeader} from '../../components/parking/SectionHeader';
 import {AppIcon} from '../../components/common/AppIcon';
+import {mockParkingLots} from '../../mocks';
 
-type NavProp = StackNavigationProp<SearchStackParamList, 'RecommendedParkingScreen'>;
-type RoutePropType = RouteProp<SearchStackParamList, 'RecommendedParkingScreen'>;
+// Self-contained NavParam — works in HomeStack or SearchStack
+type NavParam = {
+  RecommendedParkingScreen: {destinationName: string; destinationSub?: string};
+  DestinationSearchScreen: undefined;
+  ParkingDetailScreen: {parkingLotId: string};
+};
+type NavProp = StackNavigationProp<NavParam, 'RecommendedParkingScreen'>;
+type RoutePropType = RouteProp<NavParam, 'RecommendedParkingScreen'>;
 
-type SortKey = 'ai' | 'dist' | 'price' | 'cong';
-
-const SORT_CHIPS: {k: SortKey; label: string}[] = [
-  {k: 'ai', label: 'AI 추천'},
-  {k: 'dist', label: '거리순'},
-  {k: 'price', label: '요금순'},
-  {k: 'cong', label: '여유순'},
-];
-
-function sortLots(
-  lots: typeof mockParkingLots,
-  key: SortKey,
-): typeof mockParkingLots {
-  const arr = [...lots];
-  switch (key) {
-    case 'ai':
-      return arr.sort((a, b) => b.recommendationScore - a.recommendationScore);
-    case 'dist':
-      return arr.sort((a, b) => a.distanceMeters - b.distanceMeters);
-    case 'price':
-      return arr.sort((a, b) => a.pricePerHour - b.pricePerHour);
-    case 'cong':
-      return arr.sort((a, b) => a.availableCount - b.availableCount);
-    default:
-      return arr;
-  }
-}
+const sorted = [...mockParkingLots].sort(
+  (a, b) => b.recommendationScore - a.recommendationScore,
+);
 
 export function RecommendedParkingScreen(): React.JSX.Element {
   const insets = useSafeAreaInsets();
@@ -56,45 +38,30 @@ export function RecommendedParkingScreen(): React.JSX.Element {
 
   const {destinationName, destinationSub} = route.params;
   const [arrivalTime, setArrivalTime] = useState<ArrivalTime>('지금');
-  const [sortKey, setSortKey] = useState<SortKey>('ai');
-
-  const sorted = sortLots(mockParkingLots, sortKey);
-
-  const navigateToDetail = (parkingLotId: string) => {
-    (navigation as any).navigate('ParkingTab', {
-      screen: 'ParkingDetailScreen',
-      params: {parkingLotId},
-    });
-  };
 
   return (
     <View style={styles.screen}>
-      {/* ── Header ── */}
-      <View style={[styles.header, {paddingTop: insets.top + 10}]}>
-        <Pressable onPress={() => navigation.goBack()} style={styles.backBtn} hitSlop={8}>
-          <AppIcon name="chevronLeft" size={20} color="#222225" strokeWidth={2.2} />
-        </Pressable>
-        <Text style={styles.headerTitle} numberOfLines={1}>
-          {destinationName}
-        </Text>
-        <View style={styles.headerRight} />
-      </View>
+      {/* ── Header (same search bar style as DestinationSearchScreen) ── */}
+      <SearchHeader
+        onBack={() => navigation.goBack()}
+        paddingTop={insets.top + 10}
+        editable={false}
+        onInputPress={() => navigation.goBack()}
+      />
 
       <ScrollView
         style={styles.scroll}
         contentContainerStyle={[
           styles.scrollContent,
-          {paddingBottom: insets.bottom + 20},
+          {paddingBottom: insets.bottom + 24},
         ]}
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="handled"
       >
-        {/* Destination card */}
+        {/* ── 선택 목적지 카드 ── */}
         <View style={styles.destCard}>
           <View style={styles.destIconCircle}>
-            <View style={styles.destPinIcon}>
-              <View style={styles.destPinDot} />
-            </View>
+            <AppIcon name="mapPin" size={20} color="#FB5852" strokeWidth={2} />
           </View>
           <View style={styles.destBody}>
             <Text style={styles.destLabel}>도착</Text>
@@ -112,12 +79,14 @@ export function RecommendedParkingScreen(): React.JSX.Element {
             style={styles.destClose}
             hitSlop={8}
           >
-            <Text style={styles.destCloseText}>✕</Text>
+            <AppIcon name="x" size={12} color="#6B7C92" strokeWidth={2.2} />
           </Pressable>
+
+          {/* 도착 예정 chip 영역 */}
           <ArrivalTimeSelector value={arrivalTime} onChange={setArrivalTime} />
         </View>
 
-        {/* AI banner */}
+        {/* ── AI 안내 배너 ── */}
         <View style={styles.aiBanner}>
           <View style={styles.aiChip}>
             <Text style={styles.aiChipText}>AI</Text>
@@ -128,39 +97,20 @@ export function RecommendedParkingScreen(): React.JSX.Element {
           </Text>
         </View>
 
-        {/* Sort chips */}
-        <View style={styles.sortRow}>
-          {SORT_CHIPS.map(c => {
-            const active = sortKey === c.k;
-            return (
-              <Pressable
-                key={c.k}
-                onPress={() => setSortKey(c.k)}
-                style={[styles.sortChip, active && styles.sortChipActive]}
-              >
-                <Text
-                  style={[
-                    styles.sortChipText,
-                    active && styles.sortChipTextActive,
-                  ]}
-                >
-                  {c.label}
-                </Text>
-              </Pressable>
-            );
-          })}
-        </View>
-
+        {/* ── 추천 주차장 ── */}
         <SectionHeader title="추천 주차장" sub={`${sorted.length}곳`} />
         <View style={styles.cardList}>
           {sorted.map((lot, idx) => (
             <ParkingCard
               key={lot.id}
               lot={lot}
-              rank={idx < 3 ? idx + 1 : undefined}
+              rank={idx < 4 ? idx + 1 : undefined}
               selected={false}
-              onPress={() => navigateToDetail(lot.id)}
-              onPressDetail={() => navigateToDetail(lot.id)}
+              onPress={() =>
+                navigation.navigate('ParkingDetailScreen', {
+                  parkingLotId: lot.id,
+                })
+              }
             />
           ))}
         </View>
@@ -171,35 +121,6 @@ export function RecommendedParkingScreen(): React.JSX.Element {
 
 const styles = StyleSheet.create({
   screen: {flex: 1, backgroundColor: '#FFFFFF'},
-
-  // ── Header
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 12,
-    paddingBottom: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: '#E5EAF1',
-    backgroundColor: '#FFFFFF',
-    gap: 4,
-  },
-  backBtn: {
-    width: 36,
-    height: 36,
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexShrink: 0,
-  },
-  headerTitle: {
-    flex: 1,
-    textAlign: 'center',
-    fontSize: 16,
-    fontWeight: '700',
-    color: '#222225',
-    letterSpacing: -0.3,
-    includeFontPadding: false,
-  },
-  headerRight: {width: 36},
 
   scroll: {flex: 1},
   scrollContent: {
@@ -225,21 +146,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(251,88,82,0.10)',
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  destPinIcon: {
-    width: 16,
-    height: 16,
-    borderRadius: 8,
-    borderWidth: 1.5,
-    borderColor: '#FB5852',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  destPinDot: {
-    width: 5,
-    height: 5,
-    borderRadius: 2.5,
-    backgroundColor: '#FB5852',
   },
   destBody: {
     marginLeft: 52,
@@ -277,11 +183,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  destCloseText: {
-    fontSize: 12,
-    color: '#6B7C92',
-    includeFontPadding: false,
-  },
 
   // ── AI banner
   aiBanner: {
@@ -316,29 +217,6 @@ const styles = StyleSheet.create({
     includeFontPadding: false,
   },
   aiTextBold: {fontWeight: '700', color: '#222225'},
-
-  // ── Sort chips
-  sortRow: {
-    flexDirection: 'row',
-    gap: 6,
-    flexWrap: 'wrap',
-  },
-  sortChip: {
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 100,
-    borderWidth: 1,
-    borderColor: '#CAD1DB',
-    backgroundColor: '#FFFFFF',
-  },
-  sortChipActive: {backgroundColor: '#222225', borderColor: '#222225'},
-  sortChipText: {
-    fontSize: 12,
-    fontWeight: '600',
-    color: '#4D5A6A',
-    includeFontPadding: false,
-  },
-  sortChipTextActive: {color: '#FFFFFF'},
 
   cardList: {gap: 8},
 });

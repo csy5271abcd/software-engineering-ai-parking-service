@@ -1,5 +1,6 @@
 import React from 'react';
 import {View, Text, Pressable, StyleSheet} from 'react-native';
+import {AppIcon} from '../common/AppIcon';
 
 const TIMES = ['지금', '15분 후', '30분 후', '1시간 후'] as const;
 export type ArrivalTime = (typeof TIMES)[number];
@@ -15,9 +16,7 @@ export function ArrivalTimeSelector({
 }: ArrivalTimeSelectorProps): React.JSX.Element {
   return (
     <View style={styles.row}>
-      <View style={styles.clockIcon}>
-        <View style={styles.clockFace} />
-      </View>
+      <AppIcon name="clock" size={14} color="#03AA5A" strokeWidth={2} />
       <Text style={styles.label}>도착 예정</Text>
       <View style={styles.chips}>
         {TIMES.map(t => {
@@ -48,24 +47,6 @@ const styles = StyleSheet.create({
     marginTop: 12,
     borderTopWidth: 1,
     borderTopColor: '#F2F4F7',
-  },
-  clockIcon: {
-    width: 14,
-    height: 14,
-    borderRadius: 7,
-    borderWidth: 1.5,
-    borderColor: '#03AA5A',
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexShrink: 0,
-  },
-  clockFace: {
-    width: 5,
-    height: 5,
-    borderBottomWidth: 1,
-    borderRightWidth: 1,
-    borderColor: '#03AA5A',
-    transform: [{rotate: '45deg'}, {translateX: -0.5}, {translateY: -0.5}],
   },
   label: {
     fontSize: 12,

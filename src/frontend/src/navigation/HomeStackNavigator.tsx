@@ -1,6 +1,8 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import {HomeMapScreen} from '../screens/home/HomeMapScreen';
+import {DestinationSearchScreen} from '../screens/search/DestinationSearchScreen';
+import {RecommendedParkingScreen} from '../screens/search/RecommendedParkingScreen';
 import {ParkingDetailScreen} from '../screens/parking/ParkingDetailScreen';
 import {RouteScreen} from '../screens/session/RouteScreen';
 import {ActiveSessionScreen} from '../screens/session/ActiveSessionScreen';
@@ -22,6 +24,16 @@ export function HomeStackNavigator(): React.JSX.Element {
       <Stack.Screen
         name="HomeMapScreen"
         component={HomeMapScreen}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="DestinationSearchScreen"
+        component={DestinationSearchScreen}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="RecommendedParkingScreen"
+        component={RecommendedParkingScreen}
         options={{headerShown: false}}
       />
       <Stack.Screen
