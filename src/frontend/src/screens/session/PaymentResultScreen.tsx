@@ -1,6 +1,5 @@
-import React, {useEffect, useRef} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
-  Alert,
   Animated,
   Pressable,
   StyleSheet,
@@ -13,9 +12,18 @@ import {CommonActions} from '@react-navigation/native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {AppIcon} from '../../components/common/AppIcon';
 import {getMockParkingLotById} from '../../mocks';
+import {ReceiptModal} from '../../components/session/ReceiptModal';
+import type {ReceiptData} from '../../components/session/ReceiptModal';
 
 type NavParam = {
-  PaymentResultScreen: {parkingLotId: string};
+  PaymentResultScreen: {
+    parkingLotId: string;
+    startedAt: string;
+    endedAt: string;
+    durationMinutes: number;
+    finalAmount: number;
+    paymentMethod: string;
+  };
 };
 
 interface Props {
@@ -23,11 +31,56 @@ interface Props {
   navigation: StackNavigationProp<NavParam, 'PaymentResultScreen'>;
 }
 
+const PAYMENT_METHOD_LABEL: Record<string, string> = {
+  kakao: '카카오페이',
+  shinhan: '신한카드',
+  samsung: '삼성페이',
+};
+
+function formatDuration(minutes: number): string {
+  const h = Math.floor(minutes / 60);
+  const m = minutes % 60;
+  if (h === 0) {return `${m}분`;}
+  if (m === 0) {return `${h}시간`;}
+  return `${h}시간 ${m}분`;
+}
+
+function generateApprovalCode(): string {
+  const pad = (n: number, len: number) => n.toString().padStart(len, '0');
+  const d = new Date();
+  return `${pad(d.getMonth() + 1, 2)}${pad(d.getDate(), 2)}-${pad(
+    Math.floor(Math.random() * 9999),
+    4,
+  )}-${pad(Math.floor(Math.random() * 99), 2)}`;
+}
+
 export function PaymentResultScreen({route: navRoute, navigation}: Props): React.JSX.Element {
   const insets = useSafeAreaInsets();
-  const {parkingLotId} = navRoute.params;
+  const {parkingLotId, startedAt, endedAt, durationMinutes, finalAmount, paymentMethod} =
+    navRoute.params;
   const lot = getMockParkingLotById(parkingLotId);
   const lotName = lot?.name ?? '주차장';
+  const methodLabel = PAYMENT_METHOD_LABEL[paymentMethod] ?? paymentMethod;
+  const durationLabel = formatDuration(durationMinutes);
+  const approvalCode = useRef(generateApprovalCode()).current;
+
+  const [isCompleting, setIsCompleting] = useState(false);
+  const [receiptVisible, setReceiptVisible] = useState(false);
+
+  const receiptData: ReceiptData = {
+    receiptId: `RCP-${approvalCode}`,
+    parkingLotName: lotName,
+    parkingLotAddress: lot?.address.roadAddress,
+    startedAt,
+    endedAt,
+    durationMinutes,
+    baseAmount: finalAmount,
+    discountAmount: 0,
+    finalAmount,
+    paymentMethod,
+    approvalNumber: approvalCode,
+    paidAt: endedAt,
+  };
 
   const checkScale = useRef(new Animated.Value(0.4)).current;
   const checkOpacity = useRef(new Animated.Value(0)).current;
@@ -57,9 +110,61 @@ export function PaymentResultScreen({route: navRoute, navigation}: Props): React
   }, [checkScale, checkOpacity, contentOpacity]);
 
   const handleDone = () => {
+    if (isCompleting) return;
+    setIsCompleting(true);
+
+    // Mock paid session record.
+    // TODO: When real API is integrated, POST /sessions/{id}/complete before navigating.
+    const paidUsageHistory = {
+      id: `PS-${Date.now()}`,
+      parkingLotId,
+      parkingLotName: lotName,
+      startedAt,
+      endedAt,
+      durationMinutes,
+      amount: finalAmount,
+      paymentMethod,
+      approvalCode,
+      status: 'PAID',
+    };
+
+    console.log('[PaymentResult] complete pressed');
+    console.log('[PaymentResult] paid session', paidUsageHistory);
+    console.log('[PaymentResult] navigate to usage history');
+
+    // Reset the entire navigation state so the user cannot press back into the
+    // payment flow. ParkingTab (index 2) is opened at UsedHistoryScreen.
+    // Tab indices: 0=HomeTab, 1=SearchTab, 2=ParkingTab, 3=RecommendTab, 4=MyPageTab
     navigation.dispatch(
-      CommonActions.navigate({name: 'HomeTab', params: {screen: 'HomeMapScreen'}}),
+      CommonActions.reset({
+        index: 0,
+        routes: [
+          {
+            name: 'MainTab',
+            state: {
+              index: 2,
+              routes: [
+                {name: 'HomeTab'},
+                {name: 'SearchTab'},
+                {
+                  name: 'ParkingTab',
+                  state: {
+                    index: 0,
+                    routes: [{name: 'UsedHistoryScreen'}],
+                  },
+                },
+                {name: 'RecommendTab'},
+                {name: 'MyPageTab'},
+              ],
+            },
+          },
+        ],
+      }),
     );
+  };
+
+  const handleReceipt = () => {
+    setReceiptVisible(true);
   };
 
   return (
@@ -82,7 +187,7 @@ export function PaymentResultScreen({route: navRoute, navigation}: Props): React
         <Animated.View style={[styles.textBlock, {opacity: contentOpacity}]}>
           <Text style={styles.title}>결제 완료</Text>
           <Text style={styles.desc}>
-            {lotName} · 1시간 32분{'\n'}
+            {lotName} · {durationLabel}{'\n'}
             영수증은 [이용] 탭에서 확인할 수 있어요
           </Text>
         </Animated.View>
@@ -90,9 +195,9 @@ export function PaymentResultScreen({route: navRoute, navigation}: Props): React
         {/* Summary card */}
         <Animated.View style={[styles.summaryCard, {opacity: contentOpacity}]}>
           {[
-            {label: '결제 금액', value: '₩4,000', blue: true},
-            {label: '결제 수단', value: '카카오페이', blue: false},
-            {label: '승인 번호', value: '0518-1512-94', blue: false},
+            {label: '결제 금액', value: `₩${finalAmount.toLocaleString()}`, blue: true},
+            {label: '결제 수단', value: methodLabel, blue: false},
+            {label: '승인 번호', value: approvalCode, blue: false},
           ].map((r, i, arr) => (
             <View
               key={r.label}
@@ -109,16 +214,23 @@ export function PaymentResultScreen({route: navRoute, navigation}: Props): React
 
       {/* Buttons */}
       <View style={[styles.btnRow, {paddingBottom: Math.max(insets.bottom, 20)}]}>
-        <Pressable
-          onPress={() => Alert.alert('영수증', '이용 탭에서 확인할 수 있습니다.')}
-          style={styles.receiptBtn}
-        >
+        <Pressable onPress={handleReceipt} style={styles.receiptBtn}>
           <Text style={styles.receiptBtnText}>영수증 보기</Text>
         </Pressable>
-        <Pressable onPress={handleDone} style={styles.doneBtn}>
+        <Pressable
+          onPress={handleDone}
+          style={[styles.doneBtn, isCompleting && styles.doneBtnDisabled]}
+          disabled={isCompleting}
+        >
           <Text style={styles.doneBtnText}>완료</Text>
         </Pressable>
       </View>
+
+      <ReceiptModal
+        visible={receiptVisible}
+        onClose={() => setReceiptVisible(false)}
+        receipt={receiptData}
+      />
     </View>
   );
 }
@@ -252,6 +364,10 @@ const styles = StyleSheet.create({
     shadowOffset: {width: 0, height: 3},
     shadowOpacity: 0.3,
     shadowRadius: 6,
+  },
+  doneBtnDisabled: {
+    backgroundColor: '#A0BDFF',
+    elevation: 0,
   },
   doneBtnText: {
     fontSize: 14,

@@ -28,9 +28,22 @@ import {NFCScanModal} from '../../components/session/NFCScanModal';
 type NavParam = {
   ParkingDetailScreen: {parkingLotId: string};
   RouteScreen: {parkingLotId: string};
-  ActiveSessionScreen: {parkingLotId: string};
-  PaymentScreen: {parkingLotId: string};
-  PaymentResultScreen: {parkingLotId: string};
+  ActiveSessionScreen: {parkingLotId: string; startedAt: string};
+  PaymentScreen: {
+    parkingLotId: string;
+    startedAt: string;
+    endedAt: string;
+    durationMinutes: number;
+    finalAmount: number;
+  };
+  PaymentResultScreen: {
+    parkingLotId: string;
+    startedAt: string;
+    endedAt: string;
+    durationMinutes: number;
+    finalAmount: number;
+    paymentMethod: string;
+  };
 };
 type DetailRoute = RouteProp<NavParam, 'ParkingDetailScreen'>;
 interface Props {
@@ -209,10 +222,16 @@ export function ParkingDetailScreen({route, navigation}: Props): React.JSX.Eleme
 
       <NFCScanModal
         visible={showNfcModal}
+        mode="START"
         onClose={() => setShowNfcModal(false)}
-        onSuccess={() => {
+        onScanSuccess={() => {
           setShowNfcModal(false);
-          navigation.navigate('ActiveSessionScreen', {parkingLotId});
+          setTimeout(() => {
+            navigation.navigate('ActiveSessionScreen', {
+              parkingLotId,
+              startedAt: new Date().toISOString(),
+            });
+          }, 100);
         }}
       />
     </View>

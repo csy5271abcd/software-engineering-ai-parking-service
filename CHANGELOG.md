@@ -13,6 +13,117 @@ SmartPark 프로젝트의 주요 변경 사항과 Git tag 기준선을 정리한
 
 ---
 
+## v1.1.12
+
+### NFC 이용 종료 인식 단계 및 결제 플로우 완성
+
+#### NFC 세션 플로우 (END 인식 → 결제 → 결제 완료)
+
+- `types/session.ts` 신규 추가
+  - `ParkingSessionStatus` union type: `READY | IN_USE | END_NFC_REQUIRED | COMPLETED_PENDING_PAYMENT | PAID`
+  - `SessionRouteParams`, `PaymentRouteParams`, `PaymentResultRouteParams` route param 타입 정의
+- `navigation/navigationTypes.ts` route param 확장
+  - `ActiveSessionScreen` — `startedAt: string` 추가
+  - `PaymentScreen` — `startedAt / endedAt / durationMinutes / finalAmount` 추가
+  - `PaymentResultScreen` — 위 항목 + `paymentMethod: string` 추가
+  - `RecommendStackParamList` — `RouteScreen / ActiveSessionScreen / PaymentScreen / PaymentResultScreen` 추가 (Recommend 탭 전체 플로우 지원)
+- `navigation/RecommendStackNavigator.tsx` — session 스크린 4개 등록
+- `components/session/NFCScanModal.tsx`
+  - `mode?: 'START' | 'END'` prop 추가
+  - END 모드 성공 메시지: "이용이 종료됩니다. 결제로 이동합니다"
+- `screens/parking/ParkingDetailScreen.tsx`
+  - NFCScanModal에 `mode="START"` 명시
+  - NFC START 성공 시 `startedAt: new Date().toISOString()` 포함하여 ActiveSessionScreen 이동
+- `screens/session/ActiveSessionScreen.tsx`
+  - `startedAt` param 수신 → 실제 경과 시간 기반으로 초기 `elapsedSec` 계산
+  - 입차 시간 헤더에 실제 `startedAt` 기반 HH:MM 표시
+  - NFC END CTA → NFCScanModal(mode='END') 표시 후 성공 시 세션 데이터 계산하여 PaymentScreen 이동
+  - 아이콘 `x` → `smartphoneNfc`로 교체
+- `screens/session/PaymentScreen.tsx`
+  - `startedAt / endedAt / durationMinutes / finalAmount` params 수신
+  - 이용 요약 카드: 실제 입차/출차 시각, 이용 시간, 최종 금액 표시
+  - 결제하기 CTA → PaymentResultScreen에 선택된 결제 수단 포함 전달
+- `screens/session/PaymentResultScreen.tsx`
+  - 실제 `finalAmount`, `paymentMethod`, `durationMinutes` 표시
+  - 승인 번호 동적 생성 (날짜 기반 mock)
+  - 완료 → `ParkingTab / UsedHistoryScreen`으로 이동 (기존 HomeTab 이동 수정)
+
+---
+
+## v1.1.11
+
+### 추천 탭 — AI 혼잡도 분석 대시보드 확장 + AI 추천 기능 보완
+
+#### AI 추천 기능 보완 (2차)
+
+- `types/aiRecommendation.ts` 보완
+  - `AiRecommendationInsight`에 `distanceMeters`, `nfcAvailable`, `maxDailyPrice`, `scenarioReasons` 필드 추가
+  - `ScenarioRecommendation` 인터페이스 신규 추가
+  - `SCENARIO_DESCRIPTION`, `SCENARIO_BEST_MESSAGE` 상수 신규 추가
+- `mocks/aiRecommendation.mock.ts` 보완
+  - 주차장 4곳에 `nfcAvailable`, `distanceMeters`, `maxDailyPrice`, `scenarioReasons` 추가
+  - `mockScenarioRecommendations`: 6개 시나리오별 최적 주차장·정렬 순서·설명 mock 추가
+- `AiCongestionSummaryCard` 강화
+  - "오늘의 AI 추천" 라벨 추가, 성공률 배경 tint 적용
+  - AI 배지 텍스트를 "AI 혼잡도 분석"으로 변경
+  - 하단 분석 데이터 근거 footer 문구 추가
+- `RecommendationScenarioChips` 보완
+  - "상황별 추천" 섹션 라벨 추가
+  - `description` prop 추가 — 선택된 기준 설명 1줄 표시
+- `AiBestParkingCard` 보완
+  - BEST 메시지 행에 시나리오별 `SCENARIO_BEST_MESSAGE` 표시
+  - `nfcAvailable`, `isSoonAvailable` badge 추가
+  - `maxDailyPrice` 상세 chip 표시
+- `AiReasonCard` 강화
+  - `lotName` prop 추가 — 추천 대상 주차장명 표시
+  - 분석 설명 문장 블록 추가 (brain 아이콘 + 분석 근거)
+- `AiRecommendedParkingList` 보완
+  - `activeScenario` prop 추가 — 헤더에 정렬 기준 표시
+  - 카드별 `scenarioReasons` 기반 1줄 추천 이유 표시
+  - NFC badge 추가
+- `AiParkingCompareCard` 보완
+  - 비교 항목에 NFC 가능 여부 행 추가 (7개 항목)
+- `TimeCongestionForecast` 보완
+  - 30분 후 혼잡도 상승 시 경고 문구 동적 표시
+  - 현재가 최적 시간대일 때 "지금 출발" 안내 문구 표시
+- `AiScoreBreakdownCard` 보완
+  - 최고 점수 항목 동적 표시 ("혼잡도 예측 점수가 가장 높게 반영되었어요.")
+  - 곧 비워질 자리 보정 점수 적용 시 안내 문구 표시
+- `RecommendationScreen` 전체 시나리오 로직 연결
+  - `useMemo`로 `scenarioRec`, `bestInsight`, `sortedInsights` 계산
+  - 시나리오 선택에 따라 BEST 카드, 리스트 정렬, 추천 이유가 연동
+
+#### 추천 탭 AI 혼잡도 분석 대시보드 (1차)
+
+#### 주요 변경
+
+- `types/aiRecommendation.ts` 신규 작성
+  - `CongestionLevel`, `ScenarioKey`, `TimeCongestionPrediction`, `AiScoreBreakdown`, `AiInfluenceFactor`, `AiRecommendationInsight`, `AiRegionSummary` 타입 정의
+  - `SCENARIO_HINT`, `SCENARIO_FIRST_REASON` 상수 정의
+- `mocks/aiRecommendation.mock.ts` 신규 작성
+  - `mockAiRegionSummary`: 성수동 주변 지역 요약 (성공률 87%)
+  - `mockAiInsights`: 주차장 4곳 AI 분석 데이터 (점수, 혼잡도, 시간대별 예측, 점수 분해, 영향 요인)
+- `mocks/index.ts`: `mockAiRegionSummary`, `mockAiInsights` 익스포트 추가
+- `AppIcon.tsx`: `brain`, `activity`, `trendingUp`, `barChart3`, `gauge`, `zap`, `checkCircle` 아이콘 추가
+- 추천 컴포넌트 9개 신규 작성 (`src/components/recommendation/`)
+  - `AiCongestionSummaryCard`: 지역 AI 혼잡도 요약 카드 (성공률, BEST 추천 주차장)
+  - `RecommendationScenarioChips`: 상황별 시나리오 6개 chip 선택 (가로 스크롤)
+  - `TimeCongestionForecast`: 시간대별 혼잡도 예측 (View 기반 막대 차트, 4개 슬롯)
+  - `AiBestParkingCard`: AI BEST 추천 카드 (점수, 성공률 진행 바, 시나리오 힌트)
+  - `AiScoreBreakdownCard`: AI 점수 분해 카드 (5개 항목, View 기반 가로 진행 바)
+  - `AiReasonCard`: 추천 이유 카드 (시나리오별 첫 번째 이유 동적 변경)
+  - `AiInfluenceFactorsCard`: 혼잡도 영향 요인 pill 카드 (sentiment 색상)
+  - `AiRecommendedParkingList`: AI 추천순 주차장 리스트 (순위 badge, 메타 정보)
+  - `AiParkingCompareCard`: 상위 3곳 비교 카드 (가로 스크롤, 메달 이모지, 6개 항목 비교)
+- `screens/recommend/RecommendationScreen.tsx` 전면 재작성
+  - 고정 헤더 (brain 아이콘 + "추천" + "실시간" badge)
+  - 9개 컴포넌트 순서대로 렌더링 + 분석 기준 footer note
+  - `ParkingDetailScreen` 타입 안전 네비게이션
+- `navigation/navigationTypes.ts`: `RecommendStackParamList`에 `ParkingDetailScreen` 추가
+- `navigation/RecommendStackNavigator.tsx`: `ParkingDetailScreen` 스크린 추가
+
+---
+
 ## v1.1.10
 
 ### 공급자 기능 구현 — 대시보드 및 주차장 등록 Wizard

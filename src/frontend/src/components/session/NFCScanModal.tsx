@@ -1,20 +1,34 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useLayoutEffect, useRef, useState} from 'react';
 import {Animated, Modal, Pressable, StyleSheet, Text, View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {AppIcon} from '../common/AppIcon';
 
 interface NFCScanModalProps {
   visible: boolean;
+  mode: 'START' | 'END';
+  parkingLotName?: string;
   onClose: () => void;
-  onSuccess: () => void;
+  onScanSuccess: () => void;
 }
 
-export function NFCScanModal({visible, onClose, onSuccess}: NFCScanModalProps): React.JSX.Element {
+export function NFCScanModal({
+  visible,
+  mode,
+  onClose,
+  onScanSuccess,
+}: NFCScanModalProps): React.JSX.Element {
   const insets = useSafeAreaInsets();
   const [phase, setPhase] = useState<'scanning' | 'success'>('scanning');
   const pulseAnim = useRef(new Animated.Value(0)).current;
   const successScale = useRef(new Animated.Value(0.6)).current;
   const successOpacity = useRef(new Animated.Value(0)).current;
+
+  // Keep latest callback in ref so the timer effect never depends on it.
+  // This prevents the timer from being cancelled when the parent re-renders.
+  const onScanSuccessRef = useRef(onScanSuccess);
+  useLayoutEffect(() => {
+    onScanSuccessRef.current = onScanSuccess;
+  });
 
   // Reset state when modal opens
   useEffect(() => {
@@ -39,25 +53,29 @@ export function NFCScanModal({visible, onClose, onSuccess}: NFCScanModalProps): 
     return () => loop.stop();
   }, [phase, pulseAnim]);
 
-  // Auto-transition to success after 3s in scanning
+  // Auto-transition to success after 2.4s in scanning
   useEffect(() => {
     if (phase !== 'scanning' || !visible) return;
-    const t = setTimeout(() => setPhase('success'), 3000);
+    const t = setTimeout(() => setPhase('success'), 2400);
     return () => clearTimeout(t);
   }, [phase, visible]);
 
-  // Success animation + auto-dismiss
+  // Success animation + callback.
+  // onScanSuccessRef is intentionally NOT in the dep array — we read the ref
+  // at call time so the timer is never restarted by parent re-renders.
   useEffect(() => {
     if (phase !== 'success') return;
+    console.log('[NFCScanModal] success', mode);
     Animated.parallel([
       Animated.spring(successScale, {toValue: 1, useNativeDriver: true, bounciness: 12}),
       Animated.timing(successOpacity, {toValue: 1, duration: 300, useNativeDriver: true}),
     ]).start();
     const t = setTimeout(() => {
-      onSuccess();
-    }, 1600);
+      onScanSuccessRef.current();
+    }, 800);
     return () => clearTimeout(t);
-  }, [phase, onSuccess, successScale, successOpacity]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [phase, successScale, successOpacity]);
 
   const pulseScale = pulseAnim.interpolate({inputRange: [0, 1], outputRange: [1, 1.35]});
   const pulseOpacity = pulseAnim.interpolate({inputRange: [0, 1], outputRange: [0.45, 0]});
@@ -105,7 +123,9 @@ export function NFCScanModal({visible, onClose, onSuccess}: NFCScanModalProps): 
           {/* Description */}
           <Text style={styles.desc}>
             {phase === 'success'
-              ? '주차 이용을 시작합니다'
+              ? mode === 'END'
+                ? '이용이 종료됩니다. 결제로 이동합니다'
+                : '주차 이용을 시작합니다'
               : '주차 공간 입구 또는 정산기에 부착된 NFC 태그를\n스마트폰 뒷면에 가까이 대주세요.'}
           </Text>
         </View>

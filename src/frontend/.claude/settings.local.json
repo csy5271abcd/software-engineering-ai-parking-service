@@ -25,7 +25,9 @@
       "Bash(key-round)",
       "Bash(smartphone)",
       "Bash(nfc)",
-      "Bash(filter\" 2>&1)"
+      "Bash(filter\" 2>&1)",
+      "Bash(timeout 30 cmd /c \"npx react-native start --port 8084 2>&1 | head -5\")",
+      "Bash(node -e ' *)"
     ]
   }
 }

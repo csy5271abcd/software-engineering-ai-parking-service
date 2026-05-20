@@ -6,9 +6,22 @@ export type HomeStackParamList = {
   RecommendedParkingScreen: {destinationName: string; destinationSub?: string};
   ParkingDetailScreen: {parkingLotId: string};
   RouteScreen: {parkingLotId: string};
-  ActiveSessionScreen: {parkingLotId: string};
-  PaymentScreen: {parkingLotId: string};
-  PaymentResultScreen: {parkingLotId: string};
+  ActiveSessionScreen: {parkingLotId: string; startedAt: string};
+  PaymentScreen: {
+    parkingLotId: string;
+    startedAt: string;
+    endedAt: string;
+    durationMinutes: number;
+    finalAmount: number;
+  };
+  PaymentResultScreen: {
+    parkingLotId: string;
+    startedAt: string;
+    endedAt: string;
+    durationMinutes: number;
+    finalAmount: number;
+    paymentMethod: string;
+  };
 };
 
 export type SearchStackParamList = {
@@ -21,9 +34,22 @@ export type SearchStackParamList = {
   ParkingDetailScreen: {parkingLotId: string};
   SoonAvailableScreen: undefined;
   RouteScreen: {parkingLotId: string};
-  ActiveSessionScreen: {parkingLotId: string};
-  PaymentScreen: {parkingLotId: string};
-  PaymentResultScreen: {parkingLotId: string};
+  ActiveSessionScreen: {parkingLotId: string; startedAt: string};
+  PaymentScreen: {
+    parkingLotId: string;
+    startedAt: string;
+    endedAt: string;
+    durationMinutes: number;
+    finalAmount: number;
+  };
+  PaymentResultScreen: {
+    parkingLotId: string;
+    startedAt: string;
+    endedAt: string;
+    durationMinutes: number;
+    finalAmount: number;
+    paymentMethod: string;
+  };
 };
 
 export type ParkingStackParamList = {
@@ -32,9 +58,22 @@ export type ParkingStackParamList = {
   ParkingDetailScreen: {parkingLotId: string};
   SoonAvailableScreen: undefined;
   RouteScreen: {parkingLotId: string};
-  ActiveSessionScreen: {parkingLotId: string};
-  PaymentScreen: {parkingLotId: string};
-  PaymentResultScreen: {parkingLotId: string};
+  ActiveSessionScreen: {parkingLotId: string; startedAt: string};
+  PaymentScreen: {
+    parkingLotId: string;
+    startedAt: string;
+    endedAt: string;
+    durationMinutes: number;
+    finalAmount: number;
+  };
+  PaymentResultScreen: {
+    parkingLotId: string;
+    startedAt: string;
+    endedAt: string;
+    durationMinutes: number;
+    finalAmount: number;
+    paymentMethod: string;
+  };
 };
 
 export type ProviderStackParamList = {
@@ -43,6 +82,24 @@ export type ProviderStackParamList = {
 
 export type RecommendStackParamList = {
   RecommendationScreen: undefined;
+  ParkingDetailScreen: {parkingLotId: string};
+  RouteScreen: {parkingLotId: string};
+  ActiveSessionScreen: {parkingLotId: string; startedAt: string};
+  PaymentScreen: {
+    parkingLotId: string;
+    startedAt: string;
+    endedAt: string;
+    durationMinutes: number;
+    finalAmount: number;
+  };
+  PaymentResultScreen: {
+    parkingLotId: string;
+    startedAt: string;
+    endedAt: string;
+    durationMinutes: number;
+    finalAmount: number;
+    paymentMethod: string;
+  };
 };
 
 export type MyPageStackParamList = {

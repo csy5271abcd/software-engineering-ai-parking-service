@@ -13,8 +13,21 @@ import {AppIcon} from '../../components/common/AppIcon';
 import {getMockParkingLotById} from '../../mocks';
 
 type NavParam = {
-  PaymentScreen: {parkingLotId: string};
-  PaymentResultScreen: {parkingLotId: string};
+  PaymentScreen: {
+    parkingLotId: string;
+    startedAt: string;
+    endedAt: string;
+    durationMinutes: number;
+    finalAmount: number;
+  };
+  PaymentResultScreen: {
+    parkingLotId: string;
+    startedAt: string;
+    endedAt: string;
+    durationMinutes: number;
+    finalAmount: number;
+    paymentMethod: string;
+  };
 };
 
 interface Props {
@@ -28,16 +41,33 @@ const METHODS = [
   {key: 'samsung', name: '삼성페이', sub: '연결 안됨', emoji: '📱', disabled: true},
 ] as const;
 
-const TOTAL_FEE = 4000;
+function formatTimeLabel(iso: string): string {
+  const d = new Date(iso);
+  const h = d.getHours().toString().padStart(2, '0');
+  const m = d.getMinutes().toString().padStart(2, '0');
+  return `오늘 ${h}:${m}`;
+}
+
+function formatDuration(minutes: number): string {
+  const h = Math.floor(minutes / 60);
+  const m = minutes % 60;
+  if (h === 0) {return `${m}분`;}
+  if (m === 0) {return `${h}시간`;}
+  return `${h}시간 ${m}분`;
+}
 
 export function PaymentScreen({route: navRoute, navigation}: Props): React.JSX.Element {
   const insets = useSafeAreaInsets();
-  const {parkingLotId} = navRoute.params;
+  const {parkingLotId, startedAt, endedAt, durationMinutes, finalAmount} = navRoute.params;
+  console.log('[PaymentScreen] params', {parkingLotId, startedAt, endedAt, durationMinutes, finalAmount});
   const lot = getMockParkingLotById(parkingLotId);
   const [method, setMethod] = useState<'kakao' | 'shinhan' | 'samsung'>('kakao');
 
   const lotName = lot?.name ?? '주차장';
   const pricePerHour = lot?.pricePerHour ?? 1500;
+  const entryLabel = formatTimeLabel(startedAt);
+  const exitLabel = formatTimeLabel(endedAt);
+  const durationLabel = formatDuration(durationMinutes);
 
   return (
     <View style={styles.screen}>
@@ -58,6 +88,7 @@ export function PaymentScreen({route: navRoute, navigation}: Props): React.JSX.E
           {paddingBottom: Math.max(insets.bottom, 16) + 80},
         ]}
         showsVerticalScrollIndicator={false}
+        showsHorizontalScrollIndicator={false}
       >
         {/* Usage summary card */}
         <View style={styles.summaryCard}>
@@ -65,9 +96,9 @@ export function PaymentScreen({route: navRoute, navigation}: Props): React.JSX.E
           <Text style={styles.summaryLotName}>{lotName}</Text>
 
           {[
-            {label: '입차', value: '오늘 13:40', bold: false},
-            {label: '출차', value: '오늘 15:12', bold: false},
-            {label: '이용 시간', value: '1시간 32분', bold: true},
+            {label: '입차', value: entryLabel, bold: false},
+            {label: '출차', value: exitLabel, bold: false},
+            {label: '이용 시간', value: durationLabel, bold: true},
             {label: '시간당 요금', value: `₩${pricePerHour.toLocaleString()}`, bold: false},
           ].map(r => (
             <View key={r.label} style={styles.summaryRow}>
@@ -82,7 +113,7 @@ export function PaymentScreen({route: navRoute, navigation}: Props): React.JSX.E
 
           <View style={styles.summaryTotalRow}>
             <Text style={styles.summaryTotalLabel}>최종 결제 금액</Text>
-            <Text style={styles.summaryTotalValue}>₩{TOTAL_FEE.toLocaleString()}</Text>
+            <Text style={styles.summaryTotalValue}>₩{finalAmount.toLocaleString()}</Text>
           </View>
         </View>
 
@@ -96,34 +127,34 @@ export function PaymentScreen({route: navRoute, navigation}: Props): React.JSX.E
           </View>
 
           <View style={styles.methodList}>
-            {METHODS.map(m => (
+            {METHODS.map(pm => (
               <Pressable
-                key={m.key}
-                onPress={() => !m.disabled && setMethod(m.key)}
+                key={pm.key}
+                onPress={() => !pm.disabled && setMethod(pm.key)}
                 style={[
                   styles.methodCard,
-                  method === m.key && styles.methodCardActive,
-                  m.disabled && styles.methodCardDisabled,
+                  method === pm.key && styles.methodCardActive,
+                  pm.disabled && styles.methodCardDisabled,
                 ]}
-                disabled={m.disabled}
+                disabled={pm.disabled}
               >
-                <Text style={styles.methodEmoji}>{m.emoji}</Text>
+                <Text style={styles.methodEmoji}>{pm.emoji}</Text>
                 <View style={styles.methodInfo}>
-                  <Text style={[styles.methodName, m.disabled && styles.methodNameDisabled]}>
-                    {m.name}
+                  <Text style={[styles.methodName, pm.disabled && styles.methodNameDisabled]}>
+                    {pm.name}
                   </Text>
-                  <Text style={[styles.methodSub, m.disabled && styles.methodSubDisabled]}>
-                    {m.sub}
+                  <Text style={[styles.methodSub, pm.disabled && styles.methodSubDisabled]}>
+                    {pm.sub}
                   </Text>
                 </View>
                 <View
                   style={[
                     styles.radio,
-                    method === m.key && styles.radioActive,
-                    m.disabled && styles.radioDisabled,
+                    method === pm.key && styles.radioActive,
+                    pm.disabled && styles.radioDisabled,
                   ]}
                 >
-                  {method === m.key && !m.disabled && (
+                  {method === pm.key && !pm.disabled && (
                     <View style={styles.radioDot} />
                   )}
                 </View>
@@ -142,10 +173,19 @@ export function PaymentScreen({route: navRoute, navigation}: Props): React.JSX.E
       {/* ── Fixed bottom CTA ── */}
       <View style={[styles.cta, {paddingBottom: Math.max(insets.bottom, 16)}]}>
         <Pressable
-          onPress={() => navigation.navigate('PaymentResultScreen', {parkingLotId})}
+          onPress={() =>
+            navigation.navigate('PaymentResultScreen', {
+              parkingLotId,
+              startedAt,
+              endedAt,
+              durationMinutes,
+              finalAmount,
+              paymentMethod: method,
+            })
+          }
           style={styles.ctaBtn}
         >
-          <Text style={styles.ctaBtnText}>₩{TOTAL_FEE.toLocaleString()} 결제하기</Text>
+          <Text style={styles.ctaBtnText}>₩{finalAmount.toLocaleString()} 결제하기</Text>
         </Pressable>
       </View>
     </View>

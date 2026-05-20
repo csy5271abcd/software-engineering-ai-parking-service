@@ -1,206 +1,169 @@
-import React, {useState} from 'react';
-import {
-  View,
-  Text,
-  Pressable,
-  ScrollView,
-  StyleSheet,
-} from 'react-native';
-import {useNavigation, CommonActions} from '@react-navigation/native';
+import React, {useState, useCallback, useMemo} from 'react';
+import {View, Text, ScrollView, StyleSheet} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
 import type {StackNavigationProp} from '@react-navigation/stack';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import type {RecommendStackParamList} from '../../navigation/navigationTypes';
-import {mockParkingLots} from '../../mocks';
-import {PARKING_STATUS} from '../../constants/status';
-import {AppSectionHeader} from '../../components/common/AppSectionHeader';
-import {AppChip} from '../../components/common/AppChip';
-import {AppCard} from '../../components/common/AppCard';
-import {AppBadge} from '../../components/common/AppBadge';
-import {AppButton} from '../../components/common/AppButton';
-import {AppSurface} from '../../components/common/AppSurface';
-import {AppSeparator} from '../../components/common/AppSeparator';
-import {ParkingCard} from '../../components/parking/ParkingCard';
 import {AppIcon} from '../../components/common/AppIcon';
-import type {AppIconName} from '../../components/common/AppIcon';
+import {AiCongestionSummaryCard} from '../../components/recommendation/AiCongestionSummaryCard';
+import {RecommendationScenarioChips} from '../../components/recommendation/RecommendationScenarioChips';
+import {TimeCongestionForecast} from '../../components/recommendation/TimeCongestionForecast';
+import {AiBestParkingCard} from '../../components/recommendation/AiBestParkingCard';
+import {AiScoreBreakdownCard} from '../../components/recommendation/AiScoreBreakdownCard';
+import {AiReasonCard} from '../../components/recommendation/AiReasonCard';
+import {AiRecommendedParkingList} from '../../components/recommendation/AiRecommendedParkingList';
+import {AiParkingCompareCard} from '../../components/recommendation/AiParkingCompareCard';
+import {AiInfluenceFactorsCard} from '../../components/recommendation/AiInfluenceFactorsCard';
+import {
+  mockAiRegionSummary,
+  mockAiInsights,
+  mockScenarioRecommendations,
+} from '../../mocks/aiRecommendation.mock';
+import type {ScenarioKey, AiRecommendationInsight} from '../../types/aiRecommendation';
+import {SCENARIO_DESCRIPTION} from '../../types/aiRecommendation';
+import type {RecommendStackParamList} from '../../navigation/navigationTypes';
 
 type NavProp = StackNavigationProp<RecommendStackParamList, 'RecommendationScreen'>;
-
-type SituationKey = '지금' | '출근' | '쇼핑' | '외식' | '병원';
-
-const SITUATIONS: {k: SituationKey; emoji: string}[] = [
-  {k: '지금', emoji: '⚡'},
-  {k: '출근', emoji: '💼'},
-  {k: '쇼핑', emoji: '🛍'},
-  {k: '외식', emoji: '🍽'},
-  {k: '병원', emoji: '🏥'},
-];
-
-function sortBySituation(situation: SituationKey) {
-  const arr = [...mockParkingLots];
-  switch (situation) {
-    case '출근':
-    case '병원':
-      return arr.sort((a, b) => a.distanceMeters - b.distanceMeters);
-    case '쇼핑':
-      return arr.sort((a, b) => b.availableCount - a.availableCount);
-    case '외식':
-      return arr.sort((a, b) => a.pricePerHour - b.pricePerHour);
-    default:
-      return arr.sort((a, b) => b.recommendationScore - a.recommendationScore);
-  }
-}
-
-const REASON_CHIPS: {icon: AppIconName; label: string}[] = [
-  {icon: 'car', label: '도보 3분 이내'},
-  {icon: 'circleDollarSign', label: '시간당 저렴'},
-  {icon: 'sparkles', label: 'AI 추천 1위'},
-];
 
 export function RecommendationScreen(): React.JSX.Element {
   const insets = useSafeAreaInsets();
   const navigation = useNavigation<NavProp>();
-  const [situation, setSituation] = useState<SituationKey>('지금');
+  const [activeScenario, setActiveScenario] = useState<ScenarioKey>('빠른 주차');
 
-  const aiLots = sortBySituation(situation).slice(0, 3);
-  const soonLots = mockParkingLots
-    .filter(l => l.status === PARKING_STATUS.SOON_AVAILABLE)
-    .slice(0, 3);
+  const scenarioRec = useMemo(
+    () => mockScenarioRecommendations[activeScenario],
+    [activeScenario],
+  );
 
-  const navigateToDetail = (id: string) => {
-    (navigation as any).navigate('ParkingTab', {
-      screen: 'ParkingDetailScreen',
-      params: {parkingLotId: id},
-    });
-  };
+  const bestInsight = useMemo((): AiRecommendationInsight => {
+    return (
+      mockAiInsights.find(i => i.parkingLotId === scenarioRec.bestParkingLotId) ??
+      mockAiInsights[0]
+    );
+  }, [scenarioRec]);
 
-  const goSearch = () => {
-    navigation.dispatch(CommonActions.navigate({name: 'SearchTab'}));
-  };
+  const sortedInsights = useMemo((): AiRecommendationInsight[] => {
+    return scenarioRec.sortedParkingLotIds
+      .map(id => mockAiInsights.find(i => i.parkingLotId === id))
+      .filter((i): i is AiRecommendationInsight => i !== undefined);
+  }, [scenarioRec]);
+
+  const handlePressLot = useCallback(
+    (id: string) => {
+      navigation.navigate('ParkingDetailScreen', {parkingLotId: id});
+    },
+    [navigation],
+  );
 
   return (
     <View style={styles.screen}>
-      {/* ── Header ── */}
+      {/* ── Fixed header ── */}
       <View style={[styles.header, {paddingTop: insets.top + 12}]}>
-        <Text style={styles.headerTitle}>추천</Text>
-        <Text style={styles.headerSub}>지금 주변 최적 주차장을 분석했어요</Text>
+        <View style={styles.headerLeft}>
+          <View style={styles.headerIconRow}>
+            <AppIcon name="atom" size={18} color="#006CFF" strokeWidth={2} />
+            <Text style={styles.headerTitle}>추천</Text>
+          </View>
+          <Text style={styles.headerSub}>
+            AI가 지금 가장 주차하기 좋은 곳을 분석했어요
+          </Text>
+        </View>
+        <View style={styles.headerBadge}>
+          <AppIcon name="sparkles" size={11} color="#FFFFFF" strokeWidth={2} />
+          <Text style={styles.headerBadgeText}>실시간</Text>
+        </View>
       </View>
 
+      {/* ── Scrollable content ── */}
       <ScrollView
         style={styles.scroll}
         contentContainerStyle={[
-          styles.scrollContent,
-          {paddingBottom: insets.bottom + 24},
+          styles.content,
+          {paddingBottom: insets.bottom + 32},
         ]}
         showsVerticalScrollIndicator={false}
+        showsHorizontalScrollIndicator={false}
       >
-        {/* ── 상황별 chips ── */}
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={styles.situRow}
-        >
-          {SITUATIONS.map(s => (
-            <AppChip
-              key={s.k}
-              label={`${s.emoji} ${s.k}`}
-              active={situation === s.k}
-              onPress={() => setSituation(s.k)}
-            />
-          ))}
-        </ScrollView>
+        {/* 1. 오늘의 AI 추천 요약 */}
+        <AiCongestionSummaryCard summary={mockAiRegionSummary} />
 
-        {/* ── AI 배너 ── */}
-        <AppSurface variant="success" style={styles.aiBanner}>
-          <AppBadge label="AI" variant="ai" style={styles.aiPill} />
-          <Text style={styles.aiBannerText}>
-            <Text style={styles.aiBannerBold}>{situation} 기준</Text>
-            {' 혼잡도·도보거리·요금을 분석해 추천해요'}
+        {/* 2. 상황별 추천 chip + 설명 */}
+        <RecommendationScenarioChips
+          active={activeScenario}
+          onSelect={setActiveScenario}
+          description={SCENARIO_DESCRIPTION[activeScenario]}
+        />
+
+        {/* 3. BEST 추천 카드 */}
+        <AiBestParkingCard
+          insight={bestInsight}
+          activeScenario={activeScenario}
+          onPress={handlePressLot}
+        />
+
+        {/* 4. 시간대별 혼잡도 예측 */}
+        <TimeCongestionForecast predictions={bestInsight.timePredictions} />
+
+        {/* 5. AI 추천 점수 분석 */}
+        <AiScoreBreakdownCard
+          breakdown={bestInsight.scoreBreakdown}
+          totalScore={bestInsight.recommendationScore}
+        />
+
+        {/* 6. AI 추천 이유 */}
+        <AiReasonCard
+          reasons={bestInsight.reasons}
+          activeScenario={activeScenario}
+          lotName={bestInsight.displayName}
+        />
+
+        {/* 7. AI 추천순 주차장 리스트 */}
+        <AiRecommendedParkingList
+          insights={sortedInsights}
+          activeScenario={activeScenario}
+          onPressLot={handlePressLot}
+        />
+
+        {/* 8. 후보 비교 카드 */}
+        <AiParkingCompareCard
+          insights={sortedInsights}
+          onPressLot={handlePressLot}
+        />
+
+        {/* 9. 혼잡도 영향 요인 */}
+        <AiInfluenceFactorsCard factors={bestInsight.influenceFactors} />
+
+        {/* 분석 기준 footer note */}
+        <View style={styles.footerNote}>
+          <AppIcon name="alertCircle" size={12} color="#8B99AC" strokeWidth={2} />
+          <Text style={styles.footerText}>
+            AI 분석은 최근 4주 이용 데이터, 시간대별 혼잡도 패턴, 현재 가용 면수를 기반으로 계산됩니다.
+            실제 상황과 차이가 있을 수 있습니다.
           </Text>
-        </AppSurface>
-
-        {/* ── AI 추천 주차장 ── */}
-        <AppSectionHeader title="AI 추천 주차장" />
-        <View style={styles.cardList}>
-          {aiLots.map((lot, idx) => (
-            <ParkingCard
-              key={lot.id}
-              lot={lot}
-              rank={idx + 1}
-              selected={false}
-              onPress={() => navigateToDetail(lot.id)}
-              onPressDetail={() => navigateToDetail(lot.id)}
-            />
-          ))}
         </View>
-
-        {/* ── 추천 이유 chips ── */}
-        <View style={styles.reasonRow}>
-          {REASON_CHIPS.map(r => (
-            <View key={r.label} style={styles.reasonChip}>
-              <AppIcon name={r.icon} size={12} color="#717182" strokeWidth={1.8} />
-              <Text style={styles.reasonText}>{r.label}</Text>
-            </View>
-          ))}
-        </View>
-
-        <AppSeparator style={styles.sep} />
-
-        {/* ── 곧 비워질 자리 ── */}
-        {soonLots.length > 0 && (
-          <>
-            <AppSectionHeader
-              title="곧 비워질 자리"
-              sub={`${soonLots.length}곳`}
-            />
-            <View style={styles.cardList}>
-              {soonLots.map(lot => (
-                <ParkingCard
-                  key={lot.id}
-                  lot={lot}
-                  selected={false}
-                  onPress={() => navigateToDetail(lot.id)}
-                  onPressDetail={() => navigateToDetail(lot.id)}
-                />
-              ))}
-            </View>
-          </>
-        )}
-
-        {/* ── 목적지 주차 찾기 CTA ── */}
-        <AppCard style={styles.ctaCard} padding="md" radius="xl" elevation>
-          <View style={styles.ctaRow}>
-            <View style={styles.ctaIconWrap}>
-              <AppIcon name="mapPin" size={20} color="#006CFF" strokeWidth={2} />
-            </View>
-            <View style={styles.ctaBody}>
-              <Text style={styles.ctaTitle}>목적지 주차 찾기</Text>
-              <Text style={styles.ctaSub}>목적지 근처 최적 주차장을 찾아드려요</Text>
-            </View>
-            <AppButton
-              label="검색"
-              variant="primary"
-              size="sm"
-              onPress={goSearch}
-              rightIcon="search"
-            />
-          </View>
-        </AppCard>
       </ScrollView>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  screen: {flex: 1, backgroundColor: '#FFFFFF'},
+  screen: {flex: 1, backgroundColor: '#F8F9FB'},
 
   // ── Header
   header: {
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    justifyContent: 'space-between',
     paddingHorizontal: 16,
     paddingBottom: 14,
+    backgroundColor: '#FFFFFF',
     borderBottomWidth: 1,
     borderBottomColor: '#E5EAF1',
-    backgroundColor: '#FFFFFF',
-    gap: 2,
+  },
+  headerLeft: {gap: 3},
+  headerIconRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
   },
   headerTitle: {
     fontSize: 22,
@@ -210,101 +173,48 @@ const styles = StyleSheet.create({
     includeFontPadding: false,
   },
   headerSub: {
-    fontSize: 13,
-    color: '#717182',
+    fontSize: 12.5,
+    color: '#6B7C92',
     letterSpacing: -0.2,
+    includeFontPadding: false,
+  },
+  headerBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    backgroundColor: '#006CFF',
+    borderRadius: 100,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    marginBottom: 2,
+  },
+  headerBadgeText: {
+    fontSize: 10.5,
+    fontWeight: '700',
+    color: '#FFFFFF',
     includeFontPadding: false,
   },
 
   scroll: {flex: 1},
-  scrollContent: {
+  content: {
     paddingHorizontal: 16,
     paddingTop: 16,
-    gap: 14,
+    gap: 16,
   },
 
-  situRow: {gap: 8, paddingBottom: 2},
-
-  // ── AI banner
-  aiBanner: {
+  // ── Footer
+  footerNote: {
     flexDirection: 'row',
-    alignItems: 'center',
-    gap: 10,
-    padding: 12,
-    borderRadius: 10,
-  },
-  aiPill: {flexShrink: 0},
-  aiBannerText: {
-    flex: 1,
-    fontSize: 12.5,
-    color: '#4D5A6A',
-    lineHeight: 18,
-    letterSpacing: -0.2,
-    includeFontPadding: false,
-  },
-  aiBannerBold: {fontWeight: '700', color: '#222225'},
-
-  cardList: {gap: 8},
-
-  // ── Reason chips
-  reasonRow: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
+    alignItems: 'flex-start',
     gap: 6,
-    marginTop: -6,
+    paddingVertical: 4,
   },
-  reasonChip: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 4,
-    paddingHorizontal: 10,
-    paddingVertical: 5,
-    borderRadius: 9999,
-    backgroundColor: '#F3F3F5',
-    borderWidth: 1,
-    borderColor: '#E5EAF1',
-  },
-  reasonText: {
-    fontSize: 11.5,
-    fontWeight: '500',
-    color: '#717182',
-    includeFontPadding: false,
-    letterSpacing: -0.2,
-  },
-
-  sep: {marginVertical: 4},
-
-  // ── CTA
-  ctaCard: {
-    borderColor: 'rgba(0,108,255,0.18)',
-    backgroundColor: '#F0F7FF',
-  },
-  ctaRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 12,
-  },
-  ctaIconWrap: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: 'rgba(0,108,255,0.10)',
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexShrink: 0,
-  },
-  ctaBody: {flex: 1, gap: 2},
-  ctaTitle: {
-    fontSize: 14,
-    fontWeight: '700',
-    color: '#006CFF',
-    letterSpacing: -0.3,
-    includeFontPadding: false,
-  },
-  ctaSub: {
-    fontSize: 11.5,
-    color: '#4D5A6A',
+  footerText: {
+    flex: 1,
+    fontSize: 11,
+    color: '#8B99AC',
     letterSpacing: -0.2,
     includeFontPadding: false,
+    lineHeight: 15,
   },
 });

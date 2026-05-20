@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {
   Pressable,
   ScrollView,
@@ -10,11 +10,18 @@ import type {RouteProp} from '@react-navigation/native';
 import type {StackNavigationProp} from '@react-navigation/stack';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {AppIcon} from '../../components/common/AppIcon';
+import {NFCScanModal} from '../../components/session/NFCScanModal';
 import {getMockParkingLotById} from '../../mocks';
 
 type NavParam = {
-  ActiveSessionScreen: {parkingLotId: string};
-  PaymentScreen: {parkingLotId: string};
+  ActiveSessionScreen: {parkingLotId: string; startedAt: string};
+  PaymentScreen: {
+    parkingLotId: string;
+    startedAt: string;
+    endedAt: string;
+    durationMinutes: number;
+    finalAmount: number;
+  };
 };
 
 interface Props {
@@ -24,14 +31,37 @@ interface Props {
 
 const EXIT_OPTIONS = ['10분 후', '30분 후', '1시간 후', '직접 입력'] as const;
 
+// Billing rounds up to the nearest hour (minimum 1 hour)
+function calculateParkingFee(durationMinutes: number, pricePerHour: number): number {
+  const billingHours = Math.max(1, Math.ceil(durationMinutes / 60));
+  return billingHours * pricePerHour;
+}
+
+function formatHHMM(iso: string): string {
+  const d = new Date(iso);
+  const h = d.getHours().toString().padStart(2, '0');
+  const m = d.getMinutes().toString().padStart(2, '0');
+  return `${h}:${m}`;
+}
+
 export function ActiveSessionScreen({route: navRoute, navigation}: Props): React.JSX.Element {
   const insets = useSafeAreaInsets();
-  const {parkingLotId} = navRoute.params;
+  const {parkingLotId, startedAt} = navRoute.params;
   const lot = getMockParkingLotById(parkingLotId);
 
-  // Start at 57 min elapsed (as in reference image)
-  const [elapsedSec, setElapsedSec] = useState(57 * 60);
-  const [exitSel, setExitSel] = useState(1); // 30분 후 active by default
+  const [elapsedSec, setElapsedSec] = useState(() =>
+    Math.max(0, Math.floor((Date.now() - new Date(startedAt).getTime()) / 1000)),
+  );
+  const [exitSel, setExitSel] = useState(1);
+  const [showNfcEndModal, setShowNfcEndModal] = useState(false);
+
+  // Ref tracks latest elapsedSec without making handleEndNfcSuccess unstable.
+  // Without this, useCallback would recreate the function every second, causing
+  // NFCScanModal's success timer to be cancelled and restarted each tick.
+  const elapsedSecRef = useRef(elapsedSec);
+  useEffect(() => {
+    elapsedSecRef.current = elapsedSec;
+  }, [elapsedSec]);
 
   useEffect(() => {
     const interval = setInterval(() => setElapsedSec(s => s + 1), 1000);
@@ -46,29 +76,51 @@ export function ActiveSessionScreen({route: navRoute, navigation}: Props): React
 
   const pricePerHour = lot?.pricePerHour ?? 1500;
   const elapsedMin = Math.floor(elapsedSec / 60);
-  const estimatedFee = Math.ceil(elapsedMin / 60) * pricePerHour;
+  const estimatedFee = calculateParkingFee(Math.max(elapsedMin, 1), pricePerHour);
 
   const lotDisplay = lot?.name ?? '주차장';
+  const entryTime = formatHHMM(startedAt);
+
+  const handleEndNfcSuccess = useCallback(() => {
+    console.log('[ActiveSession] END NFC success');
+    const endedAt = new Date().toISOString();
+    const rawMinutes = Math.max(
+      1,
+      Math.ceil((new Date(endedAt).getTime() - new Date(startedAt).getTime()) / 60000),
+    );
+    // Mock: if less than 5 minutes elapsed (typical in dev/testing), use 57 min
+    const durationMinutes = rawMinutes < 5 ? 57 : rawMinutes;
+    const finalAmount = calculateParkingFee(durationMinutes, pricePerHour);
+    console.log('[ActiveSession] navigate Payment', {startedAt, endedAt, durationMinutes, finalAmount});
+
+    // Close modal first, then navigate after one frame so the modal dismiss
+    // animation does not conflict with the screen push transition.
+    setShowNfcEndModal(false);
+    setTimeout(() => {
+      navigation.navigate('PaymentScreen', {
+        parkingLotId,
+        startedAt,
+        endedAt,
+        durationMinutes,
+        finalAmount,
+      });
+    }, 100);
+  }, [pricePerHour, navigation, parkingLotId, startedAt]);
 
   return (
     <View style={styles.screen}>
       {/* ── Blue hero header ── */}
       <View style={[styles.hero, {paddingTop: insets.top + 16}]}>
-        {/* 이용 중 back pill */}
-        <Pressable
-          onPress={() => navigation.goBack()}
-          style={styles.heroPill}
-        >
+        <Pressable onPress={() => navigation.goBack()} style={styles.heroPill}>
           <AppIcon name="chevronLeft" size={14} color="#FFFFFF" strokeWidth={2.5} />
           <Text style={styles.heroPillText}>이용 중</Text>
         </Pressable>
 
-        {/* Timer */}
         <View style={styles.timerRow}>
           <Text style={styles.timerMain}>{timeStr}</Text>
           <Text style={styles.timerSec}>.{secStr}</Text>
         </View>
-        <Text style={styles.heroSub}>이용 시간 · 입차 13:40</Text>
+        <Text style={styles.heroSub}>이용 시간 · 입차 {entryTime}</Text>
         <Text style={styles.heroLotName}>{lotDisplay}</Text>
       </View>
 
@@ -80,6 +132,7 @@ export function ActiveSessionScreen({route: navRoute, navigation}: Props): React
           {paddingBottom: Math.max(insets.bottom, 16) + 76},
         ]}
         showsVerticalScrollIndicator={false}
+        showsHorizontalScrollIndicator={false}
       >
         {/* Expected fee card */}
         <View style={styles.card}>
@@ -140,13 +193,20 @@ export function ActiveSessionScreen({route: navRoute, navigation}: Props): React
       {/* ── Fixed bottom CTA ── */}
       <View style={[styles.cta, {paddingBottom: Math.max(insets.bottom, 16)}]}>
         <Pressable
-          onPress={() => navigation.navigate('PaymentScreen', {parkingLotId})}
+          onPress={() => setShowNfcEndModal(true)}
           style={styles.ctaBtn}
         >
-          <AppIcon name="x" size={18} color="#FFFFFF" strokeWidth={2.5} />
+          <AppIcon name="smartphoneNfc" size={18} color="#FFFFFF" strokeWidth={2} />
           <Text style={styles.ctaBtnText}>NFC로 이용 종료 · 결제</Text>
         </Pressable>
       </View>
+
+      <NFCScanModal
+        visible={showNfcEndModal}
+        mode="END"
+        onClose={() => setShowNfcEndModal(false)}
+        onScanSuccess={handleEndNfcSuccess}
+      />
     </View>
   );
 }

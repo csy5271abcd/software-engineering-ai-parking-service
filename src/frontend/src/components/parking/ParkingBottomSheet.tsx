@@ -8,6 +8,8 @@ import {
   Dimensions,
   Animated,
   PanResponder,
+  type NativeSyntheticEvent,
+  type NativeScrollEvent,
 } from 'react-native';
 import {SelectedLotPreview} from './SelectedLotPreview';
 import {DefaultSheetContent} from './DefaultSheetContent';
@@ -75,6 +77,7 @@ export function ParkingBottomSheet({
 }: ParkingBottomSheetProps): React.JSX.Element {
   const translateY = useRef(new Animated.Value(snapToTranslateY(mode))).current;
   const baseY = useRef(snapToTranslateY(mode));
+  const scrollOffset = useRef(0);
 
   useEffect(() => {
     const target = snapToTranslateY(mode);
@@ -130,6 +133,53 @@ export function ParkingBottomSheet({
     [mode, onModeChange],
   );
 
+  // ── Content-area pan responder (captures downward swipe at scroll top) ──────
+  const contentPanResponder = useMemo(
+    () =>
+      PanResponder.create({
+        // Capture phase: intercept before ScrollView claims the gesture
+        onMoveShouldSetPanResponderCapture: (_e, gs) =>
+          mode === 'full' && scrollOffset.current <= 0 && gs.dy > 10,
+        onPanResponderGrant: () => {
+          translateY.stopAnimation(val => {
+            baseY.current = val;
+          });
+        },
+        onPanResponderMove: (_e, gs) => {
+          if (gs.dy <= 0) {return;}
+          const next = baseY.current + gs.dy;
+          translateY.setValue(
+            Math.max(snapToTranslateY('full'), Math.min(snapToTranslateY('hidden'), next)),
+          );
+        },
+        onPanResponderRelease: (_e, gs) => {
+          const currentY = baseY.current + gs.dy;
+          let targetMode: SheetMode;
+          if (gs.vy > 0.5) {
+            // Fast downward flick → go one level down
+            const idx = MODES.indexOf(mode);
+            targetMode = MODES[Math.max(idx - 1, 0)];
+          } else {
+            targetMode = nearestMode(currentY);
+          }
+          onModeChange(targetMode);
+        },
+        onPanResponderTerminate: () => {
+          // Interrupted — snap back to current mode
+          onModeChange(mode);
+        },
+      }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [mode, onModeChange],
+  );
+
+  const handleScroll = useCallback(
+    (e: NativeSyntheticEvent<NativeScrollEvent>) => {
+      scrollOffset.current = e.nativeEvent.contentOffset.y;
+    },
+    [],
+  );
+
   const isScrollable = mode === 'full';
 
   const handleTap = useCallback(() => {
@@ -150,30 +200,35 @@ export function ParkingBottomSheet({
       </View>
 
       {/* ── Scrollable content ── */}
-      <ScrollView
-        scrollEnabled={isScrollable}
-        showsVerticalScrollIndicator={false}
-        keyboardShouldPersistTaps="handled"
-        contentContainerStyle={styles.scrollContent}
-      >
-        {selectedLot ? (
-          <SelectedLotPreview
-            lot={selectedLot}
-            onClose={() => onSelectLot(null)}
-            onOpenDetail={
-              onOpenDetail ? () => onOpenDetail(selectedLot.id) : undefined
-            }
-          />
-        ) : (
-          <DefaultSheetContent
-            lots={lots}
-            mode={contentMode}
-            onSelectLot={(id: string) => onSelectLot(id)}
-            onOpenDetail={onOpenDetail}
-            onPressSoon={onPressSoon}
-          />
-        )}
-      </ScrollView>
+      <View {...contentPanResponder.panHandlers} style={styles.scrollWrap}>
+        <ScrollView
+          scrollEnabled={isScrollable}
+          showsVerticalScrollIndicator={false}
+          showsHorizontalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled"
+          contentContainerStyle={styles.scrollContent}
+          onScroll={handleScroll}
+          scrollEventThrottle={16}
+        >
+          {selectedLot ? (
+            <SelectedLotPreview
+              lot={selectedLot}
+              onClose={() => onSelectLot(null)}
+              onOpenDetail={
+                onOpenDetail ? () => onOpenDetail(selectedLot.id) : undefined
+              }
+            />
+          ) : (
+            <DefaultSheetContent
+              lots={lots}
+              mode={contentMode}
+              onSelectLot={(id: string) => onSelectLot(id)}
+              onOpenDetail={onOpenDetail}
+              onPressSoon={onPressSoon}
+            />
+          )}
+        </ScrollView>
+      </View>
 
       {/* ── Hidden-state tap-to-open bar ── */}
       {mode === 'hidden' && (
@@ -209,6 +264,9 @@ const styles = StyleSheet.create({
   },
   handleArea: {
     flexShrink: 0,
+  },
+  scrollWrap: {
+    flex: 1,
   },
   handleRow: {
     alignItems: 'center',

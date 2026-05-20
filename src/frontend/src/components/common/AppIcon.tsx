@@ -44,6 +44,15 @@ import {
   QrCode,
   KeyRound,
   SmartphoneNfc,
+  Brain,
+  Activity,
+  TrendingUp,
+  BarChart3,
+  Gauge,
+  Zap,
+  CheckCircle,
+  Atom,
+  ReceiptText,
 } from 'lucide-react-native';
 
 export type AppIconName =
@@ -90,7 +99,16 @@ export type AppIconName =
   | 'train'
   | 'qrCode'
   | 'keyRound'
-  | 'smartphoneNfc';
+  | 'smartphoneNfc'
+  | 'brain'
+  | 'activity'
+  | 'trendingUp'
+  | 'barChart3'
+  | 'gauge'
+  | 'zap'
+  | 'checkCircle'
+  | 'atom'
+  | 'receiptText';
 
 interface AppIconProps {
   name: AppIconName;
@@ -145,6 +163,15 @@ const ICON_MAP: Record<AppIconName, React.ElementType> = {
   qrCode: QrCode,
   keyRound: KeyRound,
   smartphoneNfc: SmartphoneNfc,
+  brain: Brain,
+  activity: Activity,
+  trendingUp: TrendingUp,
+  barChart3: BarChart3,
+  gauge: Gauge,
+  zap: Zap,
+  checkCircle: CheckCircle,
+  atom: Atom,
+  receiptText: ReceiptText,
 };
 
 export function AppIcon({
