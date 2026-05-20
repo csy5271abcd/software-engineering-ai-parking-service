@@ -13,6 +13,41 @@ SmartPark 프로젝트의 주요 변경 사항과 Git tag 기준선을 정리한
 
 ---
 
+## v1.1.9
+
+### 하단 탭 화면 구현 — 이용 내역, 저장한 주차장, MY
+
+#### 참고 이미지
+
+- `UsedHistory_Default.png` — 이용 내역 화면
+- `Saved_Default.png` — 저장한 주차장 화면
+- `My_Default.png` / `My_Default2.png` — 마이페이지 화면
+
+#### 주요 변경
+
+- `UsedHistoryScreen.tsx` 신규 작성 (이용 탭 메인 화면)
+  - 요약 통계 카드 3개 (이번 달 12회, 결제 총액 ₩48k, 평균 시간 1.4시간)
+  - 필터 chip 수평 스크롤 (전체/결제완료/확인필요/환불/이번 달/지난달)
+  - 이용 내역 카드: 결제완료(초록), 확인필요(주황+경고박스), 환불(회색) 상태 badge
+- `SavedParkingScreen.tsx` 신규 작성 (저장 탭 메인 화면)
+  - 필터 탭 3개 (전체 12 / 즐겨찾기 5 / 최근 7)
+  - 기존 `ParkingCard` 컴포넌트 재사용
+  - 카드 클릭 시 `ParkingDetailScreen`으로 이동
+- `MyPageScreen.tsx` 아이콘 업데이트
+  - 메뉴 항목 아이콘을 reference 이미지 기준으로 보정
+  - 버전 표기를 v1.1.9로 갱신
+- `usageHistory.mock.ts` 신규 작성 (이용 내역 목업 데이터 5건)
+- `ParkingStackNavigator.tsx`: `UsedHistoryScreen`을 첫 화면으로 변경
+- `SearchStackNavigator.tsx`: `SavedParkingScreen`을 첫 화면으로 변경, 전체 세션 플로우 화면 포함
+- `navigationTypes.ts`: `SearchStackParamList`, `ParkingStackParamList` 업데이트
+
+#### 검증
+
+- `npx tsc --noEmit` 통과
+- `npm run android` 성공
+
+---
+
 ## v1.1.8
 
 ### 검색 화면 이미지 기준 재구현

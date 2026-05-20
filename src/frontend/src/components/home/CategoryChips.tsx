@@ -3,24 +3,30 @@ import {
   ScrollView,
   Pressable,
   Text,
-  View,
   StyleSheet,
   StyleProp,
   ViewStyle,
 } from 'react-native';
+import {AppIcon} from '../common/AppIcon';
+import type {AppIconName} from '../common/AppIcon';
 
-export const CATEGORIES = [
-  {id: 'all',       label: '전체',      emoji: '🚙', dot: null},
-  {id: 'available', label: '이용가능',  emoji: null,  dot: '#03AA5A'},
-  {id: 'soon',      label: '곧 비워짐', emoji: '⚡', dot: null},
-  {id: 'cheap',     label: '저렴',      emoji: '🪙', dot: null},
-  {id: 'nfc',       label: 'NFC',      emoji: null,  dot: null},
-  {id: 'shared',    label: '개인공유',  emoji: null,  dot: null},
-  {id: 'public',    label: '공영',      emoji: null,  dot: null},
-  {id: '24h',       label: '24시간',    emoji: null,  dot: null},
-] as const;
+export const CATEGORIES: {
+  id: string;
+  label: string;
+  icon: AppIconName;
+  iconColor: string;
+}[] = [
+  {id: 'all',       label: '전체',     icon: 'car',              iconColor: '#006CFF'},
+  {id: 'available', label: '이용가능', icon: 'circleParking',    iconColor: '#03AA5A'},
+  {id: 'soon',      label: '곧 비워짐', icon: 'clock',           iconColor: '#F5683C'},
+  {id: 'cheap',     label: '저렴',     icon: 'circleDollarSign', iconColor: '#E8A000'},
+  {id: 'nfc',       label: 'NFC',      icon: 'creditCard',       iconColor: '#8B5CF6'},
+  {id: 'shared',    label: '개인공유', icon: 'house',            iconColor: '#006CFF'},
+  {id: 'public',    label: '공영',     icon: 'mapPin',           iconColor: '#4D5A6A'},
+  {id: '24h',       label: '24시간',   icon: 'calendarDays',     iconColor: '#03AA5A'},
+];
 
-export type CategoryId = (typeof CATEGORIES)[number]['id'];
+export type CategoryId = string;
 
 interface CategoryChipsProps {
   active: CategoryId;
@@ -48,14 +54,13 @@ export function CategoryChips({
             onPress={() => onSelect(cat.id)}
             style={[styles.chip, isActive && styles.chipActive]}
           >
-            {/* Dot indicator (이용가능) */}
-            {cat.dot != null && (
-              <View style={[styles.dotIndicator, {backgroundColor: cat.dot}]} />
-            )}
-            {/* Emoji prefix */}
-            {cat.emoji != null && (
-              <Text style={styles.chipEmoji}>{cat.emoji}</Text>
-            )}
+            <AppIcon
+              name={cat.icon}
+              size={15}
+              color={cat.iconColor}
+              strokeWidth={2.2}
+              fill="none"
+            />
             <Text style={[styles.label, isActive && styles.labelActive]}>
               {cat.label}
             </Text>
@@ -74,50 +79,36 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     gap: 6,
     alignItems: 'center',
-    paddingVertical: 4,
+    paddingVertical: 3,
   },
   chip: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 5,
-    paddingHorizontal: 14,
-    paddingVertical: 9,
+    paddingHorizontal: 12,
+    paddingVertical: 7,
     borderRadius: 100,
     backgroundColor: '#FFFFFF',
-    borderWidth: 1,
-    borderColor: '#E5EAF1',
-    elevation: 3,
+    borderWidth: 1.5,
+    borderColor: 'transparent',
+    elevation: 4,
     shadowColor: '#000',
     shadowOffset: {width: 0, height: 2},
-    shadowOpacity: 0.08,
+    shadowOpacity: 0.10,
     shadowRadius: 6,
   },
   chipActive: {
-    backgroundColor: '#222225',
-    borderColor: '#222225',
-    elevation: 0,
-    shadowOpacity: 0,
-  },
-  dotIndicator: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    flexShrink: 0,
-  },
-  chipEmoji: {
-    fontSize: 13,
-    lineHeight: 16,
-    includeFontPadding: false,
+    borderColor: '#006CFF',
   },
   label: {
-    fontSize: 13.5,
+    fontSize: 13,
     fontWeight: '600',
     color: '#222225',
     includeFontPadding: false,
     letterSpacing: -0.3,
   },
   labelActive: {
+    color: '#006CFF',
     fontWeight: '700',
-    color: '#FFFFFF',
   },
 });

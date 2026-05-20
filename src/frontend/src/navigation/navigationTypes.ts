@@ -12,14 +12,22 @@ export type HomeStackParamList = {
 };
 
 export type SearchStackParamList = {
+  SavedParkingScreen: undefined;
   DestinationSearchScreen: undefined;
   RecommendedParkingScreen: {
     destinationName: string;
     destinationSub?: string;
   };
+  ParkingDetailScreen: {parkingLotId: string};
+  SoonAvailableScreen: undefined;
+  RouteScreen: {parkingLotId: string};
+  ActiveSessionScreen: {parkingLotId: string};
+  PaymentScreen: {parkingLotId: string};
+  PaymentResultScreen: {parkingLotId: string};
 };
 
 export type ParkingStackParamList = {
+  UsedHistoryScreen: undefined;
   ParkingListScreen: undefined;
   ParkingDetailScreen: {parkingLotId: string};
   SoonAvailableScreen: undefined;

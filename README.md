@@ -284,7 +284,7 @@ git push origin main --tags
 - `constants/`
 - `utils/`
 
-주차장, 사용자, 결제, 세션 관련 타입을 정의하고, 화면 검증용 `mockParkingLots` 데이터를 구성하였다.
+주차장, 사용자, 결제, 이용 세션 관련 타입을 정의하고, 화면 검증용 mock 데이터를 구성하였다.
 
 ---
 
@@ -309,11 +309,11 @@ git push origin main --tags
 #### 검색 화면
 
 - Home 상단 검색바 클릭 시 전체 검색 화면으로 이동
+- 검색 화면에서 하단 탭바가 보이지 않도록 처리
 - 최근 검색 리스트 표시
 - 주차 수요 급증 지역 LIVE 리스트 표시
 - 장소 선택 시 추천 주차장 리스트 화면 표시
 - 추천 주차장 카드 클릭 시 ParkingDetail 화면으로 이동
-- 검색 화면에서는 하단 탭바가 보이지 않도록 처리
 
 #### 곧 비워질 자리 화면
 
@@ -333,23 +333,41 @@ git push origin main --tags
 - 경로 안내 / NFC 이용 시작 버튼 구성
 - 상세 화면 내부 ScrollView와 하단 CTA가 겹치지 않도록 padding 보정
 
-#### 추천 탭
+#### 경로 안내, NFC 이용, 결제 플로우
 
-- 공급자 탭을 제거하고 추천 탭을 추가
-- AI 추천 주차장, 상황별 추천 chip, 곧 비워질 자리, 목적지 찾기 CTA 구성
-- `mockParkingLots` 기반 추천 리스트 표시
+- ParkingDetail의 경로 안내 버튼 클릭 시 RouteScreen 이동
+- ParkingDetail의 NFC 이용 시작 버튼 클릭 시 NFC scan modal 표시
+- NFC mock 성공 후 ActiveSessionScreen 이동
+- 이용 중 화면에서 PaymentScreen 이동
+- 결제 완료 후 PaymentResultScreen 표시
+- 실제 GPS, NFC, 결제 SDK 없이 mock UI flow로 구현
 
-#### MyPage 화면
+#### 이용 내역 화면
+
+- 하단 탭의 이용 화면에서 이용 내역 리스트 표시
+- 이번 달 이용 횟수, 결제 총액, 평균 시간 요약 카드 구성
+- 결제완료, 확인필요, 환불 등 상태별 filter chip 구성
+- 이용 내역 카드 및 결제 상태 안내 박스 구성
+
+#### 저장한 주차장 화면
+
+- 하단 탭의 저장 화면에서 저장한 주차장 리스트 표시
+- 전체 / 즐겨찾기 / 최근 filter 카드 구성
+- 저장한 주차장 카드 클릭 시 ParkingDetail 화면으로 이동
+- `mockParkingLots` 기반 주차장 정보 재사용
+
+#### MY 화면
 
 - mock 로그인 상태 기반 MyPage 화면 구성
 - 프로필, 통계 카드, 결제·차량, 알림·설정, AI 투명성, 고객 지원 섹션 구성
-- AppIcon 기반 아이콘 적용
+- 하단 탭의 MY active 상태 보정
+- ScrollView 하단 padding과 safe area 보정
 
 ---
 
 ### 12.4 최신 프론트엔드 기준선
 
-현재 프론트엔드 구현 흐름은 `v1.1.8` 기준으로 정리한다.
+현재 프론트엔드 구현 흐름은 `v1.1.9` 기준으로 정리한다.
 
 | 버전     | 주요 내용                                                                                                 |
 | -------- | --------------------------------------------------------------------------------------------------------- |
@@ -359,10 +377,11 @@ git push origin main --tags
 | `v1.1.2` | 공급자 탭 제거 및 추천 탭 추가                                                                            |
 | `v1.1.3` | Figma Make UI primitive 기반 공통 컴포넌트 구축                                                           |
 | `v1.1.4` | imports 폴더 기준 디자인 토큰 및 MyPage 일부 보정                                                         |
-| `v1.1.5` | AppIcon 기반 아이콘 전면 교체 및 레이아웃 재보정                                                          |
-| `v1.1.6` | Home 화면 Figma Make 이미지 기준 재보정                                                                   |
-| `v1.1.7` | 곧 비워질 자리, ParkingSummary, ParkingDetail 5탭 화면 보정                                               |
+| `v1.1.5` | Home 화면 Figma Make 이미지 기준 재보정 및 아이콘 적용                                                    |
+| `v1.1.6` | 곧 비워질 자리, ParkingSummary, ParkingDetail 5탭 화면 보정                                               |
+| `v1.1.7` | 경로 안내, NFC 이용 시작, 이용 중 세션, 결제 플로우 구현                                                  |
 | `v1.1.8` | 검색 화면 및 장소 선택 후 추천 주차장 리스트 화면 보정                                                    |
+| `v1.1.9` | 이용 내역, 저장한 주차장, MY 화면 이미지 기준 재구현                                                      |
 
 ---
 

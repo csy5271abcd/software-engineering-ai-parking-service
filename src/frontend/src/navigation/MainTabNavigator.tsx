@@ -18,7 +18,7 @@ const TAB_CONFIG = [
   {label: '주변',      badge: false},
   {label: '저장',      badge: false},
   {label: '이용',      badge: false},
-  {label: '스마트패스', badge: false},
+  {label: '추천',       badge: false},
   {label: 'MY',        badge: false},
 ] as const;
 
@@ -55,7 +55,7 @@ function TabIcon({
       );
     case 'RecommendTab':
       return (
-        <AppIcon name="cpu" size={22} color={color} strokeWidth={strokeWidth} />
+        <AppIcon name="sparkles" size={22} color={color} strokeWidth={strokeWidth} />
       );
     case 'MyPageTab':
       return (

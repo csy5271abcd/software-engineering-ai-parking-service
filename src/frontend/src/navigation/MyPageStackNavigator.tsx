@@ -8,17 +8,8 @@ const Stack = createStackNavigator<MyPageStackParamList>();
 
 export function MyPageStackNavigator(): React.JSX.Element {
   return (
-    <Stack.Navigator
-      screenOptions={{
-        headerStyle: {backgroundColor: colors.background.default},
-        headerTintColor: colors.text.primary,
-        headerTitleStyle: {fontWeight: '600'},
-      }}>
-      <Stack.Screen
-        name="MyPageScreen"
-        component={MyPageScreen}
-        options={{title: '마이'}}
-      />
+    <Stack.Navigator screenOptions={{headerShown: false}}>
+      <Stack.Screen name="MyPageScreen" component={MyPageScreen} />
     </Stack.Navigator>
   );
 }

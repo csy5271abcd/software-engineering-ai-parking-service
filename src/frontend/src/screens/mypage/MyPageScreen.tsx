@@ -4,7 +4,6 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {AppCard} from '../../components/common/AppCard';
 import {AppSeparator} from '../../components/common/AppSeparator';
 import {AppIcon} from '../../components/common/AppIcon';
-import type {AppIconName} from '../../components/common/AppIcon';
 
 // ── Mock user data ────────────────────────────────────────────────────────────
 
@@ -22,7 +21,7 @@ const MOCK_USER = {
 // ── Menu section types ────────────────────────────────────────────────────────
 
 interface MenuItem {
-  icon: AppIconName;
+  icon: string; // emoji
   label: string;
   sub?: string;
   badge?: string;
@@ -37,33 +36,33 @@ const MENU_SECTIONS: MenuSectionData[] = [
   {
     title: '결제 · 차량',
     items: [
-      {icon: 'creditCard',     label: '결제 수단 관리',   sub: '카카오페이 · 1'},
-      {icon: 'car',            label: '내 차량 정보',     sub: '12가 3456 · 흰색 K5'},
-      {icon: 'walletCards',    label: '쿠폰함',           sub: '0장'},
+      {icon: '💳', label: '결제 수단 관리', sub: '카카오페이 · 1'},
+      {icon: '🚗', label: '내 차량 정보', sub: '12가 3456 · 흰색 K5'},
+      {icon: '🎟', label: '쿠폰함', sub: '0장'},
     ],
   },
   {
     title: '알림 · 설정',
     items: [
-      {icon: 'bell',     label: '알림 설정',   sub: '곧 비워질 자리 ON'},
-      {icon: 'mapPin',   label: '위치 권한',   sub: '항상 허용'},
-      {icon: 'settings', label: '언어 / 지역', sub: '한국어'},
+      {icon: '🔔', label: '알림 설정', sub: '곧 비워질 자리 ON'},
+      {icon: '📍', label: '위치 권한', sub: '항상 허용'},
+      {icon: '🌐', label: '언어 / 지역', sub: '한국어'},
     ],
   },
   {
     title: 'AI 투명성',
     items: [
-      {icon: 'sparkles',  label: 'AI 추천 기준',    sub: '추천이 어떻게 만들어졌나요?'},
-      {icon: 'shield',    label: '데이터 사용 내역', sub: '내 이용 데이터'},
-      {icon: 'fileText',  label: '개인정보 처리방침'},
+      {icon: '📊', label: 'AI 추천 기준', sub: '추천이 어떻게 만들어졌나요?'},
+      {icon: '🛡', label: '데이터 사용 내역', sub: '내 이용 데이터'},
+      {icon: '📑', label: '개인정보 처리방침'},
     ],
   },
   {
     title: '고객 지원',
     items: [
-      {icon: 'menu',        label: '문의하기'},
-      {icon: 'alertCircle', label: '신고 내역', badge: '1'},
-      {icon: 'fileText',    label: '이용 약관'},
+      {icon: '💬', label: '문의하기'},
+      {icon: '⚠️', label: '신고 내역', badge: '1'},
+      {icon: '📜', label: '이용 약관'},
     ],
   },
 ];
@@ -79,7 +78,7 @@ function MenuSection({section}: {section: MenuSectionData}): React.JSX.Element {
           <React.Fragment key={i}>
             <Pressable style={styles.menuRow}>
               <View style={styles.menuIconWrap}>
-                <AppIcon name={item.icon} size={18} color="#4D5A6A" strokeWidth={1.8} />
+                <Text style={styles.menuIconEmoji}>{item.icon}</Text>
               </View>
               <View style={styles.menuBody}>
                 <Text style={styles.menuLabel}>{item.label}</Text>
@@ -112,14 +111,12 @@ export function MyPageScreen(): React.JSX.Element {
   return (
     <ScrollView
       style={styles.screen}
-      contentContainerStyle={[styles.content, {paddingBottom: insets.bottom + 24}]}
+      contentContainerStyle={[
+        styles.content,
+        {paddingTop: insets.top + 16, paddingBottom: insets.bottom + 24},
+      ]}
       showsVerticalScrollIndicator={false}
     >
-      {/* ── Header ── */}
-      <View style={[styles.header, {paddingTop: insets.top + 16}]}>
-        <Text style={styles.headerTitle}>MY</Text>
-      </View>
-
       {/* ── Profile card ── */}
       <AppCard style={styles.profileCard} padding="md" radius="xl" elevation>
         <View style={styles.profileRow}>
@@ -162,7 +159,7 @@ export function MyPageScreen(): React.JSX.Element {
         <MenuSection key={section.title} section={section} />
       ))}
 
-      <Text style={styles.version}>SmartPark v1.1.5</Text>
+      <Text style={styles.version}>SmartPark v1.1.9</Text>
     </ScrollView>
   );
 }
@@ -171,27 +168,10 @@ export function MyPageScreen(): React.JSX.Element {
 
 const styles = StyleSheet.create({
   screen: {flex: 1, backgroundColor: '#F8F9FB'},
-  content: {gap: 8},
-
-  // ── Header
-  header: {
-    paddingHorizontal: 16,
-    paddingBottom: 12,
-    backgroundColor: '#FFFFFF',
-    borderBottomWidth: 1,
-    borderBottomColor: '#E5EAF1',
-    marginBottom: 8,
-  },
-  headerTitle: {
-    fontSize: 22,
-    fontWeight: '700',
-    color: '#222225',
-    letterSpacing: -0.5,
-    includeFontPadding: false,
-  },
+  content: {gap: 12},
 
   // ── Profile
-  profileCard: {marginHorizontal: 16},
+  profileCard: {marginHorizontal: 16, marginTop: 0},
   profileRow: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -314,6 +294,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     flexShrink: 0,
+  },
+  menuIconEmoji: {
+    fontSize: 15,
+    textAlign: 'center',
+    includeFontPadding: false,
   },
   menuBody: {flex: 1, gap: 1},
   menuLabel: {
