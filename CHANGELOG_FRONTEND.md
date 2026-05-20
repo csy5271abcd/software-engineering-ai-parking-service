@@ -1,0 +1,924 @@
+# CHANGELOG_FRONTEND
+
+SmartPark 프론트엔드 구현 변경 이력을 정리한다.
+
+본 문서는 `v1.x.x` 버전 라인에 해당하는 React Native 프론트엔드 구현 이력을 관리한다.
+
+---
+
+## 관리 기준
+
+| 버전 라인 | 영역 | 설명 |
+|---|---|---|
+| `v1.0.x` | 프론트엔드 초기 구현 | React Native 프로젝트 설정, 기본 구조, 디자인 토큰, 타입, mock 데이터, 네비게이션 |
+| `v1.1.x` | 프론트엔드 화면 확장 | Figma Make reference 기반 화면 정합성 개선, Home/Search/Parking/Session/AI 추천 플로우 구현 |
+
+---
+
+## 최신 기준선
+
+| 최신 버전 | 주요 내용 |
+|---:|---|
+| `v1.1.15` | 지도 마커 UI 개선, Category Chip 스타일 pill 마커 적용, 성수역 Mock 주차장 데이터 확장 |
+
+---
+
+## v1.1.15
+
+### 지도 마커 UI 개선 — Lucide 아이콘 + 클러스터링
+
+#### 신규 파일
+
+- `constants/mapMarker.ts` — 마커 상태별 아이콘·색상·테두리 상수 및 클러스터 등급 정의
+  - `MARKER_SPEC`: `AVAILABLE`(circleParking/초록), `SOON_AVAILABLE`(clock/파랑), `OCCUPIED`(car/주황), `FULL`(alertCircle/빨강), `INACTIVE`(mapPin/회색)
+  - `SHARED_MARKER_SPEC`: PRIVATE 타입 공용 (house/초록)
+  - `CLUSTER_SPEC`: small(2–9, 파랑), medium(10–29, 주황), large(30+, 빨강)
+  - `MARKER_SIZE = 40`, `MARKER_SIZE_SELECTED = 52`
+- `utils/mapCluster.ts` — 줌 레벨 기반 greedy 클러스터링 유틸
+  - `clusterParkingLots(lots, zoom)` → `ClusterGroup[]`
+  - zoom 15 이상: 클러스터링 없음 (개별 마커)
+  - zoom 11~14: `cellRadius = 0.08 / 2^(zoom-11)` 도(degree) 단위 반경으로 인근 좌표 묶음
+- `components/map/ParkingClusterMarker.tsx` — 클러스터 카운트 원형 배지 컴포넌트
+  - `React.memo`, `collapsable={false}`
+  - tier별 크기: small 44px, medium 56px, large 68px
+
+#### SmartNaverMapView.tsx 개선
+
+- 마커 아이콘: 텍스트(`'P'`/`'🏠'`) → `AppIcon` (Lucide 아이콘) 으로 교체
+- `LotMarker` 서브컴포넌트 분리 (`React.memo` + `useCallback`)
+- `ClusterOverlay` 서브컴포넌트 추가 (`React.memo` + `useCallback`)
+- `onCameraChanged` 훅으로 현재 zoom 추적 → `useMemo`로 클러스터 재계산
+- 클러스터 탭 시 `animateCameraTo` 클러스터 중심 + zoom+2 (최대 16)
+- 개별 마커 탭 → 기존 `onPressParkingLot` 동작 유지
+- `useMemo([parkingLots, zoom])` 클러스터 계산 메모이제이션
+
+#### 검증
+
+- `npx tsc --noEmit` 통과
+- `npm run android` 빌드 및 단말 설치 확인
+
+---
+
+---
+
+## v1.1.14
+
+### Naver Map SDK 연동 — Home 화면 실제 지도 적용
+
+#### 패키지 추가
+
+- `@mj-studio/react-native-naver-map@2.8.0` (Naver Maps Android SDK 3.23.0 기반) 설치
+
+#### Android 설정
+
+- `android/build.gradle` — `allprojects.repositories`에 Naver Maven repository 추가
+  (`https://repository.map.naver.com/archive/maven`)
+- `android/app/build.gradle` — `local.properties`에서 `NAVER_MAP_CLIENT_ID` 읽어 `manifestPlaceholders`에 전달
+- `android/app/src/main/AndroidManifest.xml` — `com.naver.maps.map.NCP_KEY_ID` meta-data 추가
+  (`android:value="${NAVER_MAP_CLIENT_ID}"` — 실제 키 값은 코드 미포함)
+- `android/local.properties` — `NAVER_MAP_CLIENT_ID=...` (Git 미추적, `.gitignore` 기반)
+
+#### 신규 컴포넌트
+
+- `components/map/SmartNaverMapView.tsx` 신규
+  - `NaverMapView` + `NaverMapMarkerOverlay` 기반 SmartPark 전용 지도 컴포넌트
+  - 성수역 기준 mock 현재 위치 (`locationOverlay`) 표시
+  - `mockParkingLots` 좌표 기반 `NaverMapMarkerOverlay` 마커 렌더링
+  - 주차장 상태별 마커 색상: AVAILABLE(초록), SOON_AVAILABLE(파랑), OCCUPIED(주황), FULL(빨강), INACTIVE(회색)
+  - PRIVATE 타입 주차장: '🏠' 아이콘, 그 외: 'P' 텍스트
+  - SOON_AVAILABLE 마커에 `Xmin` 텍스트 표시
+  - 선택된 마커: 크기 확대(40→50px) + 흰색 테두리 + zIndex 상승
+  - `forwardRef` + `useImperativeHandle`로 `moveToCurrentLocation()` 메서드 제공
+  - `animateCameraTo` 500ms 애니메이션으로 mock 현재 위치로 이동
+
+#### HomeMapScreen 수정
+
+- `ENABLE_NAVER_MAP = true` 플래그 추가
+- `naverMapRef = useRef<SmartNaverMapViewRef>(null)` 추가
+- 지도 영역을 `SmartNaverMapView`로 교체 (`ENABLE_NAVER_MAP` 조건부)
+- 기존 `MapPlaceholder` + `ParkingMarker` 로직은 fallback(`ENABLE_NAVER_MAP=false`)으로 유지
+- `CurrentLocationButton`에 `onPress` 연결 → `naverMapRef.current?.moveToCurrentLocation()`
+
+#### 검증
+
+- `npx tsc --noEmit` 통과
+- `npm run android` 빌드 성공
+
+---
+
+---
+
+## v1.1.13
+
+### 프론트엔드 코드베이스 도메인 기반 구조 리팩토링
+
+#### 유틸리티 함수 분리
+
+- `utils/formatters.ts` 신규 — `formatCurrency`, `formatDateTime`, `formatDuration`, `formatHHMM`, `formatTimeLabel` 추출 (ReceiptModal / PaymentScreen / PaymentResultScreen / ActiveSessionScreen에서 사용하던 인라인 함수)
+- `utils/parkingFee.ts` 신규 — `calculateParkingFee`, `calculateDurationMinutes` 추출 (ActiveSessionScreen에서 사용하던 인라인 함수)
+
+#### 타입 파일 분리
+
+- `types/history.ts` 신규 — `UsageStatus`, `UsageHistoryItem` 타입 정의 (이전: mocks/usageHistory.mock.ts 내 인라인)
+- `mocks/usageHistory.mock.ts` — 위 타입 re-export로 전환 (하위 호환 유지)
+
+#### 컴포넌트 추출
+
+- `components/history/HistoryCard.tsx` — UsedHistoryScreen에서 추출, STATUS_CONFIG 포함
+- `components/provider/ProviderParkingSpaceCard.tsx` — ProviderDashboardScreen에서 추출, STATUS_CONFIG 포함
+- `components/provider/ProviderTodayUsageRow.tsx` — ProviderDashboardScreen에서 추출
+- `components/provider/register/registerStyles.ts` — 위저드 스텝 공유 스타일 (stepScroll, stepContent, fieldLabel, input 등)
+- `components/provider/register/RegisterBasicInfoStep.tsx` — 기본 정보 스텝 (Step1)
+- `components/provider/register/RegisterLocationStep.tsx` — 위치 선택 스텝 (Step2)
+- `components/provider/register/RegisterPhotoStep.tsx` — 사진 등록 스텝 (Step3)
+- `components/provider/register/RegisterPricingStep.tsx` — 시간·요금 스텝 (Step4), `DAY_LABELS` export
+- `components/provider/register/RegisterPreviewStep.tsx` — 미리보기 스텝 (Step5)
+- `components/mypage/MenuSection.tsx` — MyPageScreen에서 추출, `MenuItem`/`MenuSectionData` 인터페이스 export
+
+#### ReceiptModal 버그 수정
+
+- `components/session/ReceiptModal.tsx` — `card` 스타일 `maxHeight` → `Dimensions.get('window').height * 0.86` 명시 (React Native ScrollView flex:1 높이 계산 버그 수정)
+
+#### 화면 파일 정리
+
+- `screens/session/ActiveSessionScreen.tsx` — 인라인 함수 제거, utils에서 임포트
+- `screens/session/PaymentScreen.tsx` — 인라인 함수 제거
+- `screens/session/PaymentResultScreen.tsx` — 인라인 함수 제거, ReceiptModal 연결
+- `screens/parking/UsedHistoryScreen.tsx` — 인라인 HistoryCard 제거, components에서 임포트
+- `screens/provider/ProviderDashboardScreen.tsx` — 인라인 카드/로우 컴포넌트 제거
+- `screens/provider/ProviderRegisterWizardScreen.tsx` — 인라인 Step1~5 함수 및 스텝 전용 스타일 제거, Register\*Step 컴포넌트 임포트로 교체 (1040줄 → 약 190줄)
+- `screens/mypage/MyPageScreen.tsx` — 인라인 MenuSection 제거, components/mypage/MenuSection 임포트로 교체
+
+#### 검증
+
+- `npx tsc --noEmit` 통과
+- Android 실행 검증은 Naver Map SDK 연동 전 별도 확인 예정
+
+---
+
+---
+
+## v1.1.12
+
+### NFC 이용 종료 인식 단계 및 결제 플로우 완성
+
+#### NFC 세션 플로우 (END 인식 → 결제 → 결제 완료)
+
+- `types/session.ts` 신규 추가
+  - `ParkingSessionStatus` union type: `READY | IN_USE | END_NFC_REQUIRED | COMPLETED_PENDING_PAYMENT | PAID`
+  - `SessionRouteParams`, `PaymentRouteParams`, `PaymentResultRouteParams` route param 타입 정의
+- `navigation/navigationTypes.ts` route param 확장
+  - `ActiveSessionScreen` — `startedAt: string` 추가
+  - `PaymentScreen` — `startedAt / endedAt / durationMinutes / finalAmount` 추가
+  - `PaymentResultScreen` — 위 항목 + `paymentMethod: string` 추가
+  - `RecommendStackParamList` — `RouteScreen / ActiveSessionScreen / PaymentScreen / PaymentResultScreen` 추가 (Recommend 탭 전체 플로우 지원)
+- `navigation/RecommendStackNavigator.tsx` — session 스크린 4개 등록
+- `components/session/NFCScanModal.tsx`
+  - `mode?: 'START' | 'END'` prop 추가
+  - END 모드 성공 메시지: "이용이 종료됩니다. 결제로 이동합니다"
+- `screens/parking/ParkingDetailScreen.tsx`
+  - NFCScanModal에 `mode="START"` 명시
+  - NFC START 성공 시 `startedAt: new Date().toISOString()` 포함하여 ActiveSessionScreen 이동
+- `screens/session/ActiveSessionScreen.tsx`
+  - `startedAt` param 수신 → 실제 경과 시간 기반으로 초기 `elapsedSec` 계산
+  - 입차 시간 헤더에 실제 `startedAt` 기반 HH:MM 표시
+  - NFC END CTA → NFCScanModal(mode='END') 표시 후 성공 시 세션 데이터 계산하여 PaymentScreen 이동
+  - 아이콘 `x` → `smartphoneNfc`로 교체
+- `screens/session/PaymentScreen.tsx`
+  - `startedAt / endedAt / durationMinutes / finalAmount` params 수신
+  - 이용 요약 카드: 실제 입차/출차 시각, 이용 시간, 최종 금액 표시
+  - 결제하기 CTA → PaymentResultScreen에 선택된 결제 수단 포함 전달
+- `screens/session/PaymentResultScreen.tsx`
+  - 실제 `finalAmount`, `paymentMethod`, `durationMinutes` 표시
+  - 승인 번호 동적 생성 (날짜 기반 mock)
+  - 완료 → `ParkingTab / UsedHistoryScreen`으로 이동 (기존 HomeTab 이동 수정)
+
+---
+
+---
+
+## v1.1.11
+
+### 추천 탭 — AI 혼잡도 분석 대시보드 확장 + AI 추천 기능 보완
+
+#### AI 추천 기능 보완 (2차)
+
+- `types/aiRecommendation.ts` 보완
+  - `AiRecommendationInsight`에 `distanceMeters`, `nfcAvailable`, `maxDailyPrice`, `scenarioReasons` 필드 추가
+  - `ScenarioRecommendation` 인터페이스 신규 추가
+  - `SCENARIO_DESCRIPTION`, `SCENARIO_BEST_MESSAGE` 상수 신규 추가
+- `mocks/aiRecommendation.mock.ts` 보완
+  - 주차장 4곳에 `nfcAvailable`, `distanceMeters`, `maxDailyPrice`, `scenarioReasons` 추가
+  - `mockScenarioRecommendations`: 6개 시나리오별 최적 주차장·정렬 순서·설명 mock 추가
+- `AiCongestionSummaryCard` 강화
+  - "오늘의 AI 추천" 라벨 추가, 성공률 배경 tint 적용
+  - AI 배지 텍스트를 "AI 혼잡도 분석"으로 변경
+  - 하단 분석 데이터 근거 footer 문구 추가
+- `RecommendationScenarioChips` 보완
+  - "상황별 추천" 섹션 라벨 추가
+  - `description` prop 추가 — 선택된 기준 설명 1줄 표시
+- `AiBestParkingCard` 보완
+  - BEST 메시지 행에 시나리오별 `SCENARIO_BEST_MESSAGE` 표시
+  - `nfcAvailable`, `isSoonAvailable` badge 추가
+  - `maxDailyPrice` 상세 chip 표시
+- `AiReasonCard` 강화
+  - `lotName` prop 추가 — 추천 대상 주차장명 표시
+  - 분석 설명 문장 블록 추가 (brain 아이콘 + 분석 근거)
+- `AiRecommendedParkingList` 보완
+  - `activeScenario` prop 추가 — 헤더에 정렬 기준 표시
+  - 카드별 `scenarioReasons` 기반 1줄 추천 이유 표시
+  - NFC badge 추가
+- `AiParkingCompareCard` 보완
+  - 비교 항목에 NFC 가능 여부 행 추가 (7개 항목)
+- `TimeCongestionForecast` 보완
+  - 30분 후 혼잡도 상승 시 경고 문구 동적 표시
+  - 현재가 최적 시간대일 때 "지금 출발" 안내 문구 표시
+- `AiScoreBreakdownCard` 보완
+  - 최고 점수 항목 동적 표시 ("혼잡도 예측 점수가 가장 높게 반영되었어요.")
+  - 곧 비워질 자리 보정 점수 적용 시 안내 문구 표시
+- `RecommendationScreen` 전체 시나리오 로직 연결
+  - `useMemo`로 `scenarioRec`, `bestInsight`, `sortedInsights` 계산
+  - 시나리오 선택에 따라 BEST 카드, 리스트 정렬, 추천 이유가 연동
+
+#### 추천 탭 AI 혼잡도 분석 대시보드 (1차)
+
+#### 주요 변경
+
+- `types/aiRecommendation.ts` 신규 작성
+  - `CongestionLevel`, `ScenarioKey`, `TimeCongestionPrediction`, `AiScoreBreakdown`, `AiInfluenceFactor`, `AiRecommendationInsight`, `AiRegionSummary` 타입 정의
+  - `SCENARIO_HINT`, `SCENARIO_FIRST_REASON` 상수 정의
+- `mocks/aiRecommendation.mock.ts` 신규 작성
+  - `mockAiRegionSummary`: 성수동 주변 지역 요약 (성공률 87%)
+  - `mockAiInsights`: 주차장 4곳 AI 분석 데이터 (점수, 혼잡도, 시간대별 예측, 점수 분해, 영향 요인)
+- `mocks/index.ts`: `mockAiRegionSummary`, `mockAiInsights` 익스포트 추가
+- `AppIcon.tsx`: `brain`, `activity`, `trendingUp`, `barChart3`, `gauge`, `zap`, `checkCircle` 아이콘 추가
+- 추천 컴포넌트 9개 신규 작성 (`src/components/recommendation/`)
+  - `AiCongestionSummaryCard`: 지역 AI 혼잡도 요약 카드 (성공률, BEST 추천 주차장)
+  - `RecommendationScenarioChips`: 상황별 시나리오 6개 chip 선택 (가로 스크롤)
+  - `TimeCongestionForecast`: 시간대별 혼잡도 예측 (View 기반 막대 차트, 4개 슬롯)
+  - `AiBestParkingCard`: AI BEST 추천 카드 (점수, 성공률 진행 바, 시나리오 힌트)
+  - `AiScoreBreakdownCard`: AI 점수 분해 카드 (5개 항목, View 기반 가로 진행 바)
+  - `AiReasonCard`: 추천 이유 카드 (시나리오별 첫 번째 이유 동적 변경)
+  - `AiInfluenceFactorsCard`: 혼잡도 영향 요인 pill 카드 (sentiment 색상)
+  - `AiRecommendedParkingList`: AI 추천순 주차장 리스트 (순위 badge, 메타 정보)
+  - `AiParkingCompareCard`: 상위 3곳 비교 카드 (가로 스크롤, 메달 이모지, 6개 항목 비교)
+- `screens/recommend/RecommendationScreen.tsx` 전면 재작성
+  - 고정 헤더 (brain 아이콘 + "추천" + "실시간" badge)
+  - 9개 컴포넌트 순서대로 렌더링 + 분석 기준 footer note
+  - `ParkingDetailScreen` 타입 안전 네비게이션
+- `navigation/navigationTypes.ts`: `RecommendStackParamList`에 `ParkingDetailScreen` 추가
+- `navigation/RecommendStackNavigator.tsx`: `ParkingDetailScreen` 스크린 추가
+
+---
+
+---
+
+## v1.1.10
+
+### 공급자 기능 구현 — 대시보드 및 주차장 등록 Wizard
+
+#### 참고 이미지
+
+- `Provider_Default.png` / `Provider_Default_2.png` — 공급자 대시보드
+- `Provider_ParkingLot_Register_1~5.png` — 5단계 등록 Wizard
+
+#### 주요 변경
+
+- `ProviderDashboardScreen.tsx` 신규 작성
+  - 헤더: 뒤로가기 + "공급자" 제목 + "+ 주차장 등록" 파란 pill 버튼
+  - 정산 요약 카드: 이번 달 정산 예정 금액, 이용건수·평균이용·활성주차장 3열 통계
+  - 주황 알림 배너: 보완 요청 건수 표시
+  - 등록된 주차 공간 카드 목록: 승인완료/승인대기/보완요청 상태 badge
+  - 오늘의 이용 현황: 이용자별 행 (아바타, 이름, 시간, 요금)
+- `ProviderRegisterWizardScreen.tsx` 신규 작성 (5단계 Wizard)
+  - STEP 1: 기본 정보 (이름, 면수, 유형, 설명)
+  - STEP 2: 위치 선택 (지도 placeholder + 주소 입력)
+  - STEP 3: 사진 등록 (photo slot 3개 + 출입 방식 2×2 선택)
+  - STEP 4: 시간·요금 (요일 선택, 시간, 요금 + 예상 수익 계산)
+  - STEP 5: 미리보기 (등록 정보 요약 카드 + 안내 박스)
+  - 하단 고정 버튼: 이전/다음 (마지막 단계는 "등록 신청")
+- `MyPageScreen.tsx` "공급자" 섹션 추가 → `ProviderDashboardScreen`으로 이동
+- `MyPageStackNavigator.tsx`: `ProviderDashboardScreen`, `ProviderRegisterWizardScreen` 스택 추가
+- `MainTabNavigator.tsx` SESSION_SCREENS에 provider 화면 2개 추가 (탭바 숨김)
+- `types/provider.ts`, `mocks/provider.mock.ts` 신규 작성
+- `AppIcon.tsx`: `qrCode`, `keyRound`, `smartphoneNfc` 아이콘 추가
+
+---
+
+---
+
+## v1.1.9
+
+### 하단 탭 화면 구현 — 이용 내역, 저장한 주차장, MY
+
+#### 참고 이미지
+
+- `UsedHistory_Default.png` — 이용 내역 화면
+- `Saved_Default.png` — 저장한 주차장 화면
+- `My_Default.png` / `My_Default2.png` — 마이페이지 화면
+
+#### 주요 변경
+
+- `UsedHistoryScreen.tsx` 신규 작성 (이용 탭 메인 화면)
+  - 요약 통계 카드 3개 (이번 달 12회, 결제 총액 ₩48k, 평균 시간 1.4시간)
+  - 필터 chip 수평 스크롤 (전체/결제완료/확인필요/환불/이번 달/지난달)
+  - 이용 내역 카드: 결제완료(초록), 확인필요(주황+경고박스), 환불(회색) 상태 badge
+- `SavedParkingScreen.tsx` 신규 작성 (저장 탭 메인 화면)
+  - 필터 탭 3개 (전체 12 / 즐겨찾기 5 / 최근 7)
+  - 기존 `ParkingCard` 컴포넌트 재사용
+  - 카드 클릭 시 `ParkingDetailScreen`으로 이동
+- `MyPageScreen.tsx` 아이콘 업데이트
+  - 메뉴 항목 아이콘을 reference 이미지 기준으로 보정
+  - 버전 표기를 v1.1.9로 갱신
+- `usageHistory.mock.ts` 신규 작성 (이용 내역 목업 데이터 5건)
+- `ParkingStackNavigator.tsx`: `UsedHistoryScreen`을 첫 화면으로 변경
+- `SearchStackNavigator.tsx`: `SavedParkingScreen`을 첫 화면으로 변경, 전체 세션 플로우 화면 포함
+- `navigationTypes.ts`: `SearchStackParamList`, `ParkingStackParamList` 업데이트
+
+#### 검증
+
+- `npx tsc --noEmit` 통과
+- `npm run android` 성공
+
+---
+
+---
+
+## v1.1.8
+
+### 검색 화면 이미지 기준 재구현
+
+#### 참고 이미지
+
+- `SearchScreen.png` — 검색 초기 화면
+- `SearchScreen_Click_Place_Parking_List.png` — 장소 선택 후 추천 주차장 리스트
+
+#### 주요 변경
+
+- Home 상단 검색 박스 클릭 시 `DestinationSearchScreen`으로 이동하도록 연결
+- 검색 화면에서 하단 탭바가 보이지 않도록 처리
+- `SearchHeader.tsx` 신규 작성
+  - editable 모드: 검색 입력 화면
+  - non-editable 모드: 추천 주차장 리스트 화면에서 검색 복귀용 header
+- `DestinationSearchScreen.tsx` 전면 재구현
+  - 최근 검색 5개 항목 표시
+  - 주차 수요 급증 지역 LIVE 리스트 표시
+  - 검색어 입력 시 mock 기반 검색 결과 표시
+- `RecommendedParkingScreen.tsx` 전면 재구현
+  - 선택 목적지 카드
+  - 도착 예정 시간 chip
+  - AI 분석 배너
+  - 추천 주차장 카드 리스트
+- 추천 주차장 카드 클릭 시 `ParkingDetailScreen`으로 이동
+- `AppIcon.tsx`에 `ChevronUp`, `Train` 아이콘 추가
+- `KeyboardAvoidingView`와 `ScrollView` 하단 padding으로 키보드/리스트 겹침 보정
+
+#### 검증
+
+- `npx tsc --noEmit` 통과
+- `npm run android` 성공
+
+---
+
+---
+
+## v1.1.7
+
+### 경로 안내, NFC 이용 시작, 이용 중 세션, 결제 플로우 구현
+
+#### 참고 이미지
+
+- `Home_ParkingDetail_Route_Click_UI.png` — 경로 안내 화면
+- `Home_ParkingDetail_NFC_Click_1.png` — NFC 스캔 안내 모달
+- `Home_ParkingDetail_NFC_Click_2.png` — NFC 인식 완료 모달
+- `Payment_UI.png` — 이용 중 세션 화면
+- `Payment_UI_2.png` — 결제 화면
+- `Payment_UI_3.png` — 결제 완료 화면
+
+#### 주요 변경
+
+- `RouteScreen.tsx` 신규 구현
+  - View 기반 지도 preview
+  - 출발/도착 지점 표시
+  - 파란 route line
+  - 이동 수단 chip
+  - 추천/무료도로/최단 경로 카드
+- `NFCScanModal.tsx` 신규 구현
+  - 어두운 dim overlay
+  - scanning → success mock 상태 전환
+  - NFC 태그 안내 및 인식 완료 UI
+- `ActiveSessionScreen.tsx` 신규 구현
+  - 파란 hero 영역
+  - 이용 시간 타이머
+  - 예상 결제 금액 카드
+  - 출차 예정 시간 알림 chip
+  - NFC 이용 종료·결제 CTA
+- `PaymentScreen.tsx` 신규 구현
+  - 주차 이용 요약
+  - 최종 결제 금액
+  - 결제 수단 선택 카드
+  - 쿠폰 영역
+- `PaymentResultScreen.tsx` 신규 구현
+  - 결제 완료 check UI
+  - 결제 금액/수단/승인번호 요약
+  - 영수증 보기/완료 버튼
+- `ParkingDetailScreen` 하단 CTA 연결
+  - `경로 안내` → `RouteScreen`
+  - `NFC 이용 시작` → `NFCScanModal` → `ActiveSessionScreen`
+  - `결제하기` → `PaymentScreen` → `PaymentResultScreen`
+- 실제 GPS, NFC, 결제 SDK 없이 mock UI flow로 구현
+
+#### 검증
+
+- `npx tsc --noEmit` 통과
+- `npm run android` 성공
+
+---
+
+---
+
+## v1.1.6
+
+### 곧 비워질 자리, 마커 요약 BottomSheet, 주차장 상세 5탭 이미지 기준 재구현
+
+#### 참고 이미지
+
+- `Home_Empty_Seat_Soon.png` — 곧 비워질 자리 화면
+- `Home_Click_Marker_ParkingSummary.png` — 마커 클릭 ParkingSummary BottomSheet
+- `ParkingDetail1.png`~`ParkingDetail5.png` — 주차장 상세 5탭 화면
+
+#### 주요 변경
+
+- `SoonAvailableScreen.tsx` 재구현
+  - 상단 header
+  - mini map preview
+  - 출차 예정 안내 banner
+  - 곧 비워질 자리 카드 2개
+- `SoonAvailableCard.tsx` 개선
+  - 카드 전체 Pressable 처리
+  - `react-native-svg` 기반 arc progress ring 적용
+  - `8분 후`, `12분 후` 형식으로 표시
+- `SelectedLotPreview.tsx` 재구현
+  - badge row
+  - 주차장명/주소/도보 거리
+  - 3분할 stat card
+  - 출발/도착/공유/신고 action row
+  - 상세 정보 열기 버튼
+- `ParkingDetailScreen.tsx` 재구현
+  - hero map 영역
+  - 주차장 badge/title block
+  - 탭: 홈 / 요금·시간 / 혼잡도 / 주변 / 리뷰
+  - 하단 고정 CTA: 경로 안내 / NFC 이용 시작
+- 상세 탭별 구현
+  - `DetailHomeTab`: 2x2 정보 카드, 주차장 사진, 이용 안내
+  - `DetailPricingTab`: 요금 계산기, View 기반 slider, 요금 정책
+  - `DetailCongestionTab`: 시간대별 혼잡도 bar chart, AI 분석 카드, 요일별 패턴
+  - `DetailAroundTab`: 주변 주차장 리스트
+  - `DetailReviewsTab`: 평점 요약, 리뷰 리스트
+- 마커 클릭, 곧 비워질 자리, 주차장 카드 클릭에서 상세 화면으로 이동 연결
+
+#### 검증
+
+- `npx tsc --noEmit` 통과
+- `npm run android` 성공
+
+---
+
+---
+
+## v1.1.5
+
+### Home 화면 Figma Make 이미지 기준 재보정 및 아이콘 적용
+
+#### 참고 이미지
+
+- `Home_Default.png`
+- `Home_BottomSheet_Swipe_0.png`~`Home_BottomSheet_Swipe_3.png`
+- `Home_Click_Marker_ParkingSummary.png`
+- `Home_Empty_Seat_Soon.png`
+
+#### 주요 변경
+
+- Home 지도 영역을 Figma Make 이미지 기준으로 재보정
+- `CategoryChips.tsx` 개선
+  - `전체`, `이용가능`, `곧 비워짐`, `저렴` chip 디자인 보정
+  - active/inactive 상태 정리
+- `HomeWeatherBadge` 추가
+  - 구름 아이콘, `20°`, `미세` 표시
+- `ParkingMarker.tsx` 개선
+  - P teardrop marker
+  - 공유 주차장 Home marker
+  - 곧 비워질 자리 시간 badge
+- `FABStack.tsx`, `CurrentLocationButton.tsx`를 AppIcon 기반으로 교체
+- `DefaultSheetContent.tsx` 개선
+  - default: QuickShortcuts + 곧 비워질 자리 banner
+  - half: 주변 주차장 2개 카드 표시
+  - full: 주변 주차장 전체 목록 표시
+- `MainTabNavigator.tsx` 조정
+  - 하단 탭: 주변 / 저장 / 이용 / 스마트패스 / MY
+  - active tab border 스타일 보정
+- `AppIcon.tsx` 확장
+  - `cloud`, `layers`, `cpu`, `flag`, `chevronRight`, `crosshair`, `shield`, `fileText` 등 추가
+
+#### 검증
+
+- `npx tsc --noEmit` 통과
+- `npm run android` 성공
+
+---
+
+---
+
+## v1.1.4
+
+### SmartParkReDesign imports 기반 디자인 토큰 및 MyPage 재보정
+
+#### 주요 변경
+
+- `imports/tokens.jsx`, `Chrome.jsx`, `HomeScreen.jsx`, `OtherScreens.jsx`, `SearchDetail.jsx` 분석
+- `src/theme/tokens.ts` 보정
+  - `brandOrange`를 `#F5683C`로 변경
+  - `bgCool`, `bgCoolSecondary`, `bgCoolWeak`, `borderWeak` 추가
+  - `iconPrimary`, `iconTertiary`, `iconWeak` 추가
+  - `textPrimary`~`textQuaternary` 추가
+- `MainTabNavigator.tsx` 비활성 탭 색상 보정
+- `SearchBar.tsx` placeholder 색상, fontWeight, fontSize 보정
+- `DefaultSheetContent.tsx` soon banner 이모지를 `AppIcon name="clock"`으로 교체
+- `RecommendedParkingScreen.tsx` 뒤로가기 버튼을 `AppIcon name="chevronLeft"`로 교체
+- `MyPageScreen.tsx` 전면 재설계
+  - mock 로그인 프로필
+  - 통계 그리드
+  - 결제·차량 / 알림·설정 / AI 투명성 / 고객 지원 메뉴 섹션
+
+#### 검증
+
+- `npx tsc --noEmit` 통과
+
+---
+
+---
+
+## v1.1.3
+
+### components/ui 분석 기반 React Native 공통 컴포넌트 구축
+
+#### 주요 변경
+
+- SmartParkReDesign `components/ui` 48개 파일 분석
+- `src/theme/tokens.ts` 추가
+  - `background`, `muted`, `surfaceMuted`, `accent`, `foreground`, `border`, `radius` 계열 토큰 구성
+- 공통 컴포넌트 12종 추가
+  - `AppButton`
+  - `AppCard`
+  - `AppBadge`
+  - `AppChip`
+  - `AppTextInput`
+  - `AppTabs`
+  - `AppSeparator`
+  - `AppProgress`
+  - `AppSwitch`
+  - `AppSectionHeader`
+  - `AppSurface`
+  - `AppSheet`
+- 주요 화면에 공통 컴포넌트 적용
+  - ParkingDetail 탭바 → `AppTabs`
+  - Search input → `AppTextInput` 계열 스타일
+  - Recommendation 카드/배너 → `AppCard`, `AppBadge`, `AppChip`
+  - MyPage 기본 구조 → profile card, menu section
+- ScrollView 하단 padding 보정으로 하단 탭바/CTA 겹침 완화
+
+#### 검증
+
+- `npx tsc --noEmit` 통과
+- `npm run android` 성공
+
+---
+
+---
+
+## v1.1.2
+
+### SmartParkReDesign 기준 주요 화면 디자인 폴리시 및 추천 탭 추가
+
+#### 주요 변경
+
+- 하단 탭 구조 변경
+  - 공급자 탭 제거
+  - 추천 탭 추가
+  - 탭 구성: 주변 / 저장 / 이용 / 추천 / MY
+- `RecommendStackNavigator.tsx` 추가
+- `RecommendationScreen.tsx` 추가
+  - 상황별 chip
+  - AI 추천 주차장
+  - 추천 이유 chip
+  - 곧 비워질 자리
+  - 목적지 주차 찾기 CTA
+- `SearchBar` pill 스타일 보정
+- `SectionHeader`, `CategoryChips` 스타일 정합성 개선
+
+#### 검증
+
+- `npx tsc --noEmit` 통과
+- `npm run android` 성공
+
+---
+
+---
+
+## v1.1.1
+
+### lucide-react-native 아이콘 기반 구축 및 AppIcon 추가
+
+#### 주요 변경
+
+- `lucide-react-native@1.16.0` 설치
+- `react-native-svg@15.15.5` 설치
+- `AppIcon.tsx` 추가
+  - `name`, `size`, `color`, `strokeWidth` props 지원
+  - TypeScript union type으로 icon name 관리
+- 하단 탭 아이콘을 View/Text 기반 구현에서 AppIcon 기반으로 교체
+- `RecommendedParkingScreen`, `ParkingDetailScreen`의 일부 타입/불필요 import 정리
+
+#### 검증
+
+- `npx tsc --noEmit` 통과
+- `npm run android` 성공
+
+---
+
+---
+
+## v1.1.0
+
+### SearchDetail.jsx 기준 검색, 추천, 상세, 곧 비워질 자리 화면 최초 구현
+
+#### 주요 변경
+
+- `DestinationSearchScreen.tsx` 전면 재작성
+- 검색 관련 컴포넌트 추가
+  - `SearchResultItem`
+  - `SearchInitialState`
+  - `SearchLiveResults`
+  - `ArrivalTimeSelector`
+  - `SearchFilterModal`
+- `RecommendedParkingScreen.tsx` 추가
+- `ParkingDetailScreen.tsx` 전면 재작성
+  - hero map
+  - 5탭 구조
+  - 하단 CTA
+- 상세 탭 컴포넌트 추가
+  - `StatBlock`
+  - `DetailActionBar`
+  - `DetailHomeTab`
+  - `DetailPricingTab`
+  - `DetailCongestionTab`
+  - `DetailAroundTab`
+  - `DetailReviewsTab`
+- `SoonAvailableScreen.tsx`, `SoonAvailableCard.tsx` 추가
+- Home BottomSheet 곧 비워짐 banner에서 SoonAvailableScreen으로 이동 연결
+
+#### 검증
+
+- `npx tsc --noEmit` 통과
+- `npm run android` 성공
+
+---
+
+---
+
+## v1.0.11
+
+### Home 화면 컴포넌트 분리 및 Claude Design 정합성 개선
+
+#### 주요 변경
+
+- `CategoryChips.tsx` 추가
+- `FABStack.tsx` 추가
+- `CurrentLocationButton.tsx` 추가
+- `SectionHeader.tsx` 추가
+- `QuickShortcuts.tsx` 추가
+- `SelectedLotPreview.tsx` 추가
+- `DefaultSheetContent.tsx` 추가
+- `ParkingBottomSheet.tsx` 리팩터링
+- `HomeMapScreen.tsx` zIndex 및 위치 계산 정리
+- `ParkingMarker.tsx` SOON_AVAILABLE 시간 badge 개선
+
+#### 검증
+
+- `npx tsc --noEmit` 통과
+- `npm run android` 성공
+
+---
+
+---
+
+## v1.0.10
+
+### ParkingBottomSheet 4단계 swipe 전환 구현
+
+#### 주요 변경
+
+- `ParkingBottomSheet`를 `hidden` / `default` / `half` / `full` 4단계로 재구성
+- `SHEET_SNAP` 기준
+  - hidden: 0
+  - default: 화면 30%
+  - half: 화면 50%
+  - full: 화면 100%
+- `Animated.Value`와 `PanResponder`를 사용해 handle 영역 drag 구현
+- full 모드에서만 내부 ScrollView 활성화
+- hidden 상태에서 재오픈 탭바 표시
+- `HomeMapScreen`에서 sheet 상태별 current location button 위치 동적 계산
+
+#### 검증
+
+- `npx tsc --noEmit` 통과
+- `npm run android` 성공
+
+---
+
+---
+
+## v1.0.9
+
+### ParkingBottomSheet, ParkingCard, HomeMapScreen 연결
+
+#### 주요 변경
+
+- `ParkingStatusBadge`, `CongestionBadge` 추가
+- `ParkingCard.tsx` 추가
+  - 썸네일, rank badge, AI 점수, 상태/혼잡도/태그, 요금/거리, 출차 예정 banner 표시
+- 초기 `ParkingBottomSheet.tsx` 추가
+  - collapsed / half / expanded 3모드
+  - 선택 주차장 미리보기
+  - QuickShortcuts
+  - 곧 비워질 자리 banner
+  - 카드 목록
+- `HomeMapScreen`에서 `HomeParkingSummary`를 `ParkingBottomSheet`로 교체
+
+#### 검증
+
+- `npx tsc --noEmit` 통과
+- `npm run android` 성공
+
+---
+
+---
+
+## v1.0.8
+
+### HomeMapScreen 1차 UI 개선
+
+#### 주요 변경
+
+- `MainTabNavigator`를 custom tab bar로 재구성
+- 하단 탭 라벨: 주변 / 저장 / 이용 / 공급자 / MY
+- `ParkingMarker`를 teardrop 형태로 개선
+- `HomeMapScreen`에 CategoryChips 추가
+- 카테고리 필터링 및 selected marker 초기화 처리
+- `HomeParkingSummary`를 QuickShortcuts + 곧 비워짐 banner 중심으로 변경
+- 검색바, 카테고리 칩, FAB, 하단 패널, 탭바 간 겹침 보정
+
+#### 검증
+
+- `npx tsc --noEmit` 통과
+- `npm run android` 성공
+
+---
+
+---
+
+## v1.0.7
+
+### React Navigation 구성 및 Android Native 빌드 안정화
+
+#### 주요 변경
+
+- `@react-navigation/native-stack` 제거
+- `@react-navigation/stack` 기반으로 전환
+- 주요 navigator 구성
+  - `RootNavigator`
+  - `HomeStackNavigator`
+  - `SearchStackNavigator`
+  - `ParkingStackNavigator`
+  - `ProviderStackNavigator`
+  - `MyPageStackNavigator`
+  - `MainTabNavigator`
+- `newArchEnabled=true` 설정
+- Windows + NDK + CMake 환경의 `c++_shared` 링킹 문제 보완
+- Android 실기기에서 하단 탭 표시 확인
+
+#### 검증
+
+- `npx tsc --noEmit` 통과
+- `npm run android` 성공
+
+---
+
+---
+
+## v1.0.6
+
+### 프론트엔드 소스코드 Git 추적 오류 수정
+
+- `src/frontend`가 하위 저장소처럼 보이는 문제 점검
+- `git ls-files -s src/frontend`로 실제 파일 추적 상태 확인
+- 프론트엔드 소스코드가 부모 저장소에서 정상 추적되도록 정리
+- 원격 `origin/main` 반영 완료
+
+---
+
+---
+
+## v1.0.5
+
+### 타입 정의 및 mock 데이터 구현
+
+- `types/common.ts` 추가
+- `types/parking.ts` 추가
+- `types/user.ts` 추가
+- `types/payment.ts` 추가
+- `types/index.ts` 추가
+- `mocks/parkingLots.mock.ts` 추가
+- `mocks/index.ts` 추가
+- 주차장 상태, 혼잡도, 요금, 위치, 추천 점수 mock 데이터 구성
+
+#### 검증
+
+- `npx tsc --noEmit` 통과
+
+---
+
+---
+
+## v1.0.4
+
+### 디자인 토큰 및 공통 상수 구현
+
+- `theme/colors.ts` 추가
+- `theme/spacing.ts` 추가
+- `theme/radius.ts` 추가
+- `theme/typography.ts` 추가
+- `theme/shadow.ts` 추가
+- `theme/index.ts` 추가
+- `constants/routes.ts` 추가
+- `constants/status.ts` 추가
+
+#### 검증
+
+- `npx tsc --noEmit` 통과
+
+---
+
+---
+
+## v1.0.3
+
+### 프론트엔드 기본 폴더 구조 설정
+
+- `src/frontend/src/` 하위 기본 폴더 생성
+- `navigation`, `screens`, `components`, `services`, `hooks`, `types`, `mocks`, `theme`, `constants`, `utils`, `assets` 구성
+- 화면/컴포넌트 하위 폴더 분리
+- 빈 폴더 추적용 `.gitkeep` 추가
+
+---
+
+---
+
+## v1.0.2
+
+### Android 실기기 실행 및 CMake/NDK 오류 수정
+
+- `android/app/src/main/jni/CMakeLists.txt` 추가/수정
+- `c++_shared` 링크 설정 명시
+- `android/app/build.gradle` CMake 설정 보완
+- Gradle/CMake 캐시 정리 후 재빌드
+- Android 실기기 `SM-S911N` 실행 성공
+
+---
+
+---
+
+## v1.0.1
+
+### React Native TypeScript 프로젝트 설정
+
+- `src/frontend/` 하위 React Native CLI 프로젝트 생성
+- React Native 0.85.3 + React 19.2.3 + TypeScript 5.8.3 기반
+- `App.tsx`를 SmartPark 기본 화면으로 교체
+- `package.json`, `tsconfig.json`, `android/`, `ios/`, `index.js` 구조 확인
+- `npm install` 완료
+
+---
+
+---
+
+## v1.0.0
+
+### 프론트엔드 구현 단계 시작 및 디자인 시스템 reference 추가
+
+- `docs/design/reference/naver-map-design-system/` 하위 이미지 reference 추가
+- `docs/design/NAVER_MAP_STYLE_GUIDE.md` 추가
+- Naver Map Design System 기반 컴포넌트/토큰 기준 정리
+- 색상, 타이포그래피, 반지름, 간격, 레이아웃, elevation, icon 기준 작성
+
+---

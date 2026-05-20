@@ -24,13 +24,13 @@ SmartPark는 현재 위치와 목적지 정보를 기반으로 주변 주차 가
 
 ## 2. 핵심 기능
 
-| 기능                          | 설명                                                                         |
-| ----------------------------- | ---------------------------------------------------------------------------- |
-| 현재 위치 기반 주차 공간 조회 | 사용자의 현재 위치 또는 목적지를 기준으로 주변 주차장을 지도와 목록으로 조회 |
-| 곧 비워질 주차 공간 안내      | 출차 예정 시간이 등록된 주차 공간을 “곧 비워질 자리”로 표시                  |
-| 개인 주차장 등록 및 공유      | 개인 또는 건물 관리자가 유휴 주차 공간을 등록하고 공유                       |
-| NFC 기반 간편 결제            | NFC 태그를 활용해 주차 이용 시작, 종료, 결제 흐름을 간편화                   |
-| AI 기반 혼잡도 분석           | 시간대, 지역, 과거 이용 데이터를 기반으로 주차장 혼잡도를 예측하고 추천      |
+| 기능                          | 설명                                                                                                                                                                   |
+| ----------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 현재 위치 기반 주차 공간 조회 | 사용자의 현재 위치 또는 목적지를 기준으로 주변 주차장을 지도와 목록으로 조회                                                                                           |
+| 곧 비워질 주차 공간 안내      | 출차 예정 시간이 등록된 주차 공간을 “곧 비워질 자리”로 표시                                                                                                            |
+| 개인 주차장 등록 및 공유      | 개인 또는 건물 관리자가 유휴 주차 공간을 등록하고 공유                                                                                                                 |
+| NFC 기반 간편 결제            | NFC 태그를 활용해 주차 이용 시작, 종료, 결제 흐름을 간편화                                                                                                             |
+| AI 기반 혼잡도 분석           | 시간대·지역·과거 이용 데이터 기반 혼잡도 예측; 상황별 추천 chip(빠른 주차·저렴한 주차·NFC 등 6종), 시나리오별 BEST 추천, 점수 분해, 추천 이유, 후보 비교 대시보드 제공 |
 
 ---
 
@@ -70,16 +70,16 @@ SmartPark는 기존 주차 서비스와 비교했을 때 다음과 같은 차별
 
 ## 6. 기술 스택
 
-| 구분                   | 기술                                                           |
-| ---------------------- | -------------------------------------------------------------- |
-| Frontend               | React Native                                                   |
-| Backend                | Spring Boot, Swagger/OpenAPI                                   |
-| Database               | MySQL                                                          |
+| 구분                   | 기술                                                  |
+| ---------------------- | ----------------------------------------------------- |
+| Frontend               | React Native                                          |
+| Backend                | Spring Boot, Swagger/OpenAPI                          |
+| Database               | MySQL                                                 |
 | Map API                | Naver Maps API (`@mj-studio/react-native-naver-map`), Tmap API |
-| AI/Analysis            | Python, CSV/Excel Mock Data, 규칙 기반/ML 혼잡도 분석          |
-| Deployment             | AWS 배포 예정                                                  |
-| Version Control        | Git, GitHub                                                    |
-| AI Development Support | Claude Code, Codex                                             |
+| AI/Analysis            | Python, CSV/Excel Mock Data, 규칙 기반/ML 혼잡도 분석 |
+| Deployment             | AWS 배포 예정                                         |
+| Version Control        | Git, GitHub                                           |
+| AI Development Support | Claude Code, Codex                                    |
 
 ---
 
@@ -89,6 +89,9 @@ SmartPark는 기존 주차 서비스와 비교했을 때 다음과 같은 차별
 software-engineering-ai-parking-service/
 ├── README.md
 ├── CHANGELOG.md
+├── CHANGELOG_FRONTEND.md
+├── CHANGELOG_BACKEND.md
+├── CHANGELOG_AI.md
 ├── FOLDER_STRUCTURE.md
 ├── configuration_management_plan.md
 ├── docs/
@@ -108,7 +111,10 @@ software-engineering-ai-parking-service/
 
 - [폴더 구조 설명](./FOLDER_STRUCTURE.md)
 - [형상관리 계획서](./configuration_management_plan.md)
-- [변경 이력](./CHANGELOG.md)
+- [전체 변경 이력](./CHANGELOG.md)
+- [프론트엔드 변경 이력](./CHANGELOG_FRONTEND.md)
+- [백엔드 변경 이력](./CHANGELOG_BACKEND.md)
+- [AI 변경 이력](./CHANGELOG_AI.md)
 
 ---
 
@@ -123,6 +129,7 @@ software-engineering-ai-parking-service/
 | 하네스 문서    | `docs/harness/`      | PRD, 기능 명세, Claude/Codex 작업 지침, 프롬프트 기록                      |
 | 테스트 문서    | `docs/test/`         | 인스팩션 예제, 테스트 결과서, 결함 기록                                    |
 | 소스코드       | `src/`               | React Native 프론트엔드, Spring Boot 백엔드, Python AI 분석 모듈 구현 코드 |
+| 변경 이력     | `/`                 | 전체 변경 이력 및 프론트엔드/백엔드/AI 영역별 변경 이력                   |
 
 ---
 
@@ -160,6 +167,10 @@ software-engineering-ai-parking-service/
 | 하네스    | `PROMPT_LOG.md`                                            | AI 도구에 입력한 프롬프트, 결과, 수정 사항 기록 기준 정리       | 완료 |
 | 디자인    | `NAVER_MAP_STYLE_GUIDE.md`                                 | Naver Map Design System 기반 SmartPark UI 스타일 기준 정리      | 완료 |
 | 디자인    | `SCREEN_FLOW.md`, `UI_DESIGN_GUIDE.md`, `DESIGN_SYSTEM.md` | 앱 화면 구조와 UI 기준 정의                                     | 예정 |
+| 변경 이력 | `CHANGELOG.md` | 전체 프로젝트 변경 이력 요약 및 기준선 정리 | 완료 |
+| 변경 이력 | `CHANGELOG_FRONTEND.md` | 프론트엔드 `v1.x.x` 상세 구현 이력 정리 | 완료 |
+| 변경 이력 | `CHANGELOG_BACKEND.md` | 백엔드 `v2.x.x` 상세 구현 이력 정리 | 예정 |
+| 변경 이력 | `CHANGELOG_AI.md` | AI `v3.x.x` 상세 구현 이력 정리 | 완료 |
 
 ---
 
@@ -175,8 +186,18 @@ software-engineering-ai-parking-service/
 | 오류 수정     | `[FIX-번호]` 사용                   |
 | 변경 요청     | `[CR-번호]` 사용                    |
 | 버전 형식     | `vMajor.Minor.Patch`                |
-| 변경 이력     | `CHANGELOG.md`에 기록               |
+| 변경 이력     | `CHANGELOG.md`에 전체 요약 기록, 영역별 상세 이력은 `CHANGELOG_FRONTEND.md`, `CHANGELOG_BACKEND.md`, `CHANGELOG_AI.md`에 분리 기록 |
 | 기준선 관리   | 주요 단계마다 Git tag 생성          |
+
+SmartPark 구현 단계부터는 개발 영역별로 Major 버전을 분리하여 관리한다.
+
+| 버전 라인 | 영역 | 설명 |
+| --------- | ---- | ---- |
+| `v0.x.x` | 문서/기획/하네스 | 소프트웨어공학 산출물, 제품 기획 문서, 하네스 문서, 요구사항 문서 |
+| `v1.x.x` | 프론트엔드 | React Native 앱, Naver Map UI, 화면/컴포넌트/네비게이션 구현 |
+| `v2.x.x` | 백엔드 | Spring Boot API, MySQL, Swagger/OpenAPI, 외부 API 연동 구현 |
+| `v3.x.x` | AI | Python 기반 Mock 데이터 생성, AI 혼잡도 분석, 예측 결과 생성 |
+| `v4.x.x` | 통합/MVP | 프론트엔드-백엔드-AI 연동, 발표 가능한 MVP 시제품 통합 |
 
 예시:
 
@@ -191,15 +212,27 @@ git push origin main --tags
 
 ## 12. 현재 진행 상태
 
-현재 SmartPark 프로젝트는 소프트웨어공학 산출물 작성과 React Native 기반 프론트엔드 MVP 구현을 병행하여 진행 중이다.
+현재 SmartPark 프로젝트는 소프트웨어공학 산출물 작성과 React Native 기반 프론트엔드 MVP 구현, AI 혼잡도 분석 모듈 초기 구현을 병행하여 진행 중이다.
 
 ---
 
-### 12.1 문서 및 하네스 구축 현황
+### 12.1 문서 산출물 진행 현황
 
-현재 저장소에는 프로젝트 정의서, 프로젝트 관리 계획서, 요구사항 정의서, 요구사항 분석서, 형상관리 계획서, CHANGELOG, 폴더 구조 설명 문서가 포함되어 있다.
+현재까지 다음 소프트웨어공학 산출물과 프로젝트 보조 문서가 정리되었다.
 
-`docs/product/` 폴더에는 SmartPark의 제품 기획을 구체화하기 위한 다음 문서 5종이 추가되었다.
+#### 소프트웨어공학 과제 산출물
+
+- 과제1 프로젝트정의서 작성 완료
+- 과제2 프로젝트관리계획서 작성 완료
+- 과제3 요구사항정의서 작성 완료
+- 과제4 요구사항분석서 작성 완료
+- 과제5 소프트웨어설계서 작성 예정
+- 과제6 인스팩션예제 작성 예정
+- 과제7 테스트결과서 작성 예정
+
+#### 제품 기획 문서
+
+`docs/product/` 폴더에는 SmartPark의 서비스 기획을 구체화하기 위한 문서가 작성되었다.
 
 - `PERSONA.md`
 - `USER_JOURNEY.md`
@@ -207,7 +240,11 @@ git push origin main --tags
 - `SERVICE_SCENARIO.md`
 - `BUSINESS_MODEL.md`
 
-`docs/harness/` 폴더에는 Claude Code, Codex 등 AI 개발 도구가 SmartPark 프로젝트를 일관성 있게 이해하고 작업할 수 있도록 다음 하네스 문서 7종이 추가되었다.
+이를 통해 SmartPark의 주요 사용자, 사용자 여정, 경쟁 서비스 대비 차별성, 실제 서비스 시나리오, 비즈니스 모델을 정리하였다.
+
+#### 하네스 문서
+
+`docs/harness/` 폴더에는 Claude Code와 Codex가 SmartPark 프로젝트를 일관성 있게 이해하고 작업할 수 있도록 다음 문서가 작성되었다.
 
 - `PRD.md`
 - `FEATURE_SPEC.md`
@@ -217,11 +254,29 @@ git push origin main --tags
 - `CODEX.md`
 - `PROMPT_LOG.md`
 
-`docs/design/` 폴더에는 SmartPark 프론트엔드 구현을 위한 UI 스타일 기준 문서가 추가되었다.
+이를 통해 제품 요구사항, 기능 명세, 화면 구조, 프로젝트 작업 규칙, 프론트엔드/백엔드 작업 지침, 프롬프트 기록 기준을 정리하였다.
 
-- `NAVER_MAP_STYLE_GUIDE.md`: Naver Map Design System 이미지를 분석하여 색상, 타이포그래피, 간격, 반지름, 레이아웃, 아이콘 토큰과 컴포넌트별 적용 기준 정리
+#### 요구사항 문서
 
-이를 통해 SmartPark의 제품 요구사항, 기능 명세, 화면 구조, 프로젝트 작업 규칙, 프론트엔드/백엔드 작업 기준, AI 프롬프트 기록 기준, 디자인 시스템 기준을 정리하였다.
+`docs/requirements/` 폴더에는 소프트웨어공학 과제 산출물인 요구사항 정의서와 요구사항 분석서가 추가되었다.
+
+- `과제3.요구사항정의서.md`
+- `과제3.요구사항정의서.pdf`
+- `과제4.요구사항분석서.md`
+- `과제4.요구사항분석서.pdf`
+
+과제3 요구사항 정의서를 통해 SmartPark의 기능적 요구사항, 비기능적 요구사항, 외부 인터페이스 요구사항, 데이터 요구사항을 정리하였다.  
+과제4 요구사항 분석서를 통해 SmartPark의 소프트웨어 문맥, Use Case Description, 정적 분석, CRC 카드, 동적 분석, 인터페이스 분석, 제약사항, 요구사항 추적표를 구체화하였다.
+
+#### 디자인 기준 문서
+
+`docs/design/` 폴더에는 프론트엔드 구현을 위한 디자인 기준 문서와 reference 자료가 추가되었다.
+
+- `NAVER_MAP_STYLE_GUIDE.md`
+- `docs/design/reference/naver-map-design-system/`
+- `docs/design/reference/figma-make-design/`
+
+이를 통해 Naver Map 스타일 UI, Figma Make 기반 화면 reference, SmartPark 화면별 디자인 기준을 프론트엔드 구현에 반영하고 있다.
 
 ---
 
@@ -254,17 +309,13 @@ git push origin main --tags
 
 ### 12.3 현재 구현된 주요 화면
 
-현재 프론트엔드는 Figma Make reference 이미지와 Naver Map Design System 기준을 바탕으로 주요 사용자 흐름을 mock 데이터 기반으로 구현하였다.
+현재 프론트엔드는 Figma Make reference 이미지를 기준으로 주요 사용자 흐름을 mock 데이터 기반으로 구현하였다.
 
 #### Home 화면
 
-- Naver Maps SDK 실지도(`@mj-studio/react-native-naver-map`) 연동 — mock 현재 위치 기준 지도 표시
-- 주차장 상태별 Lucide 아이콘 기반 커스텀 마커 표시
-- 마커는 Category Chip과 유사한 compact pill/badge 구조로 구성하고, 하단에 pointer 형태 적용
-- 마커 색상은 고정하지 않고 현재 앱 theme와 주차장 상태값 기준으로 적용
-- 주차장 상태별 아이콘, 배경색, 테두리 색상 구분
-- 클러스터링은 제거하고 mock 주차장 데이터를 개별 마커로 표시
-- 지도 마커와 ParkingBottomSheet는 동일한 mock 주차장 데이터를 사용
+- Naver Maps SDK 실지도(`@mj-studio/react-native-naver-map`) 연동 — mock 현재 위치(성수역) 기준 지도 표시
+- 주차장 상태별 Lucide 아이콘 마커: AVAILABLE(circleParking/초록), SOON_AVAILABLE(clock/파랑), OCCUPIED(car/주황), FULL(alertCircle/빨강), INACTIVE(mapPin/회색), 공유 주차장(house/초록)
+- zoom 기반 자동 클러스터링 — zoom 15 이상에서 개별 마커, 미만에서 인근 마커 클러스터 badge 표시
 - 검색바, 카테고리 chip, 날씨 badge, 지도 FAB 구성
 - BottomSheet 4단계 swipe 구조 구현
   - hidden
@@ -377,11 +428,28 @@ git push origin main --tags
 | `v1.1.12` | NFC 이용 종료 인식 단계 추가 및 결제 플로우 실데이터 연결                                                 |
 | `v1.1.13` | 프론트엔드 코드베이스 도메인 기반 구조 리팩토링                                                           |
 | `v1.1.14` | Naver Maps SDK 연동 — Home 화면 실제 지도 적용 (`@mj-studio/react-native-naver-map@2.8.0`)                |
-| `v1.1.15` | 클러스터링 제거, Category Chip 유사 Lucide 커스텀 마커 적용, 지도 표시용 mock 주차장 데이터 확장          |
+| `v1.1.15` | 지도 마커 UI 개선 — Lucide 아이콘 + zoom 기반 클러스터링                                                  |
 
 ---
 
-### 12.5 미적용 및 향후 구현 예정
+### 12.5 AI 분석 모듈 초기 구현 현황
+
+`src/ai/` 폴더에는 Python 기반 SmartPark AI 혼잡도 분석 모듈의 초기 구조가 구성되어 있다.
+
+- `data/raw/` — 원본 Mock 데이터 저장
+- `data/processed/` — 전처리 완료 데이터 저장
+- `data/output/` — 혼잡도 예측 결과 저장
+- `models/` — AI 분석 모델 파일 저장
+- `notebooks/` — EDA 및 실험 노트북 저장
+- `scripts/` — 데이터 생성, 전처리, 학습, 예측 스크립트 저장
+- `requirements.txt` — Python AI 모듈 실행 패키지 정의
+- `README.md` — AI 모듈 목적, 폴더 구조, 실행 순서 문서화
+
+현재 AI 모듈은 `v3.0.0` 기준으로 초기 구조 생성 단계까지 완료되었으며, 이후 Mock 데이터 스키마 설계와 AI 혼잡도 분석 결과 생성 단계로 확장할 예정이다.
+
+---
+
+### 12.6 미적용 및 향후 구현 예정
 
 현재 프론트엔드는 mock 데이터 기반 UI 구현 단계이며, 다음 기능은 아직 실제 연동 전이다.
 
@@ -404,19 +472,19 @@ git push origin main --tags
 | ---------- | ----------------------------------------------------- | -------------------------------------- |
 | 프론트엔드 | Naver Maps 스타일의 지도 중심 React Native 앱 구현    | Claude Code, Android 실기기 USB 테스트 |
 | 백엔드     | 주차장 조회, 목적지 검색, 혼잡도 조회 API 구현        | Spring Boot, MySQL, Swagger, Codex     |
-| AI 분석    | 약 5년 치 가상 주차장 Mock 데이터 생성 및 혼잡도 예측 | Python, CSV/Excel, ML 모델             |
+| AI 분석    | 약 5년 치 가상 주차장 Mock 데이터 생성 및 AI 혼잡도 예측 | Python, CSV/Excel, AI 분석 모델        |
 
 다음 구현 단계에서는 mock UI 흐름을 실제 서비스 구조로 확장한다.
 
 ```text
-실제 GPS 위치 권한 및 현재 위치 추적
+Naver Maps SDK 연동
+→ 실제 현재 위치 및 지도 marker 표시
 → 백엔드 주차장 조회 API 연결
 → 목적지 검색 API 연결
 → AI 혼잡도 예측 API 연결
-→ 경로 안내 API 연결
-→ 실제 NFC 태그 인식 고도화
+→ NFC 이용 시작/종료 흐름 고도화
 → 결제 SDK 연동
-→ 공급자 주차 공간 등록/관리 API 연결
+→ 공급자 주차 공간 등록/관리 기능 구현
 → 관리자 승인/신고 관리 기능 구현
 ```
 

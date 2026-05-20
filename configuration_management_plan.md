@@ -20,6 +20,7 @@
 - AI 개발 도구 활용을 위한 하네스 문서
 - 인스팩션 및 테스트 문서
 - 소스코드
+- 전체 변경 이력 및 영역별 변경 이력 문서
 
 ---
 
@@ -38,22 +39,22 @@ SmartPark 프로젝트의 형상 항목은 공식 과제 산출물과 추가 프
 | 일정     | 과제2.프로젝트관리계획서 | `/docs/plan`         |
 | 테스트   | 과제6.인스팩션예제       | `/docs/test`         |
 | 테스트   | 과제7.테스트결과서       | `/docs/test`         |
-| 소스코드 | 프론트엔드 소스코드      | `/src/frontend`      |
-| 소스코드 | 백엔드 소스코드          | `/src/backend`       |
-| 소스코드 | AI 분석 모듈 소스코드    | `/src/ai`            |
+| 소스코드 | 프론트엔드 소스코드       | `/src/frontend`      |
+| 소스코드 | 백엔드 소스코드           | `/src/backend`       |
+| 소스코드 | AI 분석 모듈 소스코드      | `/src/ai`            |
 
 ### 2.2 추가 프로젝트 산출물
 
 | 구분        | 형상 항목                                              | 파일 위치       |
 | ----------- | ------------------------------------------------------ | --------------- |
 | 저장소 안내 | README                                                 | `/`             |
-| 저장소 안내 | CHANGELOG                                              | `/`             |
+| 저장소 안내 | CHANGELOG, CHANGELOG_FRONTEND, CHANGELOG_BACKEND, CHANGELOG_AI | `/`             |
 | 저장소 안내 | FOLDER_STRUCTURE                                       | `/`             |
 | 형상관리    | 형상관리 계획서                                        | `/`             |
 | 제품 기획   | 페르소나, 사용자 여정, 경쟁 서비스 분석, 비즈니스 모델 | `/docs/product` |
 | 디자인      | 화면 흐름, UI 디자인 가이드, 디자인 시스템             | `/docs/design`  |
 | 하네스      | PRD, 기능 명세, Claude/Codex 지침, 프롬프트 기록       | `/docs/harness` |
-| AI 분석     | Mock 데이터 생성 스크립트, 전처리, 학습, 예측 모델     | `/src/ai`       |
+| AI 분석     | Mock 데이터 생성 스크립트, 전처리, 학습, 예측 모델      | `/src/ai`       |
 | 테스트 보조 | 결함 기록, 인스팩션 체크리스트                         | `/docs/test`    |
 
 모든 형상 항목은 Git 저장소에 등록하고, 변경 사항은 commit 메시지와 CHANGELOG를 통해 추적한다.
@@ -68,6 +69,9 @@ SmartPark 프로젝트의 형상 항목은 공식 과제 산출물과 추가 프
 software-engineering-ai-parking-service/
 ├── README.md
 ├── CHANGELOG.md
+├── CHANGELOG_FRONTEND.md
+├── CHANGELOG_BACKEND.md
+├── CHANGELOG_AI.md
 ├── FOLDER_STRUCTURE.md
 ├── configuration_management_plan.md
 ├── docs/
@@ -95,37 +99,45 @@ AI 분석 모듈은 `src/ai` 하위에서 관리하며, Mock 데이터, 전처�
 
 버전 번호는 `vMajor.Minor.Patch` 형식으로 관리한다.
 
-SmartPark 구현 단계부터는 프론트엔드, 백엔드, AI 분석 모듈을 병렬로 개발하므로 Major 번호를 개발 영역 구분자로 사용한다. 단, 각 영역 내부에서는 Minor와 Patch를 일반적인 변경 규모 기준으로 관리한다.
-
 예시:
 
 ```text
-v0.4.1  # 문서/기획/하네스 보완
-v1.1.15 # 프론트엔드 기능 개선
-v2.0.0  # 백엔드 구현 시작 기준선
-v3.0.0  # AI 분석 모듈 구현 시작 기준선
-v4.0.0  # 프론트엔드-백엔드-AI 통합 기준선
+v0.1.0
+v0.2.0
+v0.2.1
 ```
 
-| 버전 라인 | 관리 영역        | 설명                                                               |
-| --------- | ---------------- | ------------------------------------------------------------------ |
-| `v0.x.x`  | 문서/기획/하네스 | 소프트웨어공학 산출물, 제품 기획 문서, 하네스 문서, 요구사항 문서  |
-| `v1.x.x`  | 프론트엔드       | React Native 앱, Naver Map UI, 화면/컴포넌트/네비게이션 구현       |
-| `v2.x.x`  | 백엔드           | Spring Boot API, MySQL, Swagger/OpenAPI, 외부 API 연동 구현        |
-| `v3.x.x`  | AI               | Python 기반 Mock 데이터 생성, 혼잡도 분석, ML 모델, 예측 결과 생성 |
-| `v4.x.x`  | 통합/MVP         | 프론트엔드-백엔드-AI 연동, 발표 가능한 MVP 시제품 통합             |
+| 구분  | 의미                                                   |
+| ----- | ------------------------------------------------------ |
+| Major | 요구사항 변경 또는 프로젝트 범위의 큰 변경             |
+| Minor | 기능 추가, 주요 문서 추가, 과제 산출물 추가            |
+| Patch | 오타 수정, 문구 수정, CHANGELOG 갱신, 경미한 문서 보완 |
 
-각 영역 내부의 Minor와 Patch 기준은 다음과 같다.
+현재 프로젝트는 초기 문서화 및 과제 산출물 등록 단계이므로 `v0.x.x` 버전으로 관리한다. 요구사항 정의가 확정되는 시점에는 `v1.0.0`으로 기준선을 설정할 수 있다.
 
-| 구분  | 의미                                                         |
-| ----- | ------------------------------------------------------------ |
-| Major | 개발 영역 구분 또는 전체 프로젝트 기준선 구분                |
-| Minor | 해당 영역의 주요 기능 추가, 구조 확장, 주요 문서 추가        |
-| Patch | 오타 수정, 문구 수정, CHANGELOG 갱신, 오류 수정, 경미한 보완 |
+### 4.2 CHANGELOG 관리 기준
 
-이 방식은 일반적인 SemVer의 Major 의미와 완전히 같지는 않다. 본 프로젝트에서는 소프트웨어공학 산출물과 병렬 구현 이력을 명확히 추적하기 위해 Major 번호를 영역 구분 기준으로 사용한다.
+SmartPark 프로젝트의 변경 이력은 전체 요약과 영역별 상세 이력으로 나누어 관리한다.
 
-### 4.2 태그 전략
+| 파일 | 관리 범위 |
+| ---- | --------- |
+| `CHANGELOG.md` | 전체 프로젝트 요약, 버전 관리 기준, 최신 기준선 정리 |
+| `CHANGELOG_FRONTEND.md` | 프론트엔드 `v1.x.x` 상세 구현 이력 |
+| `CHANGELOG_BACKEND.md` | 백엔드 `v2.x.x` 상세 구현 이력 |
+| `CHANGELOG_AI.md` | AI `v3.x.x` 상세 구현 이력 |
+
+운영 기준은 다음과 같다.
+
+1. 모든 주요 변경은 `CHANGELOG.md` 또는 영역별 CHANGELOG에 기록한다.
+2. 문서/기획/하네스 변경은 `CHANGELOG.md`에 기록한다.
+3. 프론트엔드 구현 변경은 `CHANGELOG_FRONTEND.md`에 상세 기록하고, 필요 시 `CHANGELOG.md`의 최신 기준선 요약을 갱신한다.
+4. 백엔드 구현 변경은 `CHANGELOG_BACKEND.md`에 상세 기록하고, 필요 시 `CHANGELOG.md`의 최신 기준선 요약을 갱신한다.
+5. AI 구현 변경은 `CHANGELOG_AI.md`에 상세 기록하고, 필요 시 `CHANGELOG.md`의 최신 기준선 요약을 갱신한다.
+6. 통합/MVP 변경은 추후 별도 통합 CHANGELOG를 만들거나 `CHANGELOG.md`에 별도 섹션으로 기록한다.
+
+---
+
+### 4.3 태그 전략
 
 | 태그                  | 설명                                  |
 | --------------------- | ------------------------------------- |
@@ -159,7 +171,11 @@ git tag -a requirements_freeze -m "요구사항 기준선 확정"
 4. 수정 작업 수행
 5. 변경 내용 검토
 6. main 브랜치에 반영
-7. commit 메시지와 CHANGELOG에 변경 이력 기록
+7. commit 메시지와 변경 이력 문서에 변경 이력 기록
+   - 전체 요약은 `CHANGELOG.md`
+   - 프론트엔드 상세 이력은 `CHANGELOG_FRONTEND.md`
+   - 백엔드 상세 이력은 `CHANGELOG_BACKEND.md`
+   - AI 상세 이력은 `CHANGELOG_AI.md`
 8. 필요한 경우 Git tag 생성
 
 ### 5.2 브랜치 전략
@@ -199,6 +215,7 @@ git checkout draft
 [DOCS-02] 형상관리계획서 및 CHANGELOG 추가
 [DOCS-05] 폴더 구조 설명 문서 추가
 [FEAT-01] 프론트엔드 기본 구조 생성
+[AI-01] AI 혼잡도 분석 모듈 초기 구조 생성
 [FIX-01] 문서 오타 수정
 [CR-01] 요구사항 문구 수정
 ```
@@ -213,6 +230,9 @@ git checkout draft
 | `[DOCS]`     | Documentation, 문서 수정                |
 | `[TEST]`     | Test, 테스트 문서 또는 테스트 코드 추가 |
 | `[REFACTOR]` | Refactor, 구조 개선                     |
+| `[AI]`       | AI 분석 모듈 관련 작업                  |
+| `[BE]`       | 백엔드 관련 작업                        |
+| `[FE]`       | 프론트엔드 관련 작업                    |
 
 변경 요청이 있는 경우에는 CR 번호를 함께 기록한다.
 
@@ -242,23 +262,21 @@ git checkout draft
 - `git log`
 - `git tag`
 - `CHANGELOG.md`
+- `CHANGELOG_FRONTEND.md`
+- `CHANGELOG_BACKEND.md`
+- `CHANGELOG_AI.md`
 - GitHub commit history
 - GitHub tags
 
 ### 7.2 변경 기록 예시
 
-| 버전      | 변경 내용                                                 |
-| --------- | --------------------------------------------------------- |
-| `v0.1.0`  | 과제1 프로젝트정의서 등록                                 |
-| `v0.1.1`  | 프로젝트정의서 파일명 정리                                |
-| `v0.2.0`  | 프로젝트관리계획서 등록                                   |
-| `v0.2.1`  | CHANGELOG 갱신                                            |
-| `v0.2.2`  | FOLDER_STRUCTURE 문서 추가 및 README/형상관리 계획서 갱신 |
-| `v0.4.1`  | 영역별 버전 관리 기준 정리                                |
-| `v1.1.15` | 프론트엔드 지도 마커 UI 개선                              |
-| `v2.0.0`  | 백엔드 구현 시작 기준선                                   |
-| `v3.0.0`  | AI 혼잡도 분석 모듈 구현 시작 기준선                      |
-| `v4.0.0`  | 프론트엔드-백엔드-AI 통합 기준선                          |
+| 버전     | 변경 내용                                                 |
+| -------- | --------------------------------------------------------- |
+| `v0.1.0` | 과제1 프로젝트정의서 등록                                 |
+| `v0.1.1` | 프로젝트정의서 파일명 정리                                |
+| `v0.2.0` | 프로젝트관리계획서 등록                                   |
+| `v0.2.1` | CHANGELOG 갱신                                            |
+| `v0.2.2` | FOLDER_STRUCTURE 문서 추가 및 README/형상관리 계획서 갱신 |
 
 변경 내역의 상세 내용은 `CHANGELOG.md`에 기록한다.
 
@@ -276,8 +294,9 @@ git checkout draft
 - FOLDER_STRUCTURE 문서가 현재 저장소 구조를 설명하고 있는가?
 - commit 메시지가 규칙에 맞게 작성되어 있는가?
 - tag가 주요 단계별로 존재하는가?
-- CHANGELOG에 변경 사유가 기록되어 있는가?
+- 전체 CHANGELOG와 영역별 CHANGELOG에 변경 사유가 기록되어 있는가?
 - 요구사항, 설계, 구현, 테스트 문서가 서로 연결되어 있는가?
+- 영역별 구현 이력이 해당 CHANGELOG 파일에 분리되어 기록되어 있는가?
 
 ---
 
@@ -288,6 +307,7 @@ git checkout draft
 - 로컬 저장소와 원격 저장소에 이중 보관한다.
 - 중요한 단계에서는 Git tag를 생성하여 기준선을 남긴다.
 - 문서 변경 후에는 README와 CHANGELOG도 함께 최신 상태로 유지한다.
+- 영역별 CHANGELOG 구조를 변경한 경우 README와 형상관리 계획서도 함께 갱신한다.
 
 ---
 
@@ -297,8 +317,8 @@ git checkout draft
 | ----------- | ------------------------------------------------------------------------- |
 | 저장소      | GitHub Public Repository                                                  |
 | 기본 브랜치 | `main`                                                                    |
-| 버전 형식   | `vMajor.Minor.Patch` 단, 구현 단계에서는 Major를 영역 구분자로 사용       |
-| 변경 기록   | `CHANGELOG.md`                                                            |
+| 버전 형식   | `vMajor.Minor.Patch`                                                      |
+| 변경 기록   | `CHANGELOG.md` 전체 요약, `CHANGELOG_FRONTEND.md`, `CHANGELOG_BACKEND.md`, `CHANGELOG_AI.md` 영역별 상세 기록 |
 | 폴더 설명   | `FOLDER_STRUCTURE.md`                                                     |
 | commit 형식 | `[구분자-번호] 변경 내용`                                                 |
 | 주기        | 최소 주 1회 commit/push                                                   |
