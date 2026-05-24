@@ -254,3 +254,20 @@ SmartPark 프로젝트의 주요 변경 사항과 버전 tag 기록을 정리한
 - `npm install` 완료, Android 실행 가능 상태 준비
 - 이후 Android 실기기 실행 확인 단계로 연결 예정
 - 다음 단계: Naver Map 스타일 UI, 지도 화면, 바텀시트, 주차장 카드, 네비게이션 구현
+
+## v0.5.0
+
+- `docs/design/과제5.소프트웨어설계서.md` 추가
+- `docs/design/과제5.소프트웨어설계서.pdf` 추가
+- SmartPark 소프트웨어설계서 최종 작성 완료
+- 서론, 소프트웨어 아키텍처, 모듈/패키지 설계, 인터페이스 설계, 데이터 설계, 구현 기술 설계, 요구사항 추적표, 참고문헌 및 부록 구성
+- 전체 시스템 아키텍처, 정적 구조, 동적 구조, 모듈 구조 이미지 반영
+- Mobile App, Auth, Parking Search, Parking Management, Session & NFC, Payment, Congestion Analysis, Admin, External API Module에 대한 모듈/패키지 설계 작성
+- 각 모듈별 구성 클래스 설계, 패키지 행위, 멤버함수 설계 반영
+- 외부 시스템 인터페이스, 내부 API 인터페이스, 사용자 인터페이스 설계 정리
+- User, Provider, ParkingLot, ParkingSpace, Availability, PricePolicy, NfcTag, ParkingSession, Payment, Settlement, Report, CongestionPrediction, Notification 중심 데이터 설계 작성
+- React Native, Spring Boot, MySQL, Python AI 분석 모듈, Naver Maps API, NFC, 결제 API 기반 구현 기술 설계 정리
+- 기능 요구사항과 모듈, 화면, API, 데이터, 테스트 관점을 연결한 요구사항 추적표 작성
+- 참고문헌, GitHub Repository 링크, 이미지 파일 목록, 주요 API 목록, 오류 코드, GitHub 반영 기준을 부록으로 정리
+- `README.md`의 과제5 소프트웨어설계서 상태를 완료로 갱신
+- 향후 과제6 인스팩션예제, 과제7 테스트결과서 작성 기준 마련
