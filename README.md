@@ -70,16 +70,16 @@ SmartPark는 기존 주차 서비스와 비교했을 때 다음과 같은 차별
 
 ## 6. 기술 스택
 
-| 구분                   | 기술                               |
-| ---------------------- | ---------------------------------- |
-| Frontend               | React Native                       |
-| Backend                | Spring Boot, Swagger/OpenAPI       |
-| Database               | MySQL                              |
-| Map API                | Naver Maps API, Tmap API           |
+| 구분                   | 기술                                                  |
+| ---------------------- | ----------------------------------------------------- |
+| Frontend               | React Native                                          |
+| Backend                | Spring Boot, Swagger/OpenAPI                          |
+| Database               | MySQL                                                 |
+| Map API                | Naver Maps API, Tmap API                              |
 | AI/Analysis            | Python, CSV/Excel Mock Data, 규칙 기반/ML 혼잡도 분석 |
-| Deployment             | AWS 배포 예정                      |
-| Version Control        | Git, GitHub                        |
-| AI Development Support | Claude Code, Codex                 |
+| Deployment             | AWS 배포 예정                                         |
+| Version Control        | Git, GitHub                                           |
+| AI Development Support | Claude Code, Codex                                    |
 
 ---
 
@@ -114,14 +114,14 @@ software-engineering-ai-parking-service/
 
 ## 8. 산출물 구성
 
-| 구분           | 위치                 | 설명                                                   |
-| -------------- | -------------------- | ------------------------------------------------------ |
-| 요구사항 문서  | `docs/requirements/` | 프로젝트 정의서, 요구사항 정의서, 요구사항 분석서      |
-| 계획 문서      | `docs/plan/`         | 프로젝트 관리 계획서, 형상관리 관련 문서               |
-| 설계 문서      | `docs/design/`       | 소프트웨어 설계서, 화면 흐름, 디자인 시스템            |
-| 제품 기획 문서 | `docs/product/`      | 페르소나, 사용자 여정, 경쟁 서비스 분석, 비즈니스 모델 |
-| 하네스 문서    | `docs/harness/`      | PRD, 기능 명세, Claude/Codex 작업 지침, 프롬프트 기록  |
-| 테스트 문서    | `docs/test/`         | 인스팩션 예제, 테스트 결과서, 결함 기록                |
+| 구분           | 위치                 | 설명                                                                       |
+| -------------- | -------------------- | -------------------------------------------------------------------------- |
+| 요구사항 문서  | `docs/requirements/` | 프로젝트 정의서, 요구사항 정의서, 요구사항 분석서                          |
+| 계획 문서      | `docs/plan/`         | 프로젝트 관리 계획서, 형상관리 관련 문서                                   |
+| 설계 문서      | `docs/design/`       | 소프트웨어 설계서, 화면 흐름, 디자인 시스템                                |
+| 제품 기획 문서 | `docs/product/`      | 페르소나, 사용자 여정, 경쟁 서비스 분석, 비즈니스 모델                     |
+| 하네스 문서    | `docs/harness/`      | PRD, 기능 명세, Claude/Codex 작업 지침, 프롬프트 기록                      |
+| 테스트 문서    | `docs/test/`         | 인스팩션 예제, 테스트 결과서, 결함 기록                                    |
 | 소스코드       | `src/`               | React Native 프론트엔드, Spring Boot 백엔드, Python AI 분석 모듈 구현 코드 |
 
 ---
@@ -134,7 +134,7 @@ software-engineering-ai-parking-service/
 | 과제2 | 프로젝트관리계획서 | `docs/plan/`         | 완료 |
 | 과제3 | 요구사항정의서     | `docs/requirements/` | 완료 |
 | 과제4 | 요구사항분석서     | `docs/requirements/` | 완료 |
-| 과제5 | 소프트웨어설계서   | `docs/design/`       | 예정 |
+| 과제5 | 소프트웨어설계서   | `docs/design/`       | 완료 |
 | 과제6 | 인스팩션예제       | `docs/test/`         | 예정 |
 | 과제7 | 테스트결과서       | `docs/test/`         | 예정 |
 
@@ -158,7 +158,7 @@ software-engineering-ai-parking-service/
 | 하네스    | `CLAUDE.md`                                                | Claude Code가 프론트엔드 구현 시 참고할 작업 지침 정리          | 완료 |
 | 하네스    | `CODEX.md`                                                 | Codex가 백엔드 설계 및 문서화 작업 시 참고할 작업 지침 정리     | 완료 |
 | 하네스    | `PROMPT_LOG.md`                                            | AI 도구에 입력한 프롬프트, 결과, 수정 사항 기록 기준 정리       | 완료 |
-| 디자인    | `NAVER_MAP_STYLE_GUIDE.md`                                  | Naver Map Design System 기반 SmartPark UI 스타일 기준 정리      | 완료 |
+| 디자인    | `NAVER_MAP_STYLE_GUIDE.md`                                 | Naver Map Design System 기반 SmartPark UI 스타일 기준 정리      | 완료 |
 | 디자인    | `SCREEN_FLOW.md`, `UI_DESIGN_GUIDE.md`, `DESIGN_SYSTEM.md` | 앱 화면 구조와 UI 기준 정의                                     | 예정 |
 
 ---
@@ -191,7 +191,7 @@ git push origin main --tags
 
 ## 12. 현재 진행 상태
 
-현재 저장소에는 소프트웨어공학 과제 산출물, 제품 기획 문서, 하네스 문서, 프론트엔드 구현 코드, AI 분석 모듈 기준 문서와 구현 이력이 함께 관리되고 있다.
+현재 저장소에는 소프트웨어공학 과제 산출물, 제품 기획 문서, 하네스 문서, 소프트웨어설계서, 프론트엔드 구현 코드, AI 분석 모듈 기준 문서와 구현 이력이 함께 관리되고 있다.
 
 ---
 
@@ -202,7 +202,11 @@ git push origin main --tags
 - `docs/requirements/과제1.프로젝트정의서.md`
 - `docs/plan/과제2.프로젝트관리계획서.md`
 - `docs/requirements/과제3.요구사항정의서.md`
+- `docs/requirements/과제3.요구사항정의서.pdf`
 - `docs/requirements/과제4.요구사항분석서.md`
+- `docs/requirements/과제4.요구사항분석서.pdf`
+- `docs/design/과제5.소프트웨어설계서.md`
+- `docs/design/과제5.소프트웨어설계서.pdf`
 
 #### 제품 기획 문서
 
@@ -229,6 +233,13 @@ git push origin main --tags
 - `docs/design/reference/figma-make-design/`
 
 이를 통해 Naver Map 스타일 UI, Figma Make 기반 화면 reference, SmartPark 화면별 디자인 기준을 프론트엔드 구현에 반영하고 있다.
+
+#### 소프트웨어 설계서
+
+- `docs/design/과제5.소프트웨어설계서.md`
+- `docs/design/과제5.소프트웨어설계서.pdf`
+
+과제5 소프트웨어설계서는 SmartPark의 전체 소프트웨어 아키텍처, 모듈/패키지 설계, 인터페이스 설계, 데이터 설계, 구현 기술 설계, 요구사항 추적표, 참고문헌 및 부록을 포함한다.
 
 ---
 
@@ -384,7 +395,7 @@ git push origin main --tags
 | `v1.1.12` | NFC 이용 종료 인식 단계 추가 및 결제 플로우 실데이터 연결                                                 |
 | `v1.1.13` | 프론트엔드 코드베이스 도메인 기반 구조 리팩토링                                                           |
 | `v1.1.14` | Naver Maps SDK 연동 — Home 화면 실제 지도 적용 (`@mj-studio/react-native-naver-map@2.8.0`)                |
-| `v1.1.15` | 클러스터링 제거, Category Chip 스타일 커스텀 마커 적용, 성수역 Mock 데이터 확장                            |
+| `v1.1.15` | 클러스터링 제거, Category Chip 스타일 커스텀 마커 적용, 성수역 Mock 데이터 확장                           |
 
 ---
 
@@ -394,15 +405,15 @@ git push origin main --tags
 
 현재 백엔드는 구현 시작 전 기준선인 `v2.0.0`을 준비하는 단계이며, 이후 다음 흐름으로 진행한다.
 
-| 단계 | 내용 |
-|---|---|
-| `v2.0.0` | Spring Boot 프로젝트 초기 설정 |
-| `v2.1.x` | 공통 응답, 예외 처리, Swagger/OpenAPI 설정 |
+| 단계     | 내용                                                    |
+| -------- | ------------------------------------------------------- |
+| `v2.0.0` | Spring Boot 프로젝트 초기 설정                          |
+| `v2.1.x` | 공통 응답, 예외 처리, Swagger/OpenAPI 설정              |
 | `v2.2.x` | ParkingLot, ParkingSpace 도메인 및 주차장 조회 API 구현 |
-| `v2.3.x` | Naver Maps API, Geocoding, Directions5 연동 |
-| `v2.4.x` | AI 혼잡도 예측 결과 조회 API 구현 |
-| `v2.5.x` | 공급자, 이용 세션, 결제 mock API 구현 |
-| `v2.6.x` | 테스트 코드, Swagger 문서 보완, AWS 배포 준비 |
+| `v2.3.x` | Naver Maps API, Geocoding, Directions5 연동             |
+| `v2.4.x` | AI 혼잡도 예측 결과 조회 API 구현                       |
+| `v2.5.x` | 공급자, 이용 세션, 결제 mock API 구현                   |
+| `v2.6.x` | 테스트 코드, Swagger 문서 보완, AWS 배포 준비           |
 
 백엔드 상세 변경 이력은 `CHANGELOG_BACKEND.md`에서 관리한다.
 
@@ -414,15 +425,15 @@ AI 분석 모듈은 `src/ai` 하위에서 Python 기반으로 구현하고 있�
 
 현재 AI 모듈은 `v3.7.0` 기준으로 예측 결과 MySQL 적재 및 백엔드 연동 준비 단계까지 정리되었다.
 
-| 버전 | 주요 내용 |
-|---:|---|
-| `v3.0.0` | AI 모듈 기본 구조 생성 |
-| `v3.1.0` | AI 데이터 스키마 설계 |
-| `v3.2.0` | Mock 주차장 데이터 생성 |
-| `v3.3.0` | 전처리 데이터셋 생성 |
-| `v3.4.0` | 규칙 기반 혼잡도 분석 구현 |
-| `v3.5.0` | RandomForest 기반 모델 학습 및 평가 |
-| `v3.6.0` | 혼잡도 예측 결과 생성 |
+|     버전 | 주요 내용                                   |
+| -------: | ------------------------------------------- |
+| `v3.0.0` | AI 모듈 기본 구조 생성                      |
+| `v3.1.0` | AI 데이터 스키마 설계                       |
+| `v3.2.0` | Mock 주차장 데이터 생성                     |
+| `v3.3.0` | 전처리 데이터셋 생성                        |
+| `v3.4.0` | 규칙 기반 혼잡도 분석 구현                  |
+| `v3.5.0` | RandomForest 기반 모델 학습 및 평가         |
+| `v3.6.0` | 혼잡도 예측 결과 생성                       |
 | `v3.7.0` | AI 예측 결과 MySQL 적재 및 백엔드 연동 준비 |
 
 AI 상세 변경 이력은 `CHANGELOG_AI.md`에서 관리한다.
@@ -448,10 +459,10 @@ AI 상세 변경 이력은 `CHANGELOG_AI.md`에서 관리한다.
 
 현재 구현 단계는 프론트엔드, 백엔드, AI 혼잡도 분석 모듈을 다음 기준으로 진행한다.
 
-| 영역       | 구현 방향                                             | 주요 도구                              |
-| ---------- | ----------------------------------------------------- | -------------------------------------- |
-| 프론트엔드 | Naver Maps 스타일의 지도 중심 React Native 앱 구현    | Claude Code, Android 실기기 USB 테스트 |
-| 백엔드     | 주차장 조회, 목적지 검색, 혼잡도 조회 API 구현        | Spring Boot, MySQL, Swagger, Codex     |
+| 영역       | 구현 방향                                                                      | 주요 도구                               |
+| ---------- | ------------------------------------------------------------------------------ | --------------------------------------- |
+| 프론트엔드 | Naver Maps 스타일의 지도 중심 React Native 앱 구현                             | Claude Code, Android 실기기 USB 테스트  |
+| 백엔드     | 주차장 조회, 목적지 검색, 혼잡도 조회 API 구현                                 | Spring Boot, MySQL, Swagger, Codex      |
 | AI 분석    | AI 예측 결과를 MySQL에 적재하고 Spring Boot API에서 조회할 수 있도록 연동 준비 | Python, CSV/JSON, MySQL loader, ML 모델 |
 
 다음 구현 단계에서는 mock UI 흐름을 실제 서비스 구조로 확장한다.
