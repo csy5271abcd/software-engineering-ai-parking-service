@@ -22,7 +22,7 @@ SmartPark는 도심 및 주거 지역의 주차난 문제를 해결하기 위한
 <p align="center">
   <a href="https://www.youtube.com/watch?v=d4TDE3vMQ3o">
     YouTube 데모 영상 보러가기
-  </a>E
+  </a>
 </p>
 
 ---
