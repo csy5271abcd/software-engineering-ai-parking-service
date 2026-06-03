@@ -32,15 +32,15 @@ SmartPark는 도심 및 주거 지역의 주차난 문제를 해결하기 위한
 </p>
 
 <p align="center">
-  <img src="./docs/presentation/image/5.%20Software%20Engineering_1.png" width="100%" alt="Software Engineering 1" />
+  <img src="./docs/presentation/image/5.%20Software%20Engineering_Definition.png" width="100%" alt="Software Engineering 1" />
 </p>
 
 <p align="center">
-  <img src="./docs/presentation/image/6.%20Software%20Engineering_2.png" width="100%" alt="Software Engineering 2" />
+  <img src="./docs/presentation/image/6.%20Software%20Engineering_Requirement.png" width="100%" alt="Software Engineering 2" />
 </p>
 
 <p align="center">
-  <img src="./docs/presentation/image/7.%20Software%20Engineering_3.png" width="100%" alt="Software Engineering 3" />
+  <img src="./docs/presentation/image/7.%20Software%20Engineering_Requirement_Analysis.png" width="100%" alt="Software Engineering 3" />
 </p>
 
 <p align="center">
