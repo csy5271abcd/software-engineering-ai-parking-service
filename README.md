@@ -13,6 +13,22 @@ SmartPark는 도심 및 주거 지역의 주차난 문제를 해결하기 위한
 
 ---
 
+## SmartPark Demo Video
+
+<p align="center">
+  <a href="https://www.youtube.com/watch?v=d4TDE3vMQ3o" target="_blank">
+    <img src="https://img.youtube.com/vi/d4TDE3vMQ3o/maxresdefault.jpg" width="100%" alt="SmartPark Demo Video" />
+  </a>
+</p>
+
+<p align="center">
+  <a href="https://www.youtube.com/watch?v=d4TDE3vMQ3o">
+    SmartPark 데모 영상 보러가기
+  </a>
+</p>
+
+---
+
 ## SmartPark Presentation Preview
 
 <p align="center">
